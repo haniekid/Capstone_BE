@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZAsWVW13czHK9F0JzWMStjVu+WCCMHRNCmQH4SQavFnK5ip49pAZ0KPQN+FxH0GdxqYhrlElBvKKzU80MCMiEg==",
+  "dgSpecHash": "yaWQKHXFM+7IJH+qF8LfL99kP7ZTTeiIyudS83A3P4LDQgmprLvjI7i5udw7ZYODUHgGJtxCUpWKuFkB1m9Idw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\source\\repos\\ecommerce-app-ms-sql-net-react\\backend\\backend.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\source\\repos\\Study_1\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.15\\microsoft.aspnetcore.authentication.jwtbearer.6.0.15.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\6.0.15\\microsoft.aspnetcore.jsonpatch.6.0.15.nupkg.sha512",

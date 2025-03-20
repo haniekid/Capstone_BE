@@ -1617,11 +1617,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\ecommerce-app-ms-sql-net-react\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\Study_1\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Users\\Admin\\source\\repos\\ecommerce-app-ms-sql-net-react\\backend\\backend.csproj",
+      "projectPath": "C:\\Users\\Admin\\source\\repos\\Study_1\\backend.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\source\\repos\\ecommerce-app-ms-sql-net-react\\backend\\obj\\",
+      "outputPath": "C:\\Users\\Admin\\source\\repos\\Study_1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

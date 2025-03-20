@@ -1,10 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Controllers",
-    "\\Models",
-    "\\Repositories"
+    ""
   ],
-  "SelectedNode": "\\JwtService.cs",
+  "SelectedNode": "\\backend.sln",
   "PreviewInSolutionExplorer": false
 }
