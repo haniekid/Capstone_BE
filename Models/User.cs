@@ -15,8 +15,9 @@ namespace backend.Models
         public string Address { get; set; }
         public string City { get; set; }
         public string PostalCode { get; set; }
+        public string RoleName { get; set; }
 
-        public User(int userId, string firstName, string lastName, string email, string phone, string password, string address = null, string city = null, string postalCode = null)
+        public User(int userId, string firstName, string lastName, string email, string phone, string password, string address = null, string city = null, string postalCode = null, string roleName = null)
         {
             UserID = userId;
             FirstName = firstName;
@@ -27,6 +28,7 @@ namespace backend.Models
             Address = address;
             City = city;
             PostalCode = postalCode;
+            RoleName = roleName;
         }
     }
 }

@@ -19,7 +19,12 @@ namespace backend.Repositories
 
         public IEnumerable<User> GetAll()
         {
-            string query = @"SELECT UserID, FirstName, LastName, Email, Phone, PasswordHash, Address, City, PostalCode FROM [USERS]";
+            string query = @"SELECT 
+                        u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
+                        u.PasswordHash, u.Address, u.City, u.PostalCode, 
+                        r.RoleName 
+                     FROM [Users] u
+                     LEFT JOIN [Roles] r ON u.RoleID = r.RoleID";
 
             DataTable table = new DataTable();
             SqlDataReader myReader;
@@ -47,7 +52,8 @@ namespace backend.Repositories
                     row["PasswordHash"].ToString(),
                     row["Address"] != DBNull.Value ? row["Address"].ToString() : null,
                     row["City"] != DBNull.Value ? row["City"].ToString() : null,
-                    row["PostalCode"] != DBNull.Value ? row["PostalCode"].ToString() : null
+                    row["PostalCode"] != DBNull.Value ? row["PostalCode"].ToString() : null,
+                    row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null // RoleName
                 ));
             }
             return users;
@@ -55,7 +61,13 @@ namespace backend.Repositories
 
         public User GetById(int userId)
         {
-            string query = @"SELECT UserID, FirstName, LastName, Email, Phone, PasswordHash, Address, City, PostalCode FROM [USERS] WHERE UserID = @UserID";
+            string query = @"SELECT 
+                        u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
+                        u.PasswordHash, u.Address, u.City, u.PostalCode, 
+                        r.RoleName 
+                     FROM [Users] u
+                     LEFT JOIN [Roles] r ON u.RoleID = r.RoleID
+                     WHERE u.UserID = @UserID";
 
             User user = null;
 
@@ -72,16 +84,17 @@ namespace backend.Repositories
                     if (reader.Read())
                     {
                         user = new User(
-                         reader.GetInt32(0),
-                         reader.GetString(1),
-                         reader.GetString(2),
-                         reader.GetString(3),
-                         reader.GetString(4),
-                         reader.GetString(5),
-                         reader["Address"] != DBNull.Value ? reader.GetString(6) : null,
-                         reader["City"] != DBNull.Value ? reader.GetString(7) : null,
-                         reader["PostalCode"] != DBNull.Value ? reader.GetString(8) : null
-                     );
+                            reader.GetInt32(0),    // UserID
+                            reader.GetString(1),   // FirstName
+                            reader.GetString(2),   // LastName
+                            reader.GetString(3),   // Email
+                            reader.GetString(4),   // Phone
+                            reader.GetString(5),   // PasswordHash
+                            reader["Address"] != DBNull.Value ? reader.GetString(6) : null,
+                            reader["City"] != DBNull.Value ? reader.GetString(7) : null,
+                            reader["PostalCode"] != DBNull.Value ? reader.GetString(8) : null,
+                            reader["RoleName"] != DBNull.Value ? reader.GetString(9) : null 
+                        );
                     }
 
                     reader.Close();
