@@ -18,10 +18,12 @@ namespace backend.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<ProductDTO> _productDTORepository;
 
-        public ProductController(IRepository<Product> productRepository)
+        public ProductController(IRepository<Product> productRepository, IRepository<ProductDTO> productDTORepository)
         {
             _productRepository = productRepository;
+            _productDTORepository = productDTORepository;
         }
 
         [HttpGet]
@@ -43,16 +45,17 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Product product)
+        public IActionResult Post(ProductDTO product)
         {
-            _productRepository.Add(product);
+            _productDTORepository.Add(product);
             return Ok();
         }
 
+
         [HttpPut("{productId}")]
-        public IActionResult Put(Product updatedProduct)
+        public IActionResult Put(ProductDTO updatedProduct)
         {
-            bool updated = _productRepository.Update(updatedProduct);
+            bool updated = _productDTORepository.Update(updatedProduct);
             if (updated)
             {
                 return Ok();
