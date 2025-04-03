@@ -36,6 +36,7 @@ namespace backend
             builder.Services.AddScoped<IListRepository<Order>, OrderRepository>();
             builder.Services.AddScoped<IListRepository<ProductPrice>, ProductPriceRepository>();
             builder.Services.AddScoped<IListRepository<OrderItem>, OrderItemRepository>();
+            builder.Services.AddScoped<IListRepository<Discount>, DiscountRepository>();
             builder.Services.AddScoped<PasswordHelper>();
 
             builder.Services.AddControllers();
