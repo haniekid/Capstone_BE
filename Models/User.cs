@@ -1,11 +1,13 @@
 ﻿using backend.Helper;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace backend.Models
 {
     public class User
     {
-        public int UserID { get; }
+        public User() { }
+        public int UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -16,8 +18,10 @@ namespace backend.Models
         public string City { get; set; }
         public string PostalCode { get; set; }
         public string RoleName { get; set; }
+        public bool? IsActivated { get; set; } = false;
+        public string ActivationToken { get; set; }
 
-        public User(int userId, string firstName, string lastName, string email, string phone, string password, string address = null, string city = null, string postalCode = null, string roleName = null)
+        public User(int userId, string firstName, string lastName, string email, string phone, string password, string address = null, string city = null, string postalCode = null, string roleName = null, string activationToken = null, bool isActivated = false)
         {
             UserID = userId;
             FirstName = firstName;
@@ -29,6 +33,8 @@ namespace backend.Models
             City = city;
             PostalCode = postalCode;
             RoleName = roleName;
+            ActivationToken = activationToken;
+            IsActivated = isActivated;
         }
     }
 }

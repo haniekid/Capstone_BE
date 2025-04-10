@@ -65,5 +65,20 @@ namespace backend.Controllers
                 return NotFound();
             }
         }
+
+        [HttpPut("{discountId}")]
+        public IActionResult Put(Discount discount)
+        {
+            bool updated = _discountRepository.Update(discount);
+            if (updated)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
     }
 }

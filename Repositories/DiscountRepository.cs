@@ -165,9 +165,45 @@ namespace backend.Repositories
             throw new NotImplementedException();
         }
 
-        bool IListRepository<Discount>.Update(Discount item)
+        public bool Update(Discount discount)
         {
-            throw new NotImplementedException();
+            string query = @"UPDATE Discount 
+                     SET Code = @Code,
+                         Description = @Description,
+                         DiscountType = @DiscountType,
+                         DiscountValue = @DiscountValue,
+                         StartDate = @StartDate,
+                         EndDate = @EndDate,
+                         UsageLimit = @UsageLimit,
+                         UsedCount = @UsedCount,
+                         IsActive = @IsActive,
+                         CreatedAt = @CreatedAt
+                     WHERE DiscountId = @DiscountId";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@DiscountId", discount.DiscountId);
+                    command.Parameters.AddWithValue("@Code", discount.Code);
+                    command.Parameters.AddWithValue("@Description", (object?)discount.Description ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DiscountType", discount.DiscountType);
+                    command.Parameters.AddWithValue("@DiscountValue", discount.DiscountValue);
+                    command.Parameters.AddWithValue("@StartDate", discount.StartDate);
+                    command.Parameters.AddWithValue("@EndDate", (object?)discount.EndDate ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@UsageLimit", (object?)discount.UsageLimit ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@UsedCount", discount.UsedCount);
+                    command.Parameters.AddWithValue("@IsActive", discount.IsActive);
+                    command.Parameters.AddWithValue("@CreatedAt", discount.CreatedAt);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    return rowsAffected > 0;
+                }
+            }
         }
+
     }
 }

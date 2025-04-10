@@ -38,6 +38,7 @@ namespace backend
             builder.Services.AddScoped<IListRepository<OrderItem>, OrderItemRepository>();
             builder.Services.AddScoped<IListRepository<Discount>, DiscountRepository>();
             builder.Services.AddScoped<PasswordHelper>();
+            builder.Services.AddScoped<EmailService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -21,7 +21,7 @@ namespace backend.Repositories
         {
             string query = @"SELECT 
                         u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
-                        u.PasswordHash, u.Address, u.City, u.PostalCode, 
+                        u.PasswordHash, u.Address, u.City, u.PostalCode, u.ActivationToken, u.IsActivated,
                         r.RoleName 
                      FROM [Users] u
                      LEFT JOIN [Roles] r ON u.RoleID = r.RoleID";
@@ -53,7 +53,8 @@ namespace backend.Repositories
                     row["Address"] != DBNull.Value ? row["Address"].ToString() : null,
                     row["City"] != DBNull.Value ? row["City"].ToString() : null,
                     row["PostalCode"] != DBNull.Value ? row["PostalCode"].ToString() : null,
-                    row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null // RoleName
+                    row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null ,
+                    row["ActivationToken"] != DBNull.Value ? row["ActivationToken"].ToString() : null 
                 ));
             }
             return users;
@@ -108,9 +109,11 @@ namespace backend.Repositories
 
         public bool Add(User user)
         {
-            string query = @"INSERT INTO dbo.[USER] 
-                             (FirstName, LastName, Email, Phone, Password, Address, City, PostalCode) 
-                             VALUES (@FirstName, @LastName, @Email, @Phone, @Password, @Address, @City, @PostalCode)";
+            string query = @"
+        INSERT INTO USERS
+        (FirstName, LastName, Email, Phone, PasswordHash, Address, City, PostalCode, RoleId, ActivationToken, IsActivated) 
+        VALUES 
+        (@FirstName, @LastName, @Email, @Phone, @Password, @Address, @City, @PostalCode, @RoleId, @ActivationToken, @IsActivated)";
 
             try
             {
@@ -124,32 +127,39 @@ namespace backend.Repositories
                         myCommand.Parameters.AddWithValue("@Email", user.Email);
                         myCommand.Parameters.AddWithValue("@Phone", user.Phone);
                         myCommand.Parameters.AddWithValue("@Password", user.Password);
-                        myCommand.Parameters.AddWithValue("@Address", user.Address);
-                        myCommand.Parameters.AddWithValue("@City", user.City);
-                        myCommand.Parameters.AddWithValue("@PostalCode", user.PostalCode);
+                        myCommand.Parameters.AddWithValue("@Address", user.Address ?? (object)DBNull.Value);
+                        myCommand.Parameters.AddWithValue("@City", user.City ?? (object)DBNull.Value);
+                        myCommand.Parameters.AddWithValue("@PostalCode", user.PostalCode ?? (object)DBNull.Value);
+                        myCommand.Parameters.AddWithValue("@RoleId", 2);
+                        myCommand.Parameters.AddWithValue("@ActivationToken", user.ActivationToken);
+                        myCommand.Parameters.AddWithValue("@IsActivated", user.IsActivated);
+
                         myCommand.ExecuteNonQuery();
-                        myCon.Close();
                     }
                 }
                 return true;
             }
             catch (Exception ex)
             {
+                // Optional: Log the error here
                 return false;
             }
         }
+
         public bool Update(User user)
         {
-            string query = @"UPDATE dbo.[USER] 
-                             SET FirstName = @FirstName,
-                             LastName = @LastName,
-                             Email = @Email,
-                             Phone = @Phone,
-                             Password = @Password,
-                             Address = @Address,
-                             City = @City,
-                             PostalCode = @PostalCode
-                             WHERE UserID = @UserID";
+            string query = @"UPDATE USERS
+                     SET FirstName = @FirstName,
+                         LastName = @LastName,
+                         Email = @Email,
+                         Phone = @Phone,
+                         PasswordHash = @PasswordHash,
+                         Address = @Address,
+                         City = @City,
+                         PostalCode = @PostalCode,
+                         IsActivated = @IsActivated,
+                         ActivationToken = @ActivationToken
+                     WHERE UserID = @UserID";
 
             using (SqlConnection myCon = new SqlConnection(_connectionString))
             {
@@ -161,19 +171,23 @@ namespace backend.Repositories
                     myCommand.Parameters.AddWithValue("@LastName", user.LastName);
                     myCommand.Parameters.AddWithValue("@Email", user.Email);
                     myCommand.Parameters.AddWithValue("@Phone", user.Phone);
-                    myCommand.Parameters.AddWithValue("@Password", user.Password);
+                    myCommand.Parameters.AddWithValue("@PasswordHash", user.Password);
                     myCommand.Parameters.AddWithValue("@Address", user.Address);
                     myCommand.Parameters.AddWithValue("@City", user.City);
                     myCommand.Parameters.AddWithValue("@PostalCode", user.PostalCode);
+                    myCommand.Parameters.AddWithValue("@ActivationToken", user.ActivationToken);
+
+                    // Handle nullable bool safely
+                    myCommand.Parameters.AddWithValue("@IsActivated", user.IsActivated.HasValue ? (object)user.IsActivated.Value : DBNull.Value);
 
                     int rowsAffected = myCommand.ExecuteNonQuery();
                     myCon.Close();
 
-                    return rowsAffected > 0; 
-
+                    return rowsAffected > 0;
                 }
             }
         }
+
 
         public bool Delete(int userId)
         {
