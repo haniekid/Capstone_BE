@@ -96,6 +96,7 @@ public class Startup
         services.AddScoped(typeof(IListRepository<>), typeof(ProductPriceRepository));
         services.AddScoped(typeof(IListRepository<>), typeof(OrderItemRepository));
         services.AddScoped(typeof(IListRepository<>), typeof(DiscountRepository));
+        services.AddScoped(typeof(IListRepository<>), typeof(ProductTypeRepository));
 
         // Add controllers
         services.AddControllers();

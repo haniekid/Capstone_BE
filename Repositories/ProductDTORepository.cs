@@ -14,97 +14,204 @@ namespace backend.Repositories
 			_connectionString = _configuration.GetConnectionString("UserAppCon");
 		}
 
-		public bool Add(ProductDTO product)
+		public bool Add(ProductDTO productDto)
 		{
-			string productQuery = @"INSERT INTO dbo.Products (Name, Type, Description, ImageURL) 
-							OUTPUT INSERTED.ProductID 
-							VALUES (@Name, @Type, @Description, @ImageURL)";
-
-			string priceQuery = @"INSERT INTO dbo.ProductPrices (ProductID, Price, Quantity) 
-						  VALUES (@ProductID, @Price, @Quantity)";
-
-			try
+			using (SqlConnection myCon = new SqlConnection(_connectionString))
 			{
-				using (SqlConnection myCon = new SqlConnection(_connectionString))
+				myCon.Open();
+				SqlTransaction transaction = myCon.BeginTransaction();
+
+				try
 				{
-					myCon.Open();
-					using (SqlCommand productCommand = new SqlCommand(productQuery, myCon))
+					// 1. Insert into Products
+					string insertProductQuery = @"
+				INSERT INTO Products (Name, Type, Description, ImageURL, IsDelete)
+				OUTPUT INSERTED.ProductID
+				VALUES (@Name, @Type, @Description, @ImageURL, 0)";
+
+					int productId;
+					using (SqlCommand cmd = new SqlCommand(insertProductQuery, myCon, transaction))
 					{
-						productCommand.Parameters.AddWithValue("@Name", product.Name);
-						productCommand.Parameters.AddWithValue("@Type", product.Type);
-						productCommand.Parameters.AddWithValue("@Description", product.Description);
-						productCommand.Parameters.AddWithValue("@ImageURL", product.ImageURL);
+						cmd.Parameters.AddWithValue("@Name", productDto.Name);
+						cmd.Parameters.AddWithValue("@Type", productDto.Type);
+						cmd.Parameters.AddWithValue("@Description", productDto.Description);
+						cmd.Parameters.AddWithValue("@ImageURL", productDto.ImageURL);
+						productId = (int)cmd.ExecuteScalar();
+					}
 
-						int productId = (int)productCommand.ExecuteScalar(); // Get the inserted ProductID
-						product.ProductID = productId; // Assign it back to the object
+					// 2. Insert into ProductPrices
+					string insertPriceQuery = @"
+				INSERT INTO ProductPrices (Price, Quantity, ProductID)
+				VALUES (@Price, @Quantity, @ProductID)";
+					using (SqlCommand cmd = new SqlCommand(insertPriceQuery, myCon, transaction))
+					{
+						cmd.Parameters.AddWithValue("@Price", productDto.Price);
+						cmd.Parameters.AddWithValue("@Quantity", productDto.Quantity);
+						cmd.Parameters.AddWithValue("@ProductID", productId);
+						cmd.ExecuteNonQuery();
+					}
 
-						using (SqlCommand priceCommand = new SqlCommand(priceQuery, myCon))
+					// 3. Insert into ProductSales (if applicable)
+					if (productDto.SalePrice.HasValue)
+					{
+						string insertSaleQuery = @"
+					INSERT INTO ProductSales (ProductPriceID, SalePrice, SaleStartDate, SaleEndDate)
+					VALUES (
+						(SELECT TOP 1 ProductPriceID FROM ProductPrices WHERE ProductID = @ProductID ORDER BY ProductPriceID DESC),
+						@SalePrice, @SaleStartDate, @SaleEndDate)";
+						using (SqlCommand cmd = new SqlCommand(insertSaleQuery, myCon, transaction))
 						{
-							priceCommand.Parameters.AddWithValue("@ProductID", product.ProductID);
-							priceCommand.Parameters.AddWithValue("@Price", product.Price);
-							priceCommand.Parameters.AddWithValue("@Quantity", product.Quantity);
-							priceCommand.ExecuteNonQuery();
+							cmd.Parameters.AddWithValue("@ProductID", productId);
+							cmd.Parameters.AddWithValue("@SalePrice", productDto.SalePrice);
+							cmd.Parameters.AddWithValue("@SaleStartDate", (object)productDto.SaleStartDate ?? DBNull.Value);
+							cmd.Parameters.AddWithValue("@SaleEndDate", (object)productDto.SaleEndDate ?? DBNull.Value);
+							cmd.ExecuteNonQuery();
 						}
 					}
+
+					// 4. Insert into ProductImages
+					if (productDto.ListImageURL != null)
+					{
+						foreach (var imageUrl in productDto.ListImageURL)
+						{
+							string insertImageQuery = @"INSERT INTO ProductImages (ProductID, ImageURL) VALUES (@ProductID, @ImageURL)";
+							using (SqlCommand cmd = new SqlCommand(insertImageQuery, myCon, transaction))
+							{
+								cmd.Parameters.AddWithValue("@ProductID", productId);
+								cmd.Parameters.AddWithValue("@ImageURL", imageUrl);
+								cmd.ExecuteNonQuery();
+							}
+						}
+					}
+
+					transaction.Commit();
+					return true;
 				}
-				return true;
-			}
-			catch (Exception ex)
-			{
-				return false;
+				catch
+				{
+					transaction.Rollback();
+					return false;
+					throw;
+				}
 			}
 		}
-		public bool Update(ProductDTO product)
+
+		public bool Update(ProductDTO productDto)
 		{
-			string productQuery = @"UPDATE dbo.Products 
-							SET Name = @Name, 
-								Type = @Type, 
-								Description = @Description, 
-								ImageURL = @ImageURL 
-							WHERE ProductID = @ProductID";
+			using (SqlConnection myCon = new SqlConnection(_connectionString))
+			{
+				myCon.Open();
+				SqlTransaction transaction = myCon.BeginTransaction();
 
-			string priceQuery = @"IF EXISTS (SELECT 1 FROM dbo.ProductPrices WHERE ProductID = @ProductID)
-						  UPDATE dbo.ProductPrices 
-						  SET Price = @Price, Quantity = @Quantity 
-						  WHERE ProductID = @ProductID
-						  ELSE
-						  INSERT INTO dbo.ProductPrices (ProductID, Price, Quantity) 
-						  VALUES (@ProductID, @Price, @Quantity)";
+				try
+				{
+					// 1. Update Products
+					string updateProductQuery = @"
+				UPDATE Products 
+				SET Name = @Name, Type = @Type, Description = @Description, ImageURL = @ImageURL
+				WHERE ProductID = @ProductID";
+					using (SqlCommand cmd = new SqlCommand(updateProductQuery, myCon, transaction))
+					{
+						cmd.Parameters.AddWithValue("@ProductID", productDto.ProductID);
+						cmd.Parameters.AddWithValue("@Name", productDto.Name);
+						cmd.Parameters.AddWithValue("@Type", productDto.Type);
+						cmd.Parameters.AddWithValue("@Description", productDto.Description);
+						cmd.Parameters.AddWithValue("@ImageURL", productDto.ImageURL);
+						cmd.ExecuteNonQuery();
+					}
 
+					// 2. Update ProductPrices
+					string updatePriceQuery = @"
+				UPDATE ProductPrices 
+				SET Price = @Price, Quantity = @Quantity 
+				WHERE ProductID = @ProductID";
+					using (SqlCommand cmd = new SqlCommand(updatePriceQuery, myCon, transaction))
+					{
+						cmd.Parameters.AddWithValue("@Price", productDto.Price);
+						cmd.Parameters.AddWithValue("@Quantity", productDto.Quantity);
+						cmd.Parameters.AddWithValue("@ProductID", productDto.ProductID);
+						cmd.ExecuteNonQuery();
+					}
+
+					// 3. Update or Insert ProductSales
+					string upsertSaleQuery = @"
+				MERGE ProductSales AS target
+				USING (
+					SELECT TOP 1 ProductPriceID 
+					FROM ProductPrices 
+					WHERE ProductID = @ProductID 
+					ORDER BY ProductPriceID DESC
+				) AS source
+				ON target.ProductPriceID = source.ProductPriceID
+				WHEN MATCHED THEN
+					UPDATE SET SalePrice = @SalePrice, SaleStartDate = @SaleStartDate, SaleEndDate = @SaleEndDate
+				WHEN NOT MATCHED THEN
+					INSERT (ProductPriceID, SalePrice, SaleStartDate, SaleEndDate)
+					VALUES (source.ProductPriceID, @SalePrice, @SaleStartDate, @SaleEndDate);";
+					using (SqlCommand cmd = new SqlCommand(upsertSaleQuery, myCon, transaction))
+					{
+						cmd.Parameters.AddWithValue("@ProductID", productDto.ProductID);
+						cmd.Parameters.AddWithValue("@SalePrice", (object)productDto.SalePrice ?? DBNull.Value);
+						cmd.Parameters.AddWithValue("@SaleStartDate", (object)productDto.SaleStartDate ?? DBNull.Value);
+						cmd.Parameters.AddWithValue("@SaleEndDate", (object)productDto.SaleEndDate ?? DBNull.Value);
+						cmd.ExecuteNonQuery();
+					}
+
+					// 4. Clear and re-insert ProductImages
+					string deleteImagesQuery = @"DELETE FROM ProductImages WHERE ProductID = @ProductID";
+					using (SqlCommand cmd = new SqlCommand(deleteImagesQuery, myCon, transaction))
+					{
+						cmd.Parameters.AddWithValue("@ProductID", productDto.ProductID);
+						cmd.ExecuteNonQuery();
+					}
+
+					if (productDto.ListImageURL != null)
+					{
+						foreach (var imageUrl in productDto.ListImageURL)
+						{
+							string insertImageQuery = @"INSERT INTO ProductImages (ProductID, ImageURL) VALUES (@ProductID, @ImageURL)";
+							using (SqlCommand cmd = new SqlCommand(insertImageQuery, myCon, transaction))
+							{
+								cmd.Parameters.AddWithValue("@ProductID", productDto.ProductID);
+								cmd.Parameters.AddWithValue("@ImageURL", imageUrl);
+								cmd.ExecuteNonQuery();
+							}
+						}
+					}
+
+					transaction.Commit();
+					return true;
+				}
+				catch
+				{
+					transaction.Rollback();
+					return false;
+				}
+			}
+		}
+		bool IRepository<ProductDTO>.Delete(int productId)
+		{
 			try
 			{
 				using (SqlConnection myCon = new SqlConnection(_connectionString))
 				{
-					myCon.Open();
-					using (SqlCommand productCommand = new SqlCommand(productQuery, myCon))
+					string deleteQuery = "UPDATE Products SET IsDelete = 1 WHERE ProductID = @ProductID";
+					using (SqlCommand cmd = new SqlCommand(deleteQuery, myCon))
 					{
-						productCommand.Parameters.AddWithValue("@ProductID", product.ProductID);
-						productCommand.Parameters.AddWithValue("@Name", product.Name);
-						productCommand.Parameters.AddWithValue("@Type", product.Type);
-						productCommand.Parameters.AddWithValue("@Description", product.Description);
-						productCommand.Parameters.AddWithValue("@ImageURL", product.ImageURL);
-						productCommand.ExecuteNonQuery();
-					}
-
-					using (SqlCommand priceCommand = new SqlCommand(priceQuery, myCon))
-					{
-						priceCommand.Parameters.AddWithValue("@ProductID", product.ProductID);
-						priceCommand.Parameters.AddWithValue("@Price", product.Price);
-						priceCommand.Parameters.AddWithValue("@Quantity", product.Quantity);
-						priceCommand.ExecuteNonQuery();
+						cmd.Parameters.AddWithValue("@ProductID", productId);
+						myCon.Open();
+						cmd.ExecuteNonQuery();
+						myCon.Close();
 					}
 				}
 				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return false;
+				return false; ;
+				throw;
 			}
-		}
 
-		bool IRepository<ProductDTO>.Delete(int id)
-		{
-			throw new NotImplementedException();
 		}
 
 		IEnumerable<ProductDTO> IRepository<ProductDTO>.GetAll()
@@ -180,8 +287,72 @@ namespace backend.Repositories
 
 		ProductDTO IRepository<ProductDTO>.GetById(int id)
 		{
-			throw new NotImplementedException();
-		}
+			string query = @"
+		SELECT 
+			p.ProductID,
+			p.Name,
+			p.Type,
+			p.Description,
+			p.ImageURL,
+			pp.Price,
+			pp.Quantity,
+			ps.SalePrice,
+			ps.SaleStartDate,
+			ps.SaleEndDate,
+			pi.ImageURL AS AdditionalImage
+		FROM Products p
+		JOIN ProductPrices pp ON p.ProductID = pp.ProductID
+		LEFT JOIN ProductSales ps ON 
+			ps.ProductPriceID = pp.ProductPriceID 
+			AND GETDATE() BETWEEN ps.SaleStartDate AND ps.SaleEndDate
+		LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
+		WHERE ISNULL(p.IsDelete, 0) != 1 AND p.ProductID = @ProductID";
 
+			ProductDTO product = null;
+
+			using (SqlConnection myCon = new SqlConnection(_connectionString))
+			{
+				myCon.Open();
+				using (SqlCommand myCommand = new SqlCommand(query, myCon))
+				{
+					myCommand.Parameters.AddWithValue("@ProductID", id);
+
+					using (SqlDataReader reader = myCommand.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							if (product == null)
+							{
+								product = new ProductDTO(
+									reader.GetInt32(reader.GetOrdinal("ProductID")),
+									reader["Name"].ToString(),
+									reader["Type"].ToString(),
+									reader["Description"].ToString(),
+									reader["ImageURL"].ToString(),
+									reader.GetDecimal(reader.GetOrdinal("Price")),
+									reader.GetInt32(reader.GetOrdinal("Quantity")),
+									new List<string>(),
+									reader.IsDBNull(reader.GetOrdinal("SalePrice")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("SalePrice")),
+									reader.IsDBNull(reader.GetOrdinal("SaleStartDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleStartDate")),
+									reader.IsDBNull(reader.GetOrdinal("SaleEndDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleEndDate"))
+								);
+							}
+
+							if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
+							{
+								string image = reader["AdditionalImage"].ToString();
+								if (!product.ListImageURL.Contains(image))
+								{
+									product.ListImageURL.Add(image);
+								}
+							}
+						}
+					}
+				}
+				myCon.Close();
+			}
+
+			return product;
+		}
 	}
 }
