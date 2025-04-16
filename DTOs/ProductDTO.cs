@@ -13,9 +13,9 @@
 		public decimal? SalePrice { get; set; }
 		public DateTime? SaleStartDate { get; set; }
 		public DateTime? SaleEndDate { get; set; }
-
+		public bool? IsDeleted { get; set; }
 		public ProductDTO(int productID, string name, string type, string description, string imageURL, decimal price, int quantity, List<string> listImageURL,
-			decimal? salePrice, DateTime? saleStartDate, DateTime? saleEndDate)
+			decimal? salePrice, DateTime? saleStartDate, DateTime? saleEndDate, bool? isDeleted)
 		{
 			ProductID = productID;
 			Name = name;
@@ -28,6 +28,7 @@
 			SalePrice = salePrice;
 			SaleStartDate = saleStartDate;
 			SaleEndDate = saleEndDate;
+			IsDeleted = isDeleted;
 		}
 	}
 }
