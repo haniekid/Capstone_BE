@@ -125,7 +125,7 @@ namespace backend.Controllers
 		[HttpDelete("DeleteProductsForAdminDashboard/{productId}")]
 		public IActionResult DeleteProductsForAdminDashboard(int productId)
 		{
-			bool deleted = _productRepository.Delete(productId);
+			bool deleted = _productDTORepository.Delete(productId);
 			if (deleted)
 			{
 				return Ok();
