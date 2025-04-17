@@ -17,7 +17,7 @@ namespace backend.Repositories
 
         public IEnumerable<Order> GetAll()
         {
-            string query = @"SELECT OrderID, OrderDateTime, TotalPrice, OrderStatus, UserID FROM dbo.[ORDER]";
+            string query = @"SELECT OrderID, OrderDateTime, TotalPrice, OrderStatus, UserID FROM ORDERS";
 
             DataTable table = new DataTable();
             SqlDataReader myReader;
@@ -89,8 +89,8 @@ namespace backend.Repositories
 
         public bool Add(Order order)
         {
-            string query = @"INSERT INTO dbo.ORDER 
-                     (OrderDateTime, TotalPrice, OrderStatus, UserID) 
+            string query = @"INSERT INTO ORDERS 
+                     (DateTime, TotalPrice, Status, UserID) 
                      VALUES (@DateTime, @TotalPrice, @Status, @UserID)";
 
             try
