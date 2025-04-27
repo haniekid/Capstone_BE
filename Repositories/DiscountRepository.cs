@@ -205,5 +205,9 @@ namespace backend.Repositories
             }
         }
 
+        public int Add2(Discount item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

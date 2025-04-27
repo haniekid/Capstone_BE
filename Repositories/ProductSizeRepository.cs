@@ -188,6 +188,11 @@ namespace backend.Repositories
                 }
             }
         }
+
+        public int Add2(ProductPrice item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

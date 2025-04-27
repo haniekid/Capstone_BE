@@ -10,5 +10,7 @@ namespace backend.Repositories
         bool Add(T item);
         bool Update(T item);
         bool Delete(int id);
+        int Add2(T item);
+
     }
 }

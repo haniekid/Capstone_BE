@@ -1,9 +1,12 @@
+using backend.Controllers;
+using backend.DTOs;
 using backend.Helper;
 using backend.Models;
 using backend.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using VNPAY.NET;
 
 namespace backend
 {
@@ -28,13 +31,14 @@ namespace backend
 											.AllowAnyMethod();
 								  });
 			});
-
-			builder.Services.AddScoped<IRepository<User>, UserRepository>();
+            builder.Services.AddScoped<IVnpay, Vnpay>();
+            builder.Services.AddScoped<IRepository<User>, UserRepository>();
 			builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 			builder.Services.AddScoped<IRepository<ProductDTO>, ProductDTORepository>();
 			builder.Services.AddScoped<IRepository<ProductType>, ProductTypeRepository>();
 
 			builder.Services.AddScoped<IListRepository<Order>, OrderRepository>();
+			builder.Services.AddScoped<IListRepository<OrderDTO>, OrderRepository>();
 			builder.Services.AddScoped<IListRepository<ProductPrice>, ProductPriceRepository>();
 			builder.Services.AddScoped<IListRepository<OrderItem>, OrderItemRepository>();
 			builder.Services.AddScoped<IListRepository<Discount>, DiscountRepository>();

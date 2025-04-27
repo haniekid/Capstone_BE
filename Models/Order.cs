@@ -7,6 +7,7 @@
         Shipped,
         Delivered,
         Cancelled,
+        Paid
     }
 
     public class Order

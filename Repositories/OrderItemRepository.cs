@@ -48,7 +48,7 @@ namespace backend.Repositories
 
         public List<OrderItem> GetById(int orderId)
         {
-            string query = @"SELECT * FROM dbo.ORDER_ITEM WHERE OrderID = @OrderID";
+            string query = @"SELECT * FROM ORDERITEMS WHERE OrderID = @OrderID";
 
             List<OrderItem> orderItems = new List<OrderItem>();
 
@@ -152,6 +152,11 @@ namespace backend.Repositories
         }
 
         public OrderItem GetObjById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Add2(OrderItem item)
         {
             throw new NotImplementedException();
         }
