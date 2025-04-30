@@ -1,6 +1,6 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Demo_3]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Database [Demo_3]    Script Date: 30/4/2025 7:51:56 AM ******/
 CREATE DATABASE [Demo_3]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -82,7 +82,7 @@ ALTER DATABASE [Demo_3] SET QUERY_STORE = OFF
 GO
 USE [Demo_3]
 GO
-/****** Object:  Table [dbo].[Discount]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[Discount]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +105,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -121,7 +121,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -138,7 +138,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductImages]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[ProductImages]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -153,7 +153,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductPrices]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[ProductPrices]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -169,7 +169,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -187,7 +187,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductSales]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[ProductSales]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -205,7 +205,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -219,7 +219,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 30/4/2025 7:51:56 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -275,11 +275,281 @@ INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID
 GO
 INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (2, 1, 1, 2)
 GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (3, 2, 10, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (4, 1, 10, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (5, 2, 11, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (6, 1, 11, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (7, 2, 12, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (8, 1, 12, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (9, 2, 20, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (10, 1, 20, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (11, 2, 21, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (12, 1, 21, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (13, 2, 22, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (14, 1, 22, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (15, 2, 23, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (16, 1, 23, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (17, 2, 24, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (18, 1, 24, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (19, 2, 25, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (20, 1, 25, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (21, 2, 26, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (22, 1, 26, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (23, 2, 27, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (24, 1, 27, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (25, 2, 28, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (26, 1, 28, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (27, 2, 29, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (28, 1, 29, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (29, 2, 30, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (30, 1, 30, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (31, 2, 31, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (32, 1, 31, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (33, 2, 32, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (34, 1, 32, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (35, 2, 33, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (36, 1, 33, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (37, 2, 34, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (38, 1, 34, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (39, 2, 35, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (40, 1, 35, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (41, 2, 36, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (42, 1, 36, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (43, 2, 37, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (44, 1, 37, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (45, 2, 38, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (46, 1, 38, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (47, 2, 39, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (48, 1, 39, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (49, 2, 40, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (50, 1, 40, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (51, 2, 41, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (52, 1, 41, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (53, 2, 42, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (54, 1, 42, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (55, 2, 43, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (56, 1, 43, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (57, 2, 44, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (58, 1, 44, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (59, 2, 45, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (60, 1, 45, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (61, 2, 46, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (62, 1, 46, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (63, 2, 47, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (64, 1, 47, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (65, 2, 48, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (66, 1, 48, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (67, 2, 49, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (68, 1, 49, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (69, 2, 50, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (70, 1, 50, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (71, 2, 51, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (72, 1, 51, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (73, 2, 52, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (74, 1, 52, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (75, 2, 53, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (76, 1, 53, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (77, 2, 54, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (78, 1, 54, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (79, 2, 55, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (80, 1, 55, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (81, 2, 56, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (82, 1, 56, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (83, 2, 57, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (84, 1, 57, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (85, 2, 58, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (86, 1, 58, 14)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (87, 2, 59, 13)
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (88, 1, 59, 14)
+GO
 SET IDENTITY_INSERT [dbo].[OrderItems] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Orders] ON 
 GO
 INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (1, CAST(N'2025-03-30T17:13:25.413' AS DateTime), CAST(1599.98 AS Decimal(10, 2)), N'Processing', 1)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (2, CAST(N'2025-04-22T23:56:32.840' AS DateTime), CAST(1000.00 AS Decimal(10, 2)), N'Processing', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (3, CAST(N'2025-04-23T00:00:24.800' AS DateTime), CAST(1000.00 AS Decimal(10, 2)), N'Processing', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (4, CAST(N'2025-04-23T00:05:23.650' AS DateTime), CAST(1000.00 AS Decimal(10, 2)), N'Processing', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (5, CAST(N'2025-04-23T00:09:40.643' AS DateTime), CAST(100.00 AS Decimal(10, 2)), N'Shipped', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (6, CAST(N'2025-04-23T00:10:38.007' AS DateTime), CAST(100.00 AS Decimal(10, 2)), N'Shipped', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (7, CAST(N'2025-04-23T00:16:49.253' AS DateTime), CAST(100.00 AS Decimal(10, 2)), N'Shipped', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (10, CAST(N'2025-04-27T23:49:27.750' AS DateTime), CAST(99000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (11, CAST(N'2025-04-28T00:00:11.463' AS DateTime), CAST(99000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (12, CAST(N'2025-04-28T00:07:34.737' AS DateTime), CAST(99000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (20, CAST(N'2025-04-28T00:33:29.007' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (21, CAST(N'2025-04-28T00:33:30.637' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (22, CAST(N'2025-04-28T00:34:24.553' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (23, CAST(N'2025-04-28T00:35:40.217' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (24, CAST(N'2025-04-28T00:40:57.023' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (25, CAST(N'2025-04-28T00:44:15.703' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (26, CAST(N'2025-04-28T00:44:35.607' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (27, CAST(N'2025-04-28T00:47:25.343' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (28, CAST(N'2025-04-28T00:47:47.353' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (29, CAST(N'2025-04-28T00:50:08.847' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (30, CAST(N'2025-04-28T00:55:07.457' AS DateTime), CAST(99000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (31, CAST(N'2025-04-28T00:56:26.467' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (32, CAST(N'2025-04-28T01:10:06.590' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (33, CAST(N'2025-04-28T01:29:14.390' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (34, CAST(N'2025-04-28T01:29:27.573' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (35, CAST(N'2025-04-28T01:31:09.393' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (36, CAST(N'2025-04-28T01:32:07.077' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (37, CAST(N'2025-04-28T01:40:04.933' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (38, CAST(N'2025-04-28T01:51:15.917' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (39, CAST(N'2025-04-28T01:51:26.213' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (40, CAST(N'2025-04-28T01:53:45.180' AS DateTime), CAST(0.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (41, CAST(N'2025-04-28T01:53:45.567' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (42, CAST(N'2025-04-28T01:53:56.873' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (43, CAST(N'2025-04-28T01:55:10.207' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (44, CAST(N'2025-04-28T01:55:14.713' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (45, CAST(N'2025-04-28T01:56:23.050' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (46, CAST(N'2025-04-28T01:56:27.807' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (47, CAST(N'2025-04-28T01:56:56.870' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (48, CAST(N'2025-04-28T01:57:27.740' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (49, CAST(N'2025-04-28T01:58:43.163' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (50, CAST(N'2025-04-28T02:02:24.080' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (51, CAST(N'2025-04-28T02:05:39.130' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (52, CAST(N'2025-04-28T02:05:41.927' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (53, CAST(N'2025-04-28T02:07:34.547' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (54, CAST(N'2025-04-28T02:07:48.063' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (55, CAST(N'2025-04-28T02:10:44.597' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (56, CAST(N'2025-04-28T02:16:40.357' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (57, CAST(N'2025-04-28T02:16:43.413' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (58, CAST(N'2025-04-28T02:21:42.660' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Paid', 8)
+GO
+INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) VALUES (59, CAST(N'2025-04-28T02:34:29.360' AS DateTime), CAST(149000.00 AS Decimal(10, 2)), N'Pending', 8)
 GO
 SET IDENTITY_INSERT [dbo].[Orders] OFF
 GO
@@ -419,7 +689,7 @@ SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Discount__A25C5AA793CB0AF0]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Index [UQ__Discount__A25C5AA793CB0AF0]    Script Date: 30/4/2025 7:51:56 AM ******/
 ALTER TABLE [dbo].[Discount] ADD UNIQUE NONCLUSTERED 
 (
 	[Code] ASC
@@ -427,7 +697,7 @@ ALTER TABLE [dbo].[Discount] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B616029394D67]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Index [UQ__Roles__8A2B616029394D67]    Script Date: 30/4/2025 7:51:56 AM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -435,7 +705,7 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D105341AA49753]    Script Date: 17/4/2025 12:42:10 AM ******/
+/****** Object:  Index [UQ__Users__A9D105341AA49753]    Script Date: 30/4/2025 7:51:56 AM ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
