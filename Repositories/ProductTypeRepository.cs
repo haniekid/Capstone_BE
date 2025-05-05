@@ -18,6 +18,11 @@ namespace backend.Repositories
 			throw new NotImplementedException();
 		}
 
+		public bool Add2(ProductType item, int id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool Delete(int id)
 		{
 			throw new NotImplementedException();

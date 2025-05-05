@@ -440,5 +440,15 @@ namespace backend.Repositories
 
 			return result;
 		}
+
+		public bool Add2(ProductDTO item, int id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool Add2(int id1, int id2)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

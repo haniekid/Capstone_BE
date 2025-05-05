@@ -31,10 +31,11 @@ namespace backend
 											.AllowAnyMethod();
 								  });
 			});
-            builder.Services.AddScoped<IVnpay, Vnpay>();
-            builder.Services.AddScoped<IRepository<User>, UserRepository>();
+			builder.Services.AddScoped<IVnpay, Vnpay>();
+			builder.Services.AddScoped<IRepository<User>, UserRepository>();
 			builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 			builder.Services.AddScoped<IRepository<ProductDTO>, ProductDTORepository>();
+			builder.Services.AddScoped<IRepository<ProductDTO>, AddOnProductRepository>();
 			builder.Services.AddScoped<IRepository<ProductType>, ProductTypeRepository>();
 
 			builder.Services.AddScoped<IListRepository<Order>, OrderRepository>();

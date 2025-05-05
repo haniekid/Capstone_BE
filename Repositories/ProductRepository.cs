@@ -163,5 +163,10 @@ namespace backend.Repositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public bool Add2(Product item, int id)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

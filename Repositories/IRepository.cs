@@ -10,6 +10,7 @@ namespace backend.Repositories
 		bool Update(T item);
 		bool Delete(int id);
 		IEnumerable<T> GetById2(int id);
+		bool Add2(int id1, int id2);
 
 	}
 }

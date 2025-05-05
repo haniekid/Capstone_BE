@@ -20,13 +20,16 @@ namespace backend.Controllers
 		private readonly IRepository<Product> _productRepository;
 		private readonly IRepository<ProductDTO> _productDTORepository;
 		private readonly IRepository<ProductType> _productTypeRepository;
+		private readonly IRepository<ProductDTO> _addOnProductRepository;
 
 
-		public ProductController(IRepository<Product> productRepository, IRepository<ProductDTO> productDTORepository, IRepository<ProductType> productTypeRepository)
+		public ProductController(IRepository<Product> productRepository, IRepository<ProductDTO> productDTORepository, IRepository<ProductType> productTypeRepository,
+			IRepository<ProductDTO> addOnProductRepository)
 		{
 			_productRepository = productRepository;
 			_productDTORepository = productDTORepository;
 			_productTypeRepository = productTypeRepository;
+			_addOnProductRepository = addOnProductRepository;
 		}
 
 		[HttpGet]
@@ -101,16 +104,6 @@ namespace backend.Controllers
 			return Ok(product);
 		}
 
-		[HttpGet("GetAddOnProductByProductId/{productId}")]
-		public IActionResult GetAddOnProductByProductId(int productId)
-		{
-			var product = _productDTORepository.GetById2(productId);
-			if (product == null)
-			{
-				return NotFound();
-			}
-			return Ok(product);
-		}
 		[HttpPost("AddProductsForAdminDashboard")]
 		public IActionResult AddProductsForAdminDashboard(ProductDTO product)
 		{
@@ -151,6 +144,35 @@ namespace backend.Controllers
 		public IActionResult GetProductTypesForAdminDashboard()
 		{
 			var products = _productTypeRepository.GetAll();
+			return Ok(products);
+		}
+
+
+		[HttpGet("GetAddOnProductByProductId/{productId}")]
+		public IActionResult GetAddOnProductByProductId(int productId)
+		{
+			var product = _productDTORepository.GetById2(productId);
+			if (product == null)
+			{
+				return NotFound();
+			}
+			return Ok(product);
+		}
+
+		[HttpPost("InsertAddOnProductByProductId")]
+		public IActionResult InsertAddOnProductByProductId([FromQuery] int productId, [FromQuery] int addOnProductId)
+		{
+			bool result = _productDTORepository.Add2(productId, addOnProductId);
+			if (!result)
+				return BadRequest();
+
+			return Ok();
+		}
+
+		[HttpGet("GetAllAddOnProduct")]
+		public IActionResult GetAllAddOnProduct()
+		{
+			var products = _productDTORepository.GetAll();
 			return Ok(products);
 		}
 	}
