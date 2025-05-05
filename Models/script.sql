@@ -1,15 +1,15 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Demo_3]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Database [Demo_3]    Script Date: 05-May-25 5:44:16 PM ******/
 CREATE DATABASE [Demo_3]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'Demo_3', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_3.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'Demo_3', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_3.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'Demo_3_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_3_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT
+( NAME = N'Demo_3_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_3_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
-ALTER DATABASE [Demo_3] SET COMPATIBILITY_LEVEL = 150
+ALTER DATABASE [Demo_3] SET COMPATIBILITY_LEVEL = 160
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
@@ -76,13 +76,11 @@ ALTER DATABASE [Demo_3] SET DELAYED_DURABILITY = DISABLED
 GO
 ALTER DATABASE [Demo_3] SET ACCELERATED_DATABASE_RECOVERY = OFF  
 GO
-EXEC sys.sp_db_vardecimal_storage_format N'Demo_3', N'ON'
-GO
 ALTER DATABASE [Demo_3] SET QUERY_STORE = OFF
 GO
 USE [Demo_3]
 GO
-/****** Object:  Table [dbo].[Discount]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[Discount]    Script Date: 05-May-25 5:44:16 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +103,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 05-May-25 5:44:16 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -121,7 +119,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 05-May-25 5:44:16 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -138,7 +136,25 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductImages]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 05-May-25 5:44:16 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProductAddOns](
+	[ProductAddOnID] [int] IDENTITY(1,1) NOT NULL,
+	[ProductID] [int] NOT NULL,
+	[AddOnProductID] [int] NOT NULL,
+	[AddOnPrice] [decimal](18, 2) NOT NULL,
+	[AddOnQuantity] [int] NOT NULL,
+	[IsOptional] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ProductAddOnID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ProductImages]    Script Date: 05-May-25 5:44:16 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -153,7 +169,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductPrices]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[ProductPrices]    Script Date: 05-May-25 5:44:16 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -169,7 +185,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 05-May-25 5:44:17 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -187,7 +203,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductSales]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[ProductSales]    Script Date: 05-May-25 5:44:17 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -195,17 +211,17 @@ GO
 CREATE TABLE [dbo].[ProductSales](
 	[SaleID] [int] IDENTITY(1,1) NOT NULL,
 	[ProductPriceID] [int] NOT NULL,
-	[SalePrice] [decimal](10, 2) NOT NULL,
-	[SaleStartDate] [datetime] NOT NULL,
-	[SaleEndDate] [datetime] NOT NULL,
+	[SalePrice] [decimal](10, 2) NULL,
+	[SaleStartDate] [datetime] NULL,
+	[SaleEndDate] [datetime] NULL,
 	[CreatedAt] [datetime] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__ProductS__1EE3C41F9A3D3E1C] PRIMARY KEY CLUSTERED 
 (
 	[SaleID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 05-May-25 5:44:17 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -219,7 +235,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 05-May-25 5:44:17 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -268,186 +284,6 @@ GO
 INSERT [dbo].[Discount] ([DiscountId], [Code], [Description], [DiscountType], [DiscountValue], [StartDate], [EndDate], [UsageLimit], [UsedCount], [IsActive], [CreatedAt]) VALUES (20, N'11111111', N'11111', N'Percentage', CAST(11.00 AS Decimal(10, 2)), CAST(N'2025-04-09T00:00:00.000' AS DateTime), CAST(N'2025-04-17T00:00:00.000' AS DateTime), 111, 0, 0, CAST(N'2025-04-10T22:56:14.087' AS DateTime))
 GO
 SET IDENTITY_INSERT [dbo].[Discount] OFF
-GO
-SET IDENTITY_INSERT [dbo].[OrderItems] ON 
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (1, 1, 1, 1)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (2, 1, 1, 2)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (3, 2, 10, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (4, 1, 10, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (5, 2, 11, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (6, 1, 11, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (7, 2, 12, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (8, 1, 12, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (9, 2, 20, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (10, 1, 20, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (11, 2, 21, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (12, 1, 21, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (13, 2, 22, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (14, 1, 22, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (15, 2, 23, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (16, 1, 23, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (17, 2, 24, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (18, 1, 24, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (19, 2, 25, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (20, 1, 25, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (21, 2, 26, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (22, 1, 26, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (23, 2, 27, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (24, 1, 27, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (25, 2, 28, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (26, 1, 28, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (27, 2, 29, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (28, 1, 29, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (29, 2, 30, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (30, 1, 30, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (31, 2, 31, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (32, 1, 31, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (33, 2, 32, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (34, 1, 32, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (35, 2, 33, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (36, 1, 33, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (37, 2, 34, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (38, 1, 34, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (39, 2, 35, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (40, 1, 35, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (41, 2, 36, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (42, 1, 36, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (43, 2, 37, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (44, 1, 37, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (45, 2, 38, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (46, 1, 38, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (47, 2, 39, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (48, 1, 39, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (49, 2, 40, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (50, 1, 40, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (51, 2, 41, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (52, 1, 41, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (53, 2, 42, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (54, 1, 42, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (55, 2, 43, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (56, 1, 43, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (57, 2, 44, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (58, 1, 44, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (59, 2, 45, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (60, 1, 45, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (61, 2, 46, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (62, 1, 46, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (63, 2, 47, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (64, 1, 47, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (65, 2, 48, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (66, 1, 48, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (67, 2, 49, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (68, 1, 49, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (69, 2, 50, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (70, 1, 50, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (71, 2, 51, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (72, 1, 51, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (73, 2, 52, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (74, 1, 52, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (75, 2, 53, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (76, 1, 53, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (77, 2, 54, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (78, 1, 54, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (79, 2, 55, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (80, 1, 55, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (81, 2, 56, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (82, 1, 56, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (83, 2, 57, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (84, 1, 57, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (85, 2, 58, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (86, 1, 58, 14)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (87, 2, 59, 13)
-GO
-INSERT [dbo].[OrderItems] ([OrderItemID], [Quantity], [OrderID], [ProductPriceID]) VALUES (88, 1, 59, 14)
-GO
-SET IDENTITY_INSERT [dbo].[OrderItems] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Orders] ON 
 GO
@@ -553,101 +389,59 @@ INSERT [dbo].[Orders] ([OrderID], [DateTime], [TotalPrice], [Status], [UserID]) 
 GO
 SET IDENTITY_INSERT [dbo].[Orders] OFF
 GO
+SET IDENTITY_INSERT [dbo].[ProductAddOns] ON 
+GO
+INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID], [AddOnPrice], [AddOnQuantity], [IsOptional]) VALUES (3, 20, 21, CAST(10000.00 AS Decimal(18, 2)), 1, 1)
+GO
+INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID], [AddOnPrice], [AddOnQuantity], [IsOptional]) VALUES (4, 20, 22, CAST(8000.00 AS Decimal(18, 2)), 1, 1)
+GO
+INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID], [AddOnPrice], [AddOnQuantity], [IsOptional]) VALUES (5, 20, 23, CAST(5000.00 AS Decimal(18, 2)), 1, 1)
+GO
+SET IDENTITY_INSERT [dbo].[ProductAddOns] OFF
+GO
 SET IDENTITY_INSERT [dbo].[ProductImages] ON 
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (3, 12, N'https://product.hstatic.net/1000141988/product/banh_snack_cua_xanh_kinh_do_29_g__i0015950__293edc9f144247c19f4032e930003b98.png')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (4, 12, N'https://product.hstatic.net/1000141988/product/banh_snack_cua_xanh_kinh_do_29_g__i0015950__293edc9f144247c19f4032e930003b98.png')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (5, 13, N'https://cachnau.vn/wp-content/uploads/2021/11/bun-rieu-thit-heo.jpg')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (6, 13, N'https://i-giadinh.vnecdn.net/2024/02/22/Buoc-8-Thanh-pham-1-8-3117-1708574962.jpg')
 GO
 INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (7, 13, N'https://fullofplants.com/wp-content/uploads/2023/10/how-to-make-vegan-bun-rieu-chay-vietnamese-crab-noodle-soup-thumb.jpg')
 GO
 INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (8, 14, N'https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGhvfGVufDB8fDB8fHww')
 GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (11, 6, N'https://kenh14cdn.com/2019/6/13/5-15604349732321143466519.jpg')
+INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (16, 20, N'https://file.hstatic.net/1000394081/article/lau-thai_2aedea543c194e93948def3c260e8eb9.jpg')
 GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (12, 6, N'https://kenh14cdn.com/2019/6/13/4-1560434973220181092322.jpg')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (13, 15, N'string')
+INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (17, 20, N'https://maythucphamgoma.vn/wp-content/uploads/2024/10/thai-tc1-4-6ng.png')
 GO
 SET IDENTITY_INSERT [dbo].[ProductImages] OFF
 GO
 SET IDENTITY_INSERT [dbo].[ProductPrices] ON 
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (1, CAST(999.99 AS Decimal(10, 2)), 10, 1)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (2, CAST(599.99 AS Decimal(10, 2)), 20, 2)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (3, CAST(2000.00 AS Decimal(10, 2)), 10, 4)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (4, CAST(20.00 AS Decimal(10, 2)), 10, 5)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (5, CAST(65000.00 AS Decimal(10, 2)), 100, 6)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (7, CAST(50000.00 AS Decimal(10, 2)), 100, 7)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (8, CAST(45000.00 AS Decimal(10, 2)), 100, 8)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (9, CAST(60000.00 AS Decimal(10, 2)), 100, 9)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (10, CAST(49000.00 AS Decimal(10, 2)), 490, 10)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (11, CAST(45000.00 AS Decimal(10, 2)), 100, 11)
-GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (12, CAST(50000.00 AS Decimal(10, 2)), 50000, 12)
-GO
 INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (13, CAST(50000.00 AS Decimal(10, 2)), 100, 13)
 GO
 INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (14, CAST(49000.00 AS Decimal(10, 2)), 0, 14)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (15, CAST(0.00 AS Decimal(10, 2)), 0, 15)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (19, CAST(150000.00 AS Decimal(10, 2)), 1, 20)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (20, CAST(10000.00 AS Decimal(10, 2)), 1, 21)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (21, CAST(8000.00 AS Decimal(10, 2)), 1, 22)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (22, CAST(5000.00 AS Decimal(10, 2)), 1, 23)
 GO
 SET IDENTITY_INSERT [dbo].[ProductPrices] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Products] ON 
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (1, N'Food3', N'Food3', N'High-performance laptop', N'https://product.hstatic.net/1000141988/product/banh_snack_cua_xanh_kinh_do_29_g__i0015950__293edc9f144247c19f4032e930003b98.png', 1)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (2, N'Food2', N'Food2', N'Latest model smartphone', N'https://product.hstatic.net/200000495609/product/snack-tom-cay-oishi-du-vi-goi-lon-68g-banh-keo-an-vat-imnuts_d3ff6a241a9e4bb28aea097f9eca7166_master.jpg', 1)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (4, N'Food1', N'Food', N'a', N'https://www.lottemart.vn/media/catalog/product/cache/0x0/8/9/8934803024883-1.jpg.webp', NULL)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (5, N'Food4', N'Món cuốn', N'string', N'string', 1)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (6, N'Bún Trộn', N'Bún', N'no', N'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhd6dgfk6Qn7U25tvgrxJYLUJ94S4V4iip77bN35P17d3JGLT8eoW7_Xjse6OgZV2leEiHaYIz89BC5fsBdrc6X5NVN8caqZMe1Z8fGdUo4r19Uyr62g17tP2ALGnJUf5c0l4F4g85BaIs/s800/94271CB2-5921-4180-B602-AC21E71F4BB7_1_102_o.jpeg', NULL)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (7, N'Phở Bò', N'Món nước', N'Món phở truyền thống với nước dùng bò đậm đà', N'https://example.com/images/pho-bo.jpg', 0)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (8, N'Bánh Mì Thịt Nguội', N'Món ăn nhanh', N'Bánh mì giòn, nhân thịt nguội, pate và rau sống', N'https://example.com/images/banh-mi-thit.jpg', 0)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (9, N'Gỏi Cuốn', N'Món cuốn', N'Cuốn tôm thịt tươi, ăn kèm nước chấm chua ngọt', N'https://example.com/images/goi-cuon.jpg', 0)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (10, N'Bún Chả', N'Món nướng', N'Bún với thịt nướng và nước mắm chua ngọt', N'https://example.com/images/bun-cha.jpg', 0)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (11, N'Cơm Tấm Sườn Nướng', N'Cơm', N'Cơm tấm ăn kèm sườn nướng, trứng, bì', N'https://example.com/images/com-tam.jpg', 0)
-GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (12, N'Com rang', N'Cơm', N'no', N'https://product.hstatic.net/1000141988/product/banh_snack_cua_xanh_kinh_do_29_g__i0015950__293edc9f144247c19f4032e930003b98.png', 1)
-GO
 INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (13, N'Bun rieu', N'Bún', N'no', N'https://cdn.tgdd.vn/2020/08/CookProduct/Untitled-1-1200x676-10.jpg', 0)
 GO
 INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (14, N'Pho bo', N'Bún', N'123', N'https://plus.unsplash.com/premium_photo-1664478276162-46c39b3557c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhvfGVufDB8fDB8fHww', 0)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (15, N'string', N'string', N'string', N'string', 1)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (20, N'Lẩu Thái', N'Lẩu', N'Lẩu Thái tôm chua cay', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 0)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (21, N'Bò viên', N'Topping', N'Bò viên dai tươi ngon', NULL, 0)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (22, N'Nấm kim châm', N'Topping', N'Nấm tươi ngon', NULL, 0)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (23, N'Trứng gà', N'Topping', N'Trứng gà ta', NULL, 0)
 GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
-GO
-SET IDENTITY_INSERT [dbo].[ProductSales] ON 
-GO
-INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (1, 5, CAST(60000.00 AS Decimal(10, 2)), CAST(N'2025-04-15T17:00:00.000' AS DateTime), CAST(N'2026-04-15T17:00:00.000' AS DateTime), CAST(N'2025-04-16T13:38:21.487' AS DateTime))
-GO
-INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (2, 14, CAST(48000.00 AS Decimal(10, 2)), CAST(N'2025-04-16T08:51:00.000' AS DateTime), CAST(N'2025-04-26T08:51:00.000' AS DateTime), CAST(N'2025-04-16T15:52:22.483' AS DateTime))
-GO
-INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (3, 15, CAST(0.00 AS Decimal(10, 2)), CAST(N'2025-04-16T16:17:31.363' AS DateTime), CAST(N'2025-04-16T16:17:31.363' AS DateTime), CAST(N'2025-04-16T23:17:32.807' AS DateTime))
-GO
-SET IDENTITY_INSERT [dbo].[ProductSales] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Roles] ON 
 GO
@@ -689,7 +483,7 @@ SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Discount__A25C5AA793CB0AF0]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Index [UQ__Discount__A25C5AA775894E3C]    Script Date: 05-May-25 5:44:17 PM ******/
 ALTER TABLE [dbo].[Discount] ADD UNIQUE NONCLUSTERED 
 (
 	[Code] ASC
@@ -697,7 +491,7 @@ ALTER TABLE [dbo].[Discount] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B616029394D67]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Index [UQ__Roles__8A2B6160496FC8C3]    Script Date: 05-May-25 5:44:17 PM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -705,7 +499,7 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D105341AA49753]    Script Date: 30/4/2025 7:51:56 AM ******/
+/****** Object:  Index [UQ__Users__A9D10534737981D5]    Script Date: 05-May-25 5:44:17 PM ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -717,7 +511,11 @@ ALTER TABLE [dbo].[Discount] ADD  DEFAULT ((1)) FOR [IsActive]
 GO
 ALTER TABLE [dbo].[Discount] ADD  DEFAULT (getdate()) FOR [CreatedAt]
 GO
-ALTER TABLE [dbo].[ProductSales] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+ALTER TABLE [dbo].[ProductAddOns] ADD  DEFAULT ((1)) FOR [AddOnQuantity]
+GO
+ALTER TABLE [dbo].[ProductAddOns] ADD  DEFAULT ((1)) FOR [IsOptional]
+GO
+ALTER TABLE [dbo].[ProductSales] ADD  CONSTRAINT [DF__ProductSa__Creat__5EBF139D]  DEFAULT (getdate()) FOR [CreatedAt]
 GO
 ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD FOREIGN KEY([OrderID])
 REFERENCES [dbo].[Orders] ([OrderID])
@@ -728,6 +526,16 @@ GO
 ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([UserID])
 REFERENCES [dbo].[Users] ([UserID])
 GO
+ALTER TABLE [dbo].[ProductAddOns]  WITH CHECK ADD  CONSTRAINT [FK_ProductAddOns_AddOnProduct] FOREIGN KEY([AddOnProductID])
+REFERENCES [dbo].[Products] ([ProductID])
+GO
+ALTER TABLE [dbo].[ProductAddOns] CHECK CONSTRAINT [FK_ProductAddOns_AddOnProduct]
+GO
+ALTER TABLE [dbo].[ProductAddOns]  WITH CHECK ADD  CONSTRAINT [FK_ProductAddOns_Product] FOREIGN KEY([ProductID])
+REFERENCES [dbo].[Products] ([ProductID])
+GO
+ALTER TABLE [dbo].[ProductAddOns] CHECK CONSTRAINT [FK_ProductAddOns_Product]
+GO
 ALTER TABLE [dbo].[ProductImages]  WITH CHECK ADD FOREIGN KEY([ProductID])
 REFERENCES [dbo].[Products] ([ProductID])
 GO
@@ -736,13 +544,19 @@ REFERENCES [dbo].[Products] ([ProductID])
 GO
 ALTER TABLE [dbo].[ProductPrices] CHECK CONSTRAINT [FK__ProductPr__Produ__2D27B809]
 GO
-ALTER TABLE [dbo].[ProductSales]  WITH CHECK ADD FOREIGN KEY([ProductPriceID])
+ALTER TABLE [dbo].[ProductSales]  WITH CHECK ADD  CONSTRAINT [FK__ProductSa__Produ__6477ECF3] FOREIGN KEY([ProductPriceID])
 REFERENCES [dbo].[ProductPrices] ([ProductPriceID])
+GO
+ALTER TABLE [dbo].[ProductSales] CHECK CONSTRAINT [FK__ProductSa__Produ__6477ECF3]
 GO
 ALTER TABLE [dbo].[Users]  WITH CHECK ADD FOREIGN KEY([RoleID])
 REFERENCES [dbo].[Roles] ([RoleID])
 GO
 ALTER TABLE [dbo].[Discount]  WITH CHECK ADD CHECK  (([DiscountType]='FixedAmount' OR [DiscountType]='Percentage'))
+GO
+ALTER TABLE [dbo].[ProductAddOns]  WITH CHECK ADD  CONSTRAINT [CHK_ProductAddOns_NoSelfReference] CHECK  (([ProductID]<>[AddOnProductID]))
+GO
+ALTER TABLE [dbo].[ProductAddOns] CHECK CONSTRAINT [CHK_ProductAddOns_NoSelfReference]
 GO
 USE [master]
 GO
