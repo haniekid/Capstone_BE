@@ -100,6 +100,17 @@ namespace backend.Controllers
 			}
 			return Ok(product);
 		}
+
+		[HttpGet("GetAddOnProductByProductId/{productId}")]
+		public IActionResult GetAddOnProductByProductId(int productId)
+		{
+			var product = _productDTORepository.GetById2(productId);
+			if (product == null)
+			{
+				return NotFound();
+			}
+			return Ok(product);
+		}
 		[HttpPost("AddProductsForAdminDashboard")]
 		public IActionResult AddProductsForAdminDashboard(ProductDTO product)
 		{

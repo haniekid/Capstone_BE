@@ -55,6 +55,11 @@ namespace backend.Repositories
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<ProductType> GetById2(int id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool Update(ProductType item)
 		{
 			throw new NotImplementedException();

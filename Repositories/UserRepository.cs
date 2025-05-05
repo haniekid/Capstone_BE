@@ -204,6 +204,11 @@ namespace backend.Repositories
 				}
 			}
 		}
+
+		public IEnumerable<User> GetById2(int id)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
 
