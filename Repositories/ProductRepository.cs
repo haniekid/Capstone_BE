@@ -168,5 +168,10 @@ namespace backend.Repositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public bool Delete2(Product item)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

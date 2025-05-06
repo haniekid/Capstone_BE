@@ -20,11 +20,11 @@ namespace backend.Controllers
 		private readonly IRepository<Product> _productRepository;
 		private readonly IRepository<ProductDTO> _productDTORepository;
 		private readonly IRepository<ProductType> _productTypeRepository;
-		private readonly IRepository<ProductDTO> _addOnProductRepository;
+		private readonly IRepository<AddOnProductRequest> _addOnProductRepository;
 
 
 		public ProductController(IRepository<Product> productRepository, IRepository<ProductDTO> productDTORepository, IRepository<ProductType> productTypeRepository,
-			IRepository<ProductDTO> addOnProductRepository)
+			IRepository<AddOnProductRequest> addOnProductRepository)
 		{
 			_productRepository = productRepository;
 			_productDTORepository = productDTORepository;
@@ -160,9 +160,9 @@ namespace backend.Controllers
 		}
 
 		[HttpPost("InsertAddOnProductByProductId")]
-		public IActionResult InsertAddOnProductByProductId([FromQuery] int productId, [FromQuery] int addOnProductId)
+		public IActionResult InsertAddOnProductByProductId(AddOnProductRequest product)
 		{
-			bool result = _productDTORepository.Add2(productId, addOnProductId);
+			bool result = _addOnProductRepository.Add(product);
 			if (!result)
 				return BadRequest();
 
@@ -174,6 +174,15 @@ namespace backend.Controllers
 		{
 			var products = _productDTORepository.GetAll();
 			return Ok(products);
+		}
+		[HttpPost("DeleteAddOnProductByProductId")]
+		public IActionResult DeleteAddOnProductByProductId(AddOnProductRequest product)
+		{
+			bool result = _addOnProductRepository.Delete2(product);
+			if (!result)
+				return BadRequest();
+
+			return Ok();
 		}
 	}
 }

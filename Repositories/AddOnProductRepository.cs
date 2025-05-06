@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace backend.Repositories
 {
-	public class AddOnProductRepository : IRepository<ProductDTO>
+	public class AddOnProductRepository : IRepository<AddOnProductRequest>
 	{
 		private readonly IConfiguration _configuration;
 		private readonly string _connectionString;
@@ -13,40 +13,26 @@ namespace backend.Repositories
 			_configuration = configuration;
 			_connectionString = _configuration.GetConnectionString("UserAppCon");
 		}
-		public bool Add(ProductDTO item)
-		{
-			throw new NotImplementedException();
-		}
 
-		public bool Add2(int productId, int addOnProductId)
+		public bool Add(AddOnProductRequest product)
 		{
 			string query = @"
-						SELECT 
-					p.ProductID,
-					p.Name,
-					p.Type,
-					p.Description,
-					p.ImageURL,
-					p.IsDelete,
-					pp.Price,
-					pp.Quantity,
-					NULL AS SalePrice,
-					NULL AS SaleStartDate,
-					NULL AS SaleEndDate,
-					pi.ImageURL AS AdditionalImage
-				FROM ProductAddOns pa
-				JOIN Products p ON pa.AddOnProductID = p.ProductID
-				JOIN ProductPrices pp ON pp.ProductID = p.ProductID
-				LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
-				WHERE pa.ProductID = @ProductId";
+		IF NOT EXISTS (
+			SELECT 1 FROM ProductAddOns 
+			WHERE ProductID = @ProductID AND AddOnProductID = @AddOnProductID
+		)
+		BEGIN
+			INSERT INTO ProductAddOns (ProductID, AddOnProductID)
+			VALUES (@ProductID, @AddOnProductID)
+		END";
 
 			using (SqlConnection myCon = new SqlConnection(_connectionString))
 			{
 				myCon.Open();
 				using (SqlCommand myCommand = new SqlCommand(query, myCon))
 				{
-					myCommand.Parameters.AddWithValue("@ProductID", productId);
-					myCommand.Parameters.AddWithValue("@AddOnProductID", addOnProductId);
+					myCommand.Parameters.AddWithValue("@ProductID", product.ProductId);
+					myCommand.Parameters.AddWithValue("@AddOnProductID", product.AddOnProductId);
 
 					try
 					{
@@ -67,22 +53,42 @@ namespace backend.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<ProductDTO> GetAll()
+		public bool Delete2(AddOnProductRequest item)
+		{
+			string query = @"
+		DELETE FROM ProductAddOns
+		WHERE ProductID = @MainProductId AND AddOnProductID = @AddOnProductId";
+
+			using (SqlConnection myCon = new SqlConnection(_connectionString))
+			{
+				myCon.Open();
+				using (SqlCommand myCommand = new SqlCommand(query, myCon))
+				{
+					myCommand.Parameters.AddWithValue("@MainProductId", item.ProductId);
+					myCommand.Parameters.AddWithValue("@AddOnProductId", item.AddOnProductId);
+
+					int rowsAffected = myCommand.ExecuteNonQuery();
+					return rowsAffected > 0;
+				}
+			}
+		}
+
+		public IEnumerable<AddOnProductRequest> GetAll()
 		{
 			throw new NotImplementedException();
 		}
 
-		public ProductDTO GetById(int id)
+		public AddOnProductRequest GetById(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<ProductDTO> GetById2(int id)
+		public IEnumerable<AddOnProductRequest> GetById2(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool Update(ProductDTO item)
+		public bool Update(AddOnProductRequest item)
 		{
 			throw new NotImplementedException();
 		}

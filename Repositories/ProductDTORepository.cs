@@ -236,9 +236,6 @@ namespace backend.Repositories
 						ps.ProductPriceID = pp.ProductPriceID 
 						AND GETDATE() BETWEEN ps.SaleStartDate AND ps.SaleEndDate
 					LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
-					WHERE p.ProductID NOT IN (
-						SELECT DISTINCT AddOnProductID FROM ProductAddOns
-					)
 					ORDER BY p.ProductID";
 
 			var productDict = new Dictionary<int, ProductDTO>();
@@ -365,25 +362,24 @@ namespace backend.Repositories
 		public IEnumerable<ProductDTO> GetById2(int id)
 		{
 			var result = new List<ProductDTO>();
-
-			string query = @"
-						SELECT 
-							p.ProductID,
-							p.Name,
-							p.Type,
-							p.Description,
-							p.ImageURL,
-							p.IsDelete,
-							pa.AddOnPrice AS Price,
-							pa.AddOnQuantity AS Quantity,
-							NULL AS SalePrice,
-							NULL AS SaleStartDate,
-							NULL AS SaleEndDate,
-							pi.ImageURL AS AdditionalImage
-						FROM ProductAddOns pa
-						JOIN Products p ON pa.AddOnProductID = p.ProductID
-						LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
-						WHERE pa.ProductID = @ProductId
+						string query = @"SELECT 
+				p.ProductID,
+				p.Name,
+				p.Type,
+				p.Description,
+				p.ImageURL,
+				p.IsDelete,
+				pp.Price,
+				pp.Quantity,
+				NULL AS SalePrice,
+				NULL AS SaleStartDate,
+				NULL AS SaleEndDate,
+				pi.ImageURL AS AdditionalImage
+			FROM ProductAddOns pa
+			JOIN Products p ON pa.AddOnProductID = p.ProductID
+			JOIN ProductPrices pp ON pp.ProductID = p.ProductID
+			LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
+			WHERE pa.ProductID = @ProductId
 					";
 
 			using (SqlConnection myCon = new SqlConnection(_connectionString))
@@ -447,6 +443,11 @@ namespace backend.Repositories
 		}
 
 		public bool Add2(int id1, int id2)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool Delete2(ProductDTO item)
 		{
 			throw new NotImplementedException();
 		}

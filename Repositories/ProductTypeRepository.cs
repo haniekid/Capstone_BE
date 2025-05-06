@@ -28,6 +28,11 @@ namespace backend.Repositories
 			throw new NotImplementedException();
 		}
 
+		public bool Delete2(ProductType item)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<ProductType> GetAll()
 		{
 			var types = new List<ProductType>();
