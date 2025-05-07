@@ -2,17 +2,19 @@
 {
     public class OrderItem
     {
-        public int OrderItemID { get; set; }
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public int Quantity { get; set; }
-        public int OrderID { get; set; }
-        public int ProductPriceID { get; set; }
+        public decimal Price { get; set; }
+        public decimal TotalPrice { get; set; }
 
-        public OrderItem(int orderItemID, int quantity, int orderID, int productPriceID)
+        public OrderItem(int productId, string productName, int quantity, decimal price, decimal totalPrice)
         {
-            OrderItemID = orderItemID;
+            ProductId = productId;
+            ProductName = productName;
             Quantity = quantity;
-            OrderID = orderID;
-            ProductPriceID = productPriceID;
+            Price = price;
+            TotalPrice = totalPrice;
         }
     }
 }
