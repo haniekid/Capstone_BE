@@ -20,23 +20,21 @@ namespace backend.Repositories
 		public IEnumerable<User> GetAll()
 		{
 			string query = @"SELECT 
-						u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
-						u.PasswordHash, u.Address, u.City, u.PostalCode, u.ActivationToken, u.IsActivated,
-						r.RoleName 
-					 FROM [Users] u
-					 LEFT JOIN [Roles] r ON u.RoleID = r.RoleID";
+					u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
+					u.PasswordHash, u.Address, u.City, u.PostalCode, 
+					u.ActivationToken, u.IsActivated, u.ResetPasswordToken, u.ResetTokenExpiry,
+					r.RoleName 
+				 FROM [Users] u
+				 LEFT JOIN [Roles] r ON u.RoleID = r.RoleID";
 
 			DataTable table = new DataTable();
-			SqlDataReader myReader;
 			using (SqlConnection myCon = new SqlConnection(_connectionString))
 			{
 				myCon.Open();
 				using (SqlCommand myCommand = new SqlCommand(query, myCon))
+				using (SqlDataReader myReader = myCommand.ExecuteReader())
 				{
-					myReader = myCommand.ExecuteReader();
 					table.Load(myReader);
-					myReader.Close();
-					myCon.Close();
 				}
 			}
 
@@ -44,21 +42,25 @@ namespace backend.Repositories
 			foreach (DataRow row in table.Rows)
 			{
 				users.Add(new User(
-					(int)row["UserID"],
-					row["FirstName"].ToString(),
-					row["LastName"].ToString(),
-					row["Email"].ToString(),
-					row["Phone"].ToString(),
-					row["PasswordHash"].ToString(),
-					row["Address"] != DBNull.Value ? row["Address"].ToString() : null,
-					row["City"] != DBNull.Value ? row["City"].ToString() : null,
-					row["PostalCode"] != DBNull.Value ? row["PostalCode"].ToString() : null,
-					row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null ,
-					row["ActivationToken"] != DBNull.Value ? row["ActivationToken"].ToString() : null 
+					userId: (int)row["UserID"],
+					firstName: row["FirstName"].ToString(),
+					lastName: row["LastName"].ToString(),
+					email: row["Email"].ToString(),
+					phone: row["Phone"].ToString(),
+					password: row["PasswordHash"].ToString(),
+					address: row["Address"] != DBNull.Value ? row["Address"].ToString() : null,
+					city: row["City"] != DBNull.Value ? row["City"].ToString() : null,
+					postalCode: row["PostalCode"] != DBNull.Value ? row["PostalCode"].ToString() : null,
+					roleName: row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null,
+					activationToken: row["ActivationToken"] != DBNull.Value ? row["ActivationToken"].ToString() : null,
+					isActivated: row["IsActivated"] != DBNull.Value ? (bool)row["IsActivated"] : false,
+					resetPasswordToken: row["ResetPasswordToken"] != DBNull.Value ? row["ResetPasswordToken"].ToString() : null,
+					resetTokenExpiry: row["ResetTokenExpiry"] != DBNull.Value ? (DateTime?)row["ResetTokenExpiry"] : null
 				));
 			}
 			return users;
 		}
+
 
 		public User GetById(int userId)
 		{
@@ -149,16 +151,19 @@ namespace backend.Repositories
 		public bool Update(User user)
 		{
 			string query = @"UPDATE USERS
-					 SET FirstName = @FirstName,
-						 LastName = @LastName,
-						 Email = @Email,
-						 Phone = @Phone,
-						 Address = @Address,
-						 City = @City,
-						 PostalCode = @PostalCode,
-						 IsActivated = @IsActivated,
-						 ActivationToken = @ActivationToken
-					 WHERE UserID = @UserID";
+			SET FirstName = @FirstName,
+				LastName = @LastName,
+				Email = @Email,
+				Phone = @Phone,
+				PasswordHash = @PasswordHash,
+				Address = @Address,
+				City = @City,
+				PostalCode = @PostalCode,
+				IsActivated = @IsActivated,
+				ActivationToken = @ActivationToken,
+				ResetPasswordToken = @ResetPasswordToken,
+				ResetTokenExpiry = @ResetTokenExpiry
+			WHERE UserID = @UserID";
 
 			using (SqlConnection myCon = new SqlConnection(_connectionString))
 			{
@@ -170,11 +175,14 @@ namespace backend.Repositories
 					myCommand.Parameters.AddWithValue("@LastName", user.LastName);
 					myCommand.Parameters.AddWithValue("@Email", user.Email);
 					myCommand.Parameters.AddWithValue("@Phone", user.Phone);
-					myCommand.Parameters.AddWithValue("@Address", user.Address);
-					myCommand.Parameters.AddWithValue("@City", user.City);
-					myCommand.Parameters.AddWithValue("@PostalCode", user.PostalCode);
-					myCommand.Parameters.AddWithValue("@ActivationToken", user.ActivationToken);
+					myCommand.Parameters.AddWithValue("@PasswordHash", user.Password);
+					myCommand.Parameters.AddWithValue("@Address", (object)user.Address ?? DBNull.Value);
+					myCommand.Parameters.AddWithValue("@City", (object)user.City ?? DBNull.Value);
+					myCommand.Parameters.AddWithValue("@PostalCode", (object)user.PostalCode ?? DBNull.Value);
+					myCommand.Parameters.AddWithValue("@ActivationToken", (object)user.ActivationToken ?? DBNull.Value);
 					myCommand.Parameters.AddWithValue("@IsActivated", user.IsActivated.HasValue ? (object)user.IsActivated.Value : DBNull.Value);
+					myCommand.Parameters.AddWithValue("@ResetPasswordToken", (object)user.ResetPasswordToken ?? DBNull.Value);
+					myCommand.Parameters.AddWithValue("@ResetTokenExpiry", user.ResetTokenExpiry.HasValue ? (object)user.ResetTokenExpiry.Value : DBNull.Value);
 
 					int rowsAffected = myCommand.ExecuteNonQuery();
 					myCon.Close();
@@ -183,8 +191,6 @@ namespace backend.Repositories
 				}
 			}
 		}
-
-
 
 		public bool Delete(int userId)
 		{
