@@ -1,15 +1,15 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Demo_3]    Script Date: 07-May-25 6:00:09 PM ******/
+/****** Object:  Database [Demo_3]    Script Date: 8/5/2025 7:47:51 AM ******/
 CREATE DATABASE [Demo_3]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'Demo_3', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_3.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'Demo_3', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_3.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'Demo_3_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_3_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+( NAME = N'Demo_3_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_3_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
 GO
-ALTER DATABASE [Demo_3] SET COMPATIBILITY_LEVEL = 160
+ALTER DATABASE [Demo_3] SET COMPATIBILITY_LEVEL = 150
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
@@ -76,17 +76,19 @@ ALTER DATABASE [Demo_3] SET DELAYED_DURABILITY = DISABLED
 GO
 ALTER DATABASE [Demo_3] SET ACCELERATED_DATABASE_RECOVERY = OFF  
 GO
+EXEC sys.sp_db_vardecimal_storage_format N'Demo_3', N'ON'
+GO
 ALTER DATABASE [Demo_3] SET QUERY_STORE = OFF
 GO
 USE [Demo_3]
 GO
-/****** Object:  Table [dbo].[Discount]    Script Date: 07-May-25 6:00:09 PM ******/
+/****** Object:  Table [dbo].[Discount]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Discount](
-	[DiscountId] [int] IDENTITY(1,1) NOT NULL,
+	[DiscountId] [int] NOT NULL,
 	[Code] [nvarchar](50) NOT NULL,
 	[Description] [nvarchar](255) NULL,
 	[DiscountType] [varchar](20) NOT NULL,
@@ -97,47 +99,56 @@ CREATE TABLE [dbo].[Discount](
 	[UsedCount] [int] NULL,
 	[IsActive] [bit] NULL,
 	[CreatedAt] [datetime] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__Discount__E43F6D964DEFDDAD] PRIMARY KEY CLUSTERED 
 (
 	[DiscountId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[OrderItems](
 	[OrderItemID] [int] IDENTITY(1,1) NOT NULL,
+	[ProductId] [int] NULL,
 	[Quantity] [int] NOT NULL,
-	[OrderID] [int] NOT NULL,
-	[ProductPriceID] [int] NOT NULL,
-PRIMARY KEY CLUSTERED 
+	[Price] [decimal](10, 2) NOT NULL,
+	[TotalPrice] [decimal](10, 2) NOT NULL,
+	[OrderID] [int] NULL,
+	[ProductName] [nvarchar](50) NULL,
+ CONSTRAINT [PK__OrderIte__57ED06A1ACF9116A] PRIMARY KEY CLUSTERED 
 (
 	[OrderItemID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Orders](
 	[OrderID] [int] IDENTITY(1,1) NOT NULL,
-	[DateTime] [datetime] NOT NULL,
-	[TotalPrice] [decimal](10, 2) NOT NULL,
 	[Status] [nvarchar](50) NOT NULL,
 	[UserID] [int] NOT NULL,
-	[DiscountID] [int] NOT NULL,
+	[DiscountCode] [nvarchar](50) NULL,
+	[ShippingMethod] [nvarchar](50) NOT NULL,
+	[ShippingFee] [decimal](10, 2) NOT NULL,
+	[PaymentMethod] [nvarchar](50) NOT NULL,
+	[VnpayOption] [nvarchar](50) NOT NULL,
+	[Subtotal] [decimal](10, 2) NOT NULL,
+	[FinalTotal] [decimal](10, 2) NOT NULL,
+	[DateTime] [date] NOT NULL,
+	[Note] [nvarchar](50) NULL,
  CONSTRAINT [PK__Orders__C3905BAFDF6C44B7] PRIMARY KEY CLUSTERED 
 (
 	[OrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -152,7 +163,7 @@ CREATE TABLE [dbo].[ProductAddOns](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductImages]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[ProductImages]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -167,7 +178,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductPrices]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[ProductPrices]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -183,7 +194,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -201,7 +212,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductSales]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[ProductSales]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -219,7 +230,7 @@ CREATE TABLE [dbo].[ProductSales](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -233,7 +244,27 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 8/5/2025 7:47:51 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ShippingAddress](
+	[ShippingAddressId] [int] IDENTITY(1,1) NOT NULL,
+	[OrderId] [int] NOT NULL,
+	[Province] [nvarchar](100) NULL,
+	[DistrictId] [nvarchar](20) NULL,
+	[DistrictName] [nvarchar](100) NULL,
+	[WardCode] [nvarchar](20) NULL,
+	[WardName] [nvarchar](100) NULL,
+	[AddressDetail] [nvarchar](255) NULL,
+ CONSTRAINT [PK__Shipping__EC10DC39064BC6AD] PRIMARY KEY CLUSTERED 
+(
+	[ShippingAddressId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 8/5/2025 7:47:51 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -259,8 +290,6 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-SET IDENTITY_INSERT [dbo].[Discount] ON 
-GO
 INSERT [dbo].[Discount] ([DiscountId], [Code], [Description], [DiscountType], [DiscountValue], [StartDate], [EndDate], [UsageLimit], [UsedCount], [IsActive], [CreatedAt]) VALUES (1, N'Giam10pt', N'giam 10%', N'Percentage', CAST(10.00 AS Decimal(10, 2)), CAST(N'2000-01-01T00:00:00.000' AS DateTime), CAST(N'2030-01-01T00:00:00.000' AS DateTime), 100, 0, 1, CAST(N'2025-04-03T20:47:41.260' AS DateTime))
 GO
 INSERT [dbo].[Discount] ([DiscountId], [Code], [Description], [DiscountType], [DiscountValue], [StartDate], [EndDate], [UsageLimit], [UsedCount], [IsActive], [CreatedAt]) VALUES (3, N'Giam50k', N'giam 50k', N'FixedAmount', CAST(50000.00 AS Decimal(10, 2)), CAST(N'2000-01-01T00:00:00.000' AS DateTime), CAST(N'2030-01-01T00:00:00.000' AS DateTime), 100, 0, 1, CAST(N'2025-04-03T20:48:17.017' AS DateTime))
@@ -279,7 +308,37 @@ INSERT [dbo].[Discount] ([DiscountId], [Code], [Description], [DiscountType], [D
 GO
 INSERT [dbo].[Discount] ([DiscountId], [Code], [Description], [DiscountType], [DiscountValue], [StartDate], [EndDate], [UsageLimit], [UsedCount], [IsActive], [CreatedAt]) VALUES (13, N'NEW_CODE', N'New discount description', N'Percentage', CAST(10.00 AS Decimal(10, 2)), CAST(N'2025-04-03T15:23:56.083' AS DateTime), CAST(N'2025-05-03T15:23:56.083' AS DateTime), 100, 0, 1, CAST(N'2025-04-03T22:23:56.093' AS DateTime))
 GO
-SET IDENTITY_INSERT [dbo].[Discount] OFF
+SET IDENTITY_INSERT [dbo].[OrderItems] ON 
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [ProductId], [Quantity], [Price], [TotalPrice], [OrderID], [ProductName]) VALUES (2, NULL, 2, CAST(150000.00 AS Decimal(10, 2)), CAST(300000.00 AS Decimal(10, 2)), 2, N'Lẩu Thái')
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [ProductId], [Quantity], [Price], [TotalPrice], [OrderID], [ProductName]) VALUES (3, NULL, 2, CAST(150000.00 AS Decimal(10, 2)), CAST(300000.00 AS Decimal(10, 2)), 3, N'Lẩu Thái')
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [ProductId], [Quantity], [Price], [TotalPrice], [OrderID], [ProductName]) VALUES (4, NULL, 2, CAST(150000.00 AS Decimal(10, 2)), CAST(300000.00 AS Decimal(10, 2)), 4, N'Lẩu Thái')
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [ProductId], [Quantity], [Price], [TotalPrice], [OrderID], [ProductName]) VALUES (5, NULL, 2, CAST(150000.00 AS Decimal(10, 2)), CAST(300000.00 AS Decimal(10, 2)), 5, N'Lẩu Thái')
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [ProductId], [Quantity], [Price], [TotalPrice], [OrderID], [ProductName]) VALUES (6, NULL, 2, CAST(150000.00 AS Decimal(10, 2)), CAST(300000.00 AS Decimal(10, 2)), 6, N'Lẩu Thái')
+GO
+INSERT [dbo].[OrderItems] ([OrderItemID], [ProductId], [Quantity], [Price], [TotalPrice], [OrderID], [ProductName]) VALUES (7, NULL, 2, CAST(150000.00 AS Decimal(10, 2)), CAST(300000.00 AS Decimal(10, 2)), 7, N'Lẩu Thái')
+GO
+SET IDENTITY_INSERT [dbo].[OrderItems] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Orders] ON 
+GO
+INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingMethod], [ShippingFee], [PaymentMethod], [VnpayOption], [Subtotal], [FinalTotal], [DateTime], [Note]) VALUES (2, N'0', 8, NULL, N'home', CAST(29000.00 AS Decimal(10, 2)), N'vnpay', N'50', CAST(300000.00 AS Decimal(10, 2)), CAST(329000.00 AS Decimal(10, 2)), CAST(N'2025-05-08' AS Date), N'')
+GO
+INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingMethod], [ShippingFee], [PaymentMethod], [VnpayOption], [Subtotal], [FinalTotal], [DateTime], [Note]) VALUES (3, N'0', 8, NULL, N'home', CAST(29000.00 AS Decimal(10, 2)), N'vnpay', N'50', CAST(300000.00 AS Decimal(10, 2)), CAST(329000.00 AS Decimal(10, 2)), CAST(N'2025-05-08' AS Date), N'')
+GO
+INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingMethod], [ShippingFee], [PaymentMethod], [VnpayOption], [Subtotal], [FinalTotal], [DateTime], [Note]) VALUES (4, N'0', 8, NULL, N'home', CAST(29000.00 AS Decimal(10, 2)), N'vnpay', N'50', CAST(300000.00 AS Decimal(10, 2)), CAST(329000.00 AS Decimal(10, 2)), CAST(N'2025-05-08' AS Date), N'')
+GO
+INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingMethod], [ShippingFee], [PaymentMethod], [VnpayOption], [Subtotal], [FinalTotal], [DateTime], [Note]) VALUES (5, N'0', 8, NULL, N'home', CAST(29000.00 AS Decimal(10, 2)), N'vnpay', N'50', CAST(300000.00 AS Decimal(10, 2)), CAST(329000.00 AS Decimal(10, 2)), CAST(N'2025-05-08' AS Date), N'')
+GO
+INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingMethod], [ShippingFee], [PaymentMethod], [VnpayOption], [Subtotal], [FinalTotal], [DateTime], [Note]) VALUES (6, N'0', 8, NULL, N'home', CAST(29000.00 AS Decimal(10, 2)), N'vnpay', N'50', CAST(300000.00 AS Decimal(10, 2)), CAST(329000.00 AS Decimal(10, 2)), CAST(N'2025-05-08' AS Date), N'')
+GO
+INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingMethod], [ShippingFee], [PaymentMethod], [VnpayOption], [Subtotal], [FinalTotal], [DateTime], [Note]) VALUES (7, N'0', 8, NULL, N'store', CAST(0.00 AS Decimal(10, 2)), N'vnpay', N'100', CAST(300000.00 AS Decimal(10, 2)), CAST(285000.00 AS Decimal(10, 2)), CAST(N'2025-05-08' AS Date), N'')
+GO
+SET IDENTITY_INSERT [dbo].[Orders] OFF
 GO
 SET IDENTITY_INSERT [dbo].[ProductAddOns] ON 
 GO
@@ -363,6 +422,22 @@ INSERT [dbo].[Roles] ([RoleID], [RoleName]) VALUES (2, N'Customer')
 GO
 SET IDENTITY_INSERT [dbo].[Roles] OFF
 GO
+SET IDENTITY_INSERT [dbo].[ShippingAddress] ON 
+GO
+INSERT [dbo].[ShippingAddress] ([ShippingAddressId], [OrderId], [Province], [DistrictId], [DistrictName], [WardCode], [WardName], [AddressDetail]) VALUES (1, 2, N'Hà Nội', N'3303', N'Huyện Thường Tín', N'1B2716', N'Xã Ninh Sở', N'')
+GO
+INSERT [dbo].[ShippingAddress] ([ShippingAddressId], [OrderId], [Province], [DistrictId], [DistrictName], [WardCode], [WardName], [AddressDetail]) VALUES (2, 3, N'Hà Nội', N'3303', N'Huyện Thường Tín', N'1B2716', N'Xã Ninh Sở', N'')
+GO
+INSERT [dbo].[ShippingAddress] ([ShippingAddressId], [OrderId], [Province], [DistrictId], [DistrictName], [WardCode], [WardName], [AddressDetail]) VALUES (3, 4, N'Hà Nội', N'3303', N'Huyện Thường Tín', N'1B2716', N'Xã Ninh Sở', N'')
+GO
+INSERT [dbo].[ShippingAddress] ([ShippingAddressId], [OrderId], [Province], [DistrictId], [DistrictName], [WardCode], [WardName], [AddressDetail]) VALUES (4, 5, N'Hà Nội', N'3303', N'Huyện Thường Tín', N'1B2716', N'Xã Ninh Sở', N'')
+GO
+INSERT [dbo].[ShippingAddress] ([ShippingAddressId], [OrderId], [Province], [DistrictId], [DistrictName], [WardCode], [WardName], [AddressDetail]) VALUES (5, 6, N'Hà Nội', N'3303', N'Huyện Thường Tín', N'1B2716', N'Xã Ninh Sở', N'')
+GO
+INSERT [dbo].[ShippingAddress] ([ShippingAddressId], [OrderId], [Province], [DistrictId], [DistrictName], [WardCode], [WardName], [AddressDetail]) VALUES (6, 7, N'Hà Nội', N'3255', N'Huyện Phú Xuyên', N'1B2816', N'Xã Phú Yên', N'')
+GO
+SET IDENTITY_INSERT [dbo].[ShippingAddress] OFF
+GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 GO
 INSERT [dbo].[Users] ([UserID], [FirstName], [LastName], [Email], [Phone], [PasswordHash], [Address], [City], [PostalCode], [RoleID], [ActivationToken], [IsActivated], [ResetPasswordToken], [ResetTokenExpiry]) VALUES (5, N'ad', N'ad', N'admin@gmail.com', N'123123123', N'ky88G1YlfOhTmsJp16q0JVDaz4gY0HXwvfGZBWKq4+8=', N'111', N'11', N'11', 1, NULL, NULL, NULL, NULL)
@@ -395,15 +470,15 @@ SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Discount__A25C5AA775894E3C]    Script Date: 07-May-25 6:00:10 PM ******/
-ALTER TABLE [dbo].[Discount] ADD UNIQUE NONCLUSTERED 
+/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 8/5/2025 7:47:51 AM ******/
+ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UNIQUE NONCLUSTERED 
 (
 	[Code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B6160496FC8C3]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Index [UQ__Roles__8A2B6160DED04910]    Script Date: 8/5/2025 7:47:51 AM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -411,37 +486,24 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D10534737981D5]    Script Date: 07-May-25 6:00:10 PM ******/
+/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 8/5/2025 7:47:51 AM ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[Discount] ADD  DEFAULT ((0)) FOR [UsedCount]
+ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [DF__Discount__UsedCo__38996AB5]  DEFAULT ((0)) FOR [UsedCount]
 GO
-ALTER TABLE [dbo].[Discount] ADD  DEFAULT ((1)) FOR [IsActive]
+ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [DF__Discount__IsActi__398D8EEE]  DEFAULT ((1)) FOR [IsActive]
 GO
-ALTER TABLE [dbo].[Discount] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [DF__Discount__Create__3A81B327]  DEFAULT (getdate()) FOR [CreatedAt]
 GO
 ALTER TABLE [dbo].[ProductSales] ADD  CONSTRAINT [DF__ProductSa__Creat__5EBF139D]  DEFAULT (getdate()) FOR [CreatedAt]
 GO
-ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD  CONSTRAINT [FK__OrderItem__Order__5FB337D6] FOREIGN KEY([OrderID])
+ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD  CONSTRAINT [FK_OrderItems_Orders] FOREIGN KEY([OrderID])
 REFERENCES [dbo].[Orders] ([OrderID])
 GO
-ALTER TABLE [dbo].[OrderItems] CHECK CONSTRAINT [FK__OrderItem__Order__5FB337D6]
-GO
-ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD FOREIGN KEY([ProductPriceID])
-REFERENCES [dbo].[ProductPrices] ([ProductPriceID])
-GO
-ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK__Orders__UserID__619B8048] FOREIGN KEY([UserID])
-REFERENCES [dbo].[Users] ([UserID])
-GO
-ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK__Orders__UserID__619B8048]
-GO
-ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Discount] FOREIGN KEY([DiscountID])
-REFERENCES [dbo].[Discount] ([DiscountId])
-GO
-ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK_Orders_Discount]
+ALTER TABLE [dbo].[OrderItems] CHECK CONSTRAINT [FK_OrderItems_Orders]
 GO
 ALTER TABLE [dbo].[ProductAddOns]  WITH CHECK ADD  CONSTRAINT [FK_ProductAddOns_AddOnProduct] FOREIGN KEY([AddOnProductID])
 REFERENCES [dbo].[Products] ([ProductID])
@@ -466,10 +528,18 @@ REFERENCES [dbo].[ProductPrices] ([ProductPriceID])
 GO
 ALTER TABLE [dbo].[ProductSales] CHECK CONSTRAINT [FK__ProductSa__Produ__6477ECF3]
 GO
+ALTER TABLE [dbo].[ShippingAddress]  WITH CHECK ADD  CONSTRAINT [FK_ShippingAddress_Order] FOREIGN KEY([OrderId])
+REFERENCES [dbo].[Orders] ([OrderID])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[ShippingAddress] CHECK CONSTRAINT [FK_ShippingAddress_Order]
+GO
 ALTER TABLE [dbo].[Users]  WITH CHECK ADD FOREIGN KEY([RoleID])
 REFERENCES [dbo].[Roles] ([RoleID])
 GO
-ALTER TABLE [dbo].[Discount]  WITH CHECK ADD CHECK  (([DiscountType]='FixedAmount' OR [DiscountType]='Percentage'))
+ALTER TABLE [dbo].[Discount]  WITH CHECK ADD  CONSTRAINT [CK__Discount__Discou__45F365D3] CHECK  (([DiscountType]='FixedAmount' OR [DiscountType]='Percentage'))
+GO
+ALTER TABLE [dbo].[Discount] CHECK CONSTRAINT [CK__Discount__Discou__45F365D3]
 GO
 ALTER TABLE [dbo].[ProductAddOns]  WITH CHECK ADD  CONSTRAINT [CHK_ProductAddOns_NoSelfReference] CHECK  (([ProductID]<>[AddOnProductID]))
 GO

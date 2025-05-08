@@ -15,7 +15,7 @@
         public int OrderID { get; set; }
         public OrderStatus Status { get; set; }
         public int UserID { get; set; }
-        public int DiscountId { get; set; }
+        public string DiscountCode { get; set; }
         public string ShippingMethod { get; set; }
         public decimal ShippingFee { get; set; }
         public string PaymentMethod { get; set; }
@@ -25,12 +25,12 @@
         public DateTime DateTime { get; set; }
         public string Note {  get; set; }
 
-        public Order(int orderID, OrderStatus status, int userID, int discountId, string shippingMethod, decimal shippingFee, string paymentMethod, string vnpayOption, decimal subtotal, decimal finalTotal, DateTime dateTime, string note)
+        public Order(int orderID, OrderStatus status, int userID, string discountCode, string shippingMethod, decimal shippingFee, string paymentMethod, string vnpayOption, decimal subtotal, decimal finalTotal, DateTime dateTime, string note)
         {
             OrderID = orderID;
             Status = status;
             UserID = userID;
-            DiscountId = discountId;
+            DiscountCode = discountCode;
             ShippingMethod = shippingMethod;
             ShippingFee = shippingFee;
             PaymentMethod = paymentMethod;
@@ -39,6 +39,9 @@
             FinalTotal = finalTotal;
             DateTime = dateTime;
             Note = note;
+        }
+        public Order()
+        {
         }
     }
 }

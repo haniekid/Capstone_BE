@@ -37,14 +37,22 @@ namespace backend.Controllers
         {
             try
             {
+                if (newOrder.Order.ShippingFee == null)
+                {
+                    newOrder.Order.ShippingFee = 0;
+                }
+
                 var addedOrderID = _orderDTORepository.Add2(newOrder);
-
+                if (addedOrderID ==0)
+                {
+                    return BadRequest();
+                }
                 var ipAddress = NetworkHelper.GetIpAddress(HttpContext);
-
+                var totalAmmount = newOrder.Order.FinalTotal;
                 var request = new PaymentRequest
                 {
                     PaymentId = DateTime.Now.Ticks,
-                    Money = Decimal.ToDouble(newOrder.Order.TotalPrice),
+                    Money = Decimal.ToDouble(totalAmmount),
                     Description = $"Paid for HaFood - OrderID:{addedOrderID}",
                     IpAddress = ipAddress,
                     BankCode = BankCode.ANY,
@@ -52,11 +60,7 @@ namespace backend.Controllers
                     Currency = Currency.VND,
                     Language = DisplayLanguage.Vietnamese
                 };
-                foreach (var item in newOrder.OrderItems)
-                {
-                    var a = _productRepository.GetById(item.ProductPriceID);
 
-                }
                 var paymentUrl = _vnpay.GetPaymentUrl(request);
 
                 var response = new PaymentResponseDto

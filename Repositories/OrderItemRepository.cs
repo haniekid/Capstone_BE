@@ -17,7 +17,8 @@ namespace backend.Repositories
 
         public IEnumerable<OrderItem> GetAll()
         {
-            string query = @"SELECT OrderItemID, Quantity, OrderID, ProductPriceID FROM dbo.ORDER_ITEM";
+            return null;
+            /*string query = @"SELECT OrderItemID, Quantity, OrderID, ProductPriceID FROM dbo.ORDER_ITEM";
 
             DataTable table = new DataTable();
             SqlDataReader myReader;
@@ -43,12 +44,13 @@ namespace backend.Repositories
                         (int)row["ProductPriceID"]
                 ));
             }
-            return orderItems;
+            return orderItems;*/
         }
 
         public List<OrderItem> GetById(int orderId)
         {
-            string query = @"SELECT * FROM ORDERITEMS WHERE OrderID = @OrderID";
+            return null;
+            /*string query = @"SELECT * FROM ORDERITEMS WHERE OrderID = @OrderID";
 
             List<OrderItem> orderItems = new List<OrderItem>();
 
@@ -80,13 +82,14 @@ namespace backend.Repositories
                 connection.Close();
             }
 
-            return orderItems;
+            return orderItems;*/
         }
 
 
         public bool Add(OrderItem orderItem)
         {
-            string query = @"INSERT INTO dbo.ORDER_ITEM 
+            return true;
+          /*  string query = @"INSERT INTO dbo.ORDER_ITEM 
                              (Quantity, OrderID, ProductPriceID) 
                              VALUES (@Quantity, @OrderID, @ProductPriceID)";
 
@@ -109,11 +112,12 @@ namespace backend.Repositories
             catch (Exception ex)
             {
                 return false;
-            }
+            }*/
         }
         public bool Update(OrderItem orderItem)
         {
-            string query = @"UPDATE dbo.ORDER_ITEM
+            return true;
+           /* string query = @"UPDATE dbo.ORDER_ITEM
                              SET Quantity = @Quantity,
                              OrderID = @OrderID,
                              ProductPriceID = @ProductPriceID
@@ -131,7 +135,7 @@ namespace backend.Repositories
                     int rowsAffected = myCommand.ExecuteNonQuery();
                     return rowsAffected > 0;
                 }
-            }
+            }*/
         }
 
         public bool Delete(int orderItemId)

@@ -18,40 +18,42 @@ namespace backend.Repositories
 
         public IEnumerable<Order> GetAll()
         {
-            string query = @"SELECT OrderID, DateTime, TotalPrice, Status, UserID FROM ORDERS";
+            return null;
+            /* string query = @"SELECT OrderID, DateTime, TotalPrice, Status, UserID FROM ORDERS";
 
-            DataTable table = new DataTable();
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(_connectionString))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
+             DataTable table = new DataTable();
+             SqlDataReader myReader;
+             using (SqlConnection myCon = new SqlConnection(_connectionString))
+             {
+                 myCon.Open();
+                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                 {
+                     myReader = myCommand.ExecuteReader();
+                     table.Load(myReader);
+                     myReader.Close();
+                     myCon.Close();
+                 }
+             }
 
-            var orders = new List<Order>();
-            foreach (DataRow row in table.Rows)
-            {
-                OrderStatus orderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), row["Status"].ToString());
-                orders.Add(new Order(
-                    (int)row["OrderID"],
-                    (DateTime)row["DateTime"],
-                    (decimal)row["TotalPrice"],
-                    orderStatus,
-                    (int)row["UserID"]
-                ));
-            }
-            return orders;
+             var orders = new List<Order>();
+             foreach (DataRow row in table.Rows)
+             {
+                 OrderStatus orderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), row["Status"].ToString());
+                 orders.Add(new Order(
+                     (int)row["OrderID"],
+                     (DateTime)row["DateTime"],
+                     (decimal)row["TotalPrice"],
+                     orderStatus,
+                     (int)row["UserID"]
+                 ));
+             }
+             return orders;*/
         }
 
         public List<Order> GetById(int userId)
         {
-            string query = @"SELECT OrderID, DateTime, TotalPrice, Status, UserID FROM ORDERS WHERE UserID = @UserID";
+            return null;
+            /*string query = @"SELECT OrderID, DateTime, TotalPrice, Status, UserID FROM ORDERS WHERE UserID = @UserID";
 
             List<Order> orders = new List<Order>();
 
@@ -84,75 +86,111 @@ namespace backend.Repositories
                 connection.Close();
             }
 
-            return orders;
+            return orders;*/
         }
 
 
         public int Add2(OrderDTO orderDTO)
         {
-            string orderQuery = @"INSERT INTO ORDERS 
-                          (DateTime, TotalPrice, Status, UserID) 
-                          OUTPUT INSERTED.OrderID 
-                          VALUES (@DateTime, @TotalPrice, @Status, @UserID)";
+            string orderQuery = @"INSERT INTO Orders 
+(DateTime, Note, ShippingMethod, PaymentMethod, VnpayOption,
+ DiscountCode, ShippingFee, Subtotal, FinalTotal, Status, UserID)
+OUTPUT INSERTED.OrderID 
+VALUES 
+(@DateTime, @Note, @ShippingMethod, @PaymentMethod, @VnpayOption,
+ @DiscountCode, @ShippingFee, @Subtotal, @FinalTotal, @Status, @UserID)";
 
-            string orderItemQuery = @"INSERT INTO ORDERITEMS 
-                              (Quantity, OrderID, ProductPriceID) 
-                              VALUES (@Quantity, @OrderID, @ProductPriceID)";
+            string orderItemQuery = @"INSERT INTO OrderItems 
+(OrderID, ProductName, Quantity, Price, TotalPrice) 
+VALUES 
+(@OrderID, @ProductName, @Quantity, @Price, @TotalPrice)";
 
+            string shippingAddressQuery = @"INSERT INTO ShippingAddress
+(OrderId, Province, DistrictId, DistrictName, WardCode, WardName, AddressDetail)
+VALUES 
+(@OrderId, @Province, @DistrictId, @DistrictName, @WardCode, @WardName, @AddressDetail)";
             try
             {
                 using (SqlConnection myCon = new SqlConnection(_connectionString))
                 {
                     myCon.Open();
-
                     using (SqlTransaction transaction = myCon.BeginTransaction())
                     {
                         try
                         {
                             int newOrderId;
+
+                            // Insert Order
                             using (SqlCommand orderCommand = new SqlCommand(orderQuery, myCon, transaction))
                             {
                                 orderDTO.Order.DateTime = DateTime.Now;
 
                                 orderCommand.Parameters.AddWithValue("@DateTime", orderDTO.Order.DateTime);
-                                orderCommand.Parameters.AddWithValue("@TotalPrice", orderDTO.Order.TotalPrice);
-                                orderCommand.Parameters.AddWithValue("@Status", orderDTO.Order.Status.ToString());
+                                orderCommand.Parameters.AddWithValue("@Note", orderDTO.Order.Note ?? (object)DBNull.Value);
+                                orderCommand.Parameters.AddWithValue("@ShippingMethod", orderDTO.Order.ShippingMethod ?? (object)DBNull.Value);
+                                orderCommand.Parameters.AddWithValue("@PaymentMethod", orderDTO.Order.PaymentMethod ?? (object)DBNull.Value);
+                                orderCommand.Parameters.AddWithValue("@VnpayOption", orderDTO.Order.VnpayOption ?? (object)DBNull.Value);
+                                orderCommand.Parameters.AddWithValue("@DiscountCode", string.IsNullOrWhiteSpace(orderDTO.Order.DiscountCode)
+                                                                                                ? (object)DBNull.Value
+                                                                                                : orderDTO.Order.DiscountCode);
+                                orderCommand.Parameters.AddWithValue("@ShippingFee", orderDTO.Order.ShippingFee);
+                                orderCommand.Parameters.AddWithValue("@Subtotal", orderDTO.Order.Subtotal);
+                                orderCommand.Parameters.AddWithValue("@FinalTotal", orderDTO.Order.FinalTotal);
+                                orderCommand.Parameters.AddWithValue("@Status", orderDTO.Order.Status);
                                 orderCommand.Parameters.AddWithValue("@UserID", orderDTO.Order.UserID);
 
-                                // Get the new OrderID
                                 newOrderId = (int)orderCommand.ExecuteScalar();
                             }
 
+                            // Insert OrderItems
                             foreach (var item in orderDTO.OrderItems)
                             {
                                 using (SqlCommand itemCommand = new SqlCommand(orderItemQuery, myCon, transaction))
                                 {
-                                    itemCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
                                     itemCommand.Parameters.AddWithValue("@OrderID", newOrderId);
-                                    itemCommand.Parameters.AddWithValue("@ProductPriceID", item.ProductPriceID);
+                                    itemCommand.Parameters.AddWithValue("@ProductName", item.ProductName ?? (object)DBNull.Value);
+                                    itemCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
+                                    itemCommand.Parameters.AddWithValue("@Price", item.Price);
+                                    itemCommand.Parameters.AddWithValue("@TotalPrice", item.TotalPrice);
 
                                     itemCommand.ExecuteNonQuery();
                                 }
                             }
 
-                            transaction.Commit();
+                            // Insert ShippingAddress
+                            if (orderDTO.ShippingAddress != null)
+                            {
+                                using (SqlCommand addressCommand = new SqlCommand(shippingAddressQuery, myCon, transaction))
+                                {
+                                    addressCommand.Parameters.AddWithValue("@OrderId", newOrderId);
+                                    addressCommand.Parameters.AddWithValue("@Province", orderDTO.ShippingAddress.Province ?? (object)DBNull.Value);
+                                    addressCommand.Parameters.AddWithValue("@DistrictId", orderDTO.ShippingAddress.DistrictId ?? (object)DBNull.Value);
+                                    addressCommand.Parameters.AddWithValue("@DistrictName", orderDTO.ShippingAddress.DistrictName ?? (object)DBNull.Value);
+                                    addressCommand.Parameters.AddWithValue("@WardCode", orderDTO.ShippingAddress.WardCode ?? (object)DBNull.Value);
+                                    addressCommand.Parameters.AddWithValue("@WardName", orderDTO.ShippingAddress.WardName ?? (object)DBNull.Value);
+                                    addressCommand.Parameters.AddWithValue("@AddressDetail", orderDTO.ShippingAddress.AddressDetail ?? (object)DBNull.Value);
 
-                            // ✅ Return the inserted OrderID
+                                    addressCommand.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
                             return newOrderId;
                         }
-                        catch
+                        catch (Exception e)
                         {
                             transaction.Rollback();
-                            throw;
+                            return 0;
                         }
                     }
                 }
             }
             catch
             {
-                return 0; // return 0 if failed
+                return 0;
             }
         }
+
 
         public bool Update(Order order)
         {
