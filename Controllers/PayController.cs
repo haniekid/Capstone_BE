@@ -10,126 +10,141 @@ using VNPAY.NET.Models;
 using VNPAY.NET.Utilities;
 namespace backend.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [EnableCors("_myAllowSpecificOrigins")]
+	[Route("api/[controller]")]
+	[ApiController]
+	[EnableCors("_myAllowSpecificOrigins")]
 
-    public class PayController : ControllerBase
-    {
-        private readonly IVnpay _vnpay;
-        private readonly IConfiguration _configuration;
-        private readonly IListRepository<OrderDTO> _orderDTORepository;
-        private readonly IListRepository<Order> _orderRepository;
-        private readonly IRepository<Product> _productRepository;
+	public class PayController : ControllerBase
+	{
+		private readonly IVnpay _vnpay;
+		private readonly IConfiguration _configuration;
+		private readonly IListRepository<OrderDTO> _orderDTORepository;
+		private readonly IListRepository<Order> _orderRepository;
+		private readonly IRepository<Product> _productRepository;
 
-        public PayController(IVnpay vnpay, IConfiguration configuration, IListRepository<OrderDTO> orderDTORepository, IListRepository<Order> orderRepo, IRepository<Product> productRepository)
-        {
-            _configuration = configuration;
-            _vnpay = vnpay;
-            _vnpay.Initialize(_configuration["Vnpay:TmnCode"], _configuration["Vnpay:HashSecret"], _configuration["Vnpay:BaseUrl"], _configuration["Vnpay:ReturnUrl"]);
-            _orderDTORepository = orderDTORepository;
-            _orderRepository = orderRepo;
-            _productRepository = productRepository;
-        }
+		private readonly string ORDER_SUCCESS = "http://localhost:3000/order-success";
 
-        [HttpPost("CreatePaymentUrl")]
-        public ActionResult<PaymentResponseDto> CreatePaymentUrl([FromBody] OrderDTO newOrder)
-        {
-            try
-            {
-                if (newOrder.Order.ShippingFee == null)
-                {
-                    newOrder.Order.ShippingFee = 0;
-                }
+		public PayController(IVnpay vnpay, IConfiguration configuration, IListRepository<OrderDTO> orderDTORepository, IListRepository<Order> orderRepo, IRepository<Product> productRepository)
+		{
+			_configuration = configuration;
+			_vnpay = vnpay;
+			_vnpay.Initialize(_configuration["Vnpay:TmnCode"], _configuration["Vnpay:HashSecret"], _configuration["Vnpay:BaseUrl"], _configuration["Vnpay:ReturnUrl"]);
+			_orderDTORepository = orderDTORepository;
+			_orderRepository = orderRepo;
+			_productRepository = productRepository;
+		}
 
-                var addedOrderID = _orderDTORepository.Add2(newOrder);
-                if (addedOrderID ==0)
-                {
-                    return BadRequest();
-                }
-                var ipAddress = NetworkHelper.GetIpAddress(HttpContext);
-                var totalAmmount = newOrder.Order.FinalTotal;
-                var request = new PaymentRequest
-                {
-                    PaymentId = DateTime.Now.Ticks,
-                    Money = Decimal.ToDouble(totalAmmount),
-                    Description = $"Paid for HaFood - OrderID:{addedOrderID}",
-                    IpAddress = ipAddress,
-                    BankCode = BankCode.ANY,
-                    CreatedDate = DateTime.Now,
-                    Currency = Currency.VND,
-                    Language = DisplayLanguage.Vietnamese
-                };
+		[HttpPost("CreatePaymentUrl")]
+		public ActionResult<PaymentResponseDto> CreatePaymentUrl([FromBody] OrderDTO newOrder)
+		{
+			try
+			{
+				if (newOrder.Order.ShippingFee == null)
+				{
+					newOrder.Order.ShippingFee = 0;
+				}
 
-                var paymentUrl = _vnpay.GetPaymentUrl(request);
+				var addedOrderID = _orderDTORepository.Add2(newOrder);
+				if (addedOrderID == 0)
+				{
+					return BadRequest();
+				}
+				if (newOrder.Order.PaymentMethod == "cod")
+				{
+					var responseSucess = new PaymentResponseDto
+					{
+						PaymentUrl = ORDER_SUCCESS,
+						OrderId = addedOrderID
+					};
+					return Created(ORDER_SUCCESS, responseSucess);
+				}
+				var ipAddress = NetworkHelper.GetIpAddress(HttpContext);
+				var totalAmmount = newOrder.Order.FinalTotal;
+				if (newOrder.Order.VnpayOption=="50")
+				{
+					totalAmmount /=2;
+				}
+				var request = new PaymentRequest
+				{
+					PaymentId = DateTime.Now.Ticks,
+					Money = Decimal.ToDouble(totalAmmount),
+					Description = $"Paid for HaFood - OrderID:{addedOrderID}",
+					IpAddress = ipAddress,
+					BankCode = BankCode.ANY,
+					CreatedDate = DateTime.Now,
+					Currency = Currency.VND,
+					Language = DisplayLanguage.Vietnamese
+				};
 
-                var response = new PaymentResponseDto
-                {
-                    PaymentUrl = paymentUrl,
-                    OrderId = addedOrderID
-                };
+				var paymentUrl = _vnpay.GetPaymentUrl(request);
 
-                return Created(paymentUrl, response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+				var response = new PaymentResponseDto
+				{
+					PaymentUrl = paymentUrl,
+					OrderId = addedOrderID
+				};
 
-        [HttpGet("confirm")]
-        public ActionResult<string> Confirm()
-        {
-            if (Request.QueryString.HasValue)
-            {
-                try
-                {
-                    var query = HttpContext.Request.Query;
+				return Created(paymentUrl, response);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
 
-                    // Try to get "orderId" from the query string
-                    if (query.TryGetValue("vnp_OrderInfo", out var orderInfo))
-                    {
-                        string orderInfoStr = orderInfo.ToString();
-                        var match = Regex.Match(orderInfoStr, @"OrderID:(\d+)");
-                        int orderId = int.Parse(match.Groups[1].Value);
-                        var fakePaymentResult = new PaymentResult
-                        {
-                            IsSuccess = true,
-                            PaymentResponse = new PaymentResponse
-                            {
-                                Description = "Thanh toán thành công"
-                            },
-                            TransactionStatus = new TransactionStatus
-                            {
-                                Description = "Giao dịch thành công"
-                            }
-                        };
+		[HttpGet("confirm")]
+		public ActionResult<string> Confirm()
+		{
+			if (Request.QueryString.HasValue)
+			{
+				try
+				{
+					var query = HttpContext.Request.Query;
 
-                        var resultDescription = $"{fakePaymentResult.PaymentResponse.Description}. {fakePaymentResult.TransactionStatus.Description}. OrderID: {orderId}";
+					// Try to get "orderId" from the query string
+					if (query.TryGetValue("vnp_OrderInfo", out var orderInfo))
+					{
+						string orderInfoStr = orderInfo.ToString();
+						var match = Regex.Match(orderInfoStr, @"OrderID:(\d+)");
+						int orderId = int.Parse(match.Groups[1].Value);
+						var fakePaymentResult = new PaymentResult
+						{
+							IsSuccess = true,
+							PaymentResponse = new PaymentResponse
+							{
+								Description = "Thanh toán thành công"
+							},
+							TransactionStatus = new TransactionStatus
+							{
+								Description = "Giao dịch thành công"
+							}
+						};
 
-                        if (fakePaymentResult.IsSuccess)
-                        {
-                            var order = _orderRepository.GetAll().FirstOrDefault(x => x.OrderID == orderId);
-                            order.Status = OrderStatus.Paid;
-                            _orderRepository.Update(order);
-                            return Ok(resultDescription);
-                        }
+						var resultDescription = $"{fakePaymentResult.PaymentResponse.Description}. {fakePaymentResult.TransactionStatus.Description}. OrderID: {orderId}";
 
-                        return BadRequest(resultDescription);
-                    }
-                    else
-                    {
-                        return BadRequest("Missing orderId in the query.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest($"Lỗi: {ex.Message}");
-                }
-            }
+						if (fakePaymentResult.IsSuccess)
+						{
+							//var order = _orderRepository.GetAll().FirstOrDefault(x => x.OrderID == orderId);
+							//order.Status = OrderStatus.Paid;
+							//_orderRepository.Update(order);
+							return Redirect(ORDER_SUCCESS);
+						}
 
-            return NotFound("Không tìm thấy thông tin thanh toán.");
-        }
-    }
+						return Redirect(ORDER_SUCCESS);
+					}
+					else
+					{
+						return BadRequest("Missing orderId in the query.");
+					}
+				}
+				catch (Exception ex)
+				{
+					return BadRequest($"Lỗi: {ex.Message}");
+				}
+			}
+
+			return NotFound("Không tìm thấy thông tin thanh toán.");
+		}
+	}
 
 }
