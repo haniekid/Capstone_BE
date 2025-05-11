@@ -261,7 +261,22 @@ namespace backend.Controllers
 			}
 			return BadRequest();
         }
-
+        [HttpPut("change-password")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest req)
+        {
+			var currentUser = _userRepository.GetById(req.UserId);
+			if (currentUser.Password != _passwordHelper.HashPassword(req.OldPassword))
+			{
+				return BadRequest("Mật khẩu hiện tại không đúng");
+			}
+            currentUser.Password = _passwordHelper.HashPassword(req.NewPassword);
+            var result = _userRepository.Update(currentUser);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
         private string GenerateResetPasswordEmail(string resetLink)
 		{
 			return $@"
