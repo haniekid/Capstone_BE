@@ -2,14 +2,12 @@
 {
     public enum OrderStatus
     {
-        Pending,
-        Processing,
-        Shipped,
-        Delivered,
-        Cancelled,
-        Paid,
-        Done,
-        PaidHalf
+        Cancelled, // da huy
+        Processing, //cho xac nhan
+        Accepted, // da xac nhan
+        Preparing, // dang chuan bi
+        Shipping, // shipping
+        Shipped, // da ship
     }
 
     public class Order

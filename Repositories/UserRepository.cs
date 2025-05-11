@@ -17,105 +17,111 @@ namespace backend.Repositories
 			_connectionString = _configuration.GetConnectionString("UserAppCon");
 		}
 
-		public IEnumerable<User> GetAll()
-		{
-			string query = @"SELECT 
-					u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
-					u.PasswordHash, u.Address, u.City, u.PostalCode, 
-					u.ActivationToken, u.IsActivated, u.ResetPasswordToken, u.ResetTokenExpiry,
-					r.RoleName 
-				 FROM [Users] u
-				 LEFT JOIN [Roles] r ON u.RoleID = r.RoleID";
+        public IEnumerable<User> GetAll()
+        {
+            string query = @"SELECT 
+		u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
+		u.PasswordHash,	u.ActivationToken, u.IsActivated, u.ResetPasswordToken, u.ResetTokenExpiry,
+		u.DistrictID, u.WardCode, u.AddressDetail,
+		r.RoleName 
+	FROM [Users] u
+	LEFT JOIN [Roles] r ON u.RoleID = r.RoleID";
 
-			DataTable table = new DataTable();
-			using (SqlConnection myCon = new SqlConnection(_connectionString))
-			{
-				myCon.Open();
-				using (SqlCommand myCommand = new SqlCommand(query, myCon))
-				using (SqlDataReader myReader = myCommand.ExecuteReader())
-				{
-					table.Load(myReader);
-				}
-			}
+            DataTable table = new DataTable();
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                using (SqlDataReader myReader = myCommand.ExecuteReader())
+                {
+                    table.Load(myReader);
+                }
+            }
 
-			var users = new List<User>();
-			foreach (DataRow row in table.Rows)
-			{
-				users.Add(new User(
-					userId: (int)row["UserID"],
-					firstName: row["FirstName"].ToString(),
-					lastName: row["LastName"].ToString(),
-					email: row["Email"].ToString(),
-					phone: row["Phone"].ToString(),
-					password: row["PasswordHash"].ToString(),
-					address: row["Address"] != DBNull.Value ? row["Address"].ToString() : null,
-					city: row["City"] != DBNull.Value ? row["City"].ToString() : null,
-					postalCode: row["PostalCode"] != DBNull.Value ? row["PostalCode"].ToString() : null,
-					roleName: row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null,
-					activationToken: row["ActivationToken"] != DBNull.Value ? row["ActivationToken"].ToString() : null,
-					isActivated: row["IsActivated"] != DBNull.Value ? (bool)row["IsActivated"] : false,
-					resetPasswordToken: row["ResetPasswordToken"] != DBNull.Value ? row["ResetPasswordToken"].ToString() : null,
-					resetTokenExpiry: row["ResetTokenExpiry"] != DBNull.Value ? (DateTime?)row["ResetTokenExpiry"] : null
-				));
-			}
-			return users;
-		}
+            var users = new List<User>();
+            foreach (DataRow row in table.Rows)
+            {
+                var user = new User
+                {
+                    UserID = (int)row["UserID"],
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    Email = row["Email"].ToString(),
+                    Phone = row["Phone"].ToString(),
+                    Password = row["PasswordHash"].ToString(),
+                    RoleName = row["RoleName"] != DBNull.Value ? row["RoleName"].ToString() : null,
+                    ActivationToken = row["ActivationToken"] != DBNull.Value ? row["ActivationToken"].ToString() : null,
+                    IsActivated = row["IsActivated"] != DBNull.Value ? (bool)row["IsActivated"] : false,
+                    ResetPasswordToken = row["ResetPasswordToken"] != DBNull.Value ? row["ResetPasswordToken"].ToString() : null,
+                    ResetTokenExpiry = row["ResetTokenExpiry"] != DBNull.Value ? (DateTime?)row["ResetTokenExpiry"] : null,
+                    DistrictID = row["DistrictID"] != DBNull.Value ? (int?)Convert.ToInt32(row["DistrictID"]) : null,
+                    WardCode = row["WardCode"].ToString(),
+                    AddressDetail = row["AddressDetail"] != DBNull.Value ? row["AddressDetail"].ToString() : null
+                };
+                users.Add(user);
+            }
+            return users;
+        }
 
+        public User GetById(int userId)
+        {
+            string query = @"
+		SELECT 
+			u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
+			u.PasswordHash, u.ActivationToken, u.IsActivated, 
+			u.ResetPasswordToken, u.ResetTokenExpiry,
+			u.DistrictID, u.WardCode, u.AddressDetail,
+			r.RoleName
+		FROM [Users] u
+		LEFT JOIN [Roles] r ON u.RoleID = r.RoleID
+		WHERE u.UserID = @UserID";
 
-		public User GetById(int userId)
-		{
-			string query = @"SELECT 
-						u.UserID, u.FirstName, u.LastName, u.Email, u.Phone, 
-						u.PasswordHash, u.Address, u.City, u.PostalCode, 
-						r.RoleName 
-					 FROM [Users] u
-					 LEFT JOIN [Roles] r ON u.RoleID = r.RoleID
-					 WHERE u.UserID = @UserID";
+            User user = null;
 
-			User user = null;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
 
-			using (SqlConnection connection = new SqlConnection(_connectionString))
-			{
-				connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@UserID", userId);
 
-				using (SqlCommand command = new SqlCommand(query, connection))
-				{
-					command.Parameters.AddWithValue("@UserID", userId);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            user = new User
+                            {
+                                UserID = reader.GetInt32(0),
+                                FirstName = reader.GetString(1),
+                                LastName = reader.GetString(2),
+                                Email = reader.GetString(3),
+                                Phone = reader.GetString(4),
+                                Password = reader.GetString(5),
+                                ActivationToken = reader.IsDBNull(6) ? null : reader.GetString(6),
+                                IsActivated = reader.IsDBNull(7) ? false : reader.GetBoolean(7),
+                                ResetPasswordToken = reader.IsDBNull(8) ? null : reader.GetString(8),
+                                ResetTokenExpiry = reader.IsDBNull(9) ? (DateTime?)null : reader.GetDateTime(9),
+                                DistrictID = reader.IsDBNull(10) ? (int?)null : reader.GetInt32(10),
+                                WardCode = reader.GetString(11),
+                                AddressDetail = reader.IsDBNull(12) ? null : reader.GetString(12),
+                                RoleName = reader.IsDBNull(13) ? null : reader.GetString(13)
+                            };
+                        }
+                    }
+                }
+            }
 
-					SqlDataReader reader = command.ExecuteReader();
+            return user;
+        }
 
-					if (reader.Read())
-					{
-						user = new User(
-							reader.GetInt32(0),    // UserID
-							reader.GetString(1),   // FirstName
-							reader.GetString(2),   // LastName
-							reader.GetString(3),   // Email
-							reader.GetString(4),   // Phone
-							reader.GetString(5),   // PasswordHash
-							reader["Address"] != DBNull.Value ? reader.GetString(6) : null,
-							reader["City"] != DBNull.Value ? reader.GetString(7) : null,
-							reader["PostalCode"] != DBNull.Value ? reader.GetString(8) : null,
-							reader["RoleName"] != DBNull.Value ? reader.GetString(9) : null 
-						);
-					}
-
-					reader.Close();
-				}
-
-				connection.Close();
-			}
-
-			return user;
-		}
-
-		public bool Add(User user)
+        public bool Add(User user)
 		{
 			string query = @"
 		INSERT INTO USERS
-		(FirstName, LastName, Email, Phone, PasswordHash, Address, City, PostalCode, RoleId, ActivationToken, IsActivated) 
+		(FirstName, LastName, Email, Phone, PasswordHash, RoleId, ActivationToken, IsActivated) 
 		VALUES 
-		(@FirstName, @LastName, @Email, @Phone, @Password, @Address, @City, @PostalCode, @RoleId, @ActivationToken, @IsActivated)";
+		(@FirstName, @LastName, @Email, @Phone, @Password, @RoleId, @ActivationToken, @IsActivated)";
 
 			try
 			{
@@ -129,9 +135,6 @@ namespace backend.Repositories
 						myCommand.Parameters.AddWithValue("@Email", user.Email);
 						myCommand.Parameters.AddWithValue("@Phone", user.Phone);
 						myCommand.Parameters.AddWithValue("@Password", user.Password);
-						myCommand.Parameters.AddWithValue("@Address", user.Address ?? (object)DBNull.Value);
-						myCommand.Parameters.AddWithValue("@City", user.City ?? (object)DBNull.Value);
-						myCommand.Parameters.AddWithValue("@PostalCode", user.PostalCode ?? (object)DBNull.Value);
 						myCommand.Parameters.AddWithValue("@RoleId", 2);
 						myCommand.Parameters.AddWithValue("@ActivationToken", user.ActivationToken);
 						myCommand.Parameters.AddWithValue("@IsActivated", user.IsActivated);
@@ -148,51 +151,50 @@ namespace backend.Repositories
 			}
 		}
 
-		public bool Update(User user)
-		{
-			string query = @"UPDATE USERS
-			SET FirstName = @FirstName,
-				LastName = @LastName,
-				Email = @Email,
-				Phone = @Phone,
-				PasswordHash = @PasswordHash,
-				Address = @Address,
-				City = @City,
-				PostalCode = @PostalCode,
-				IsActivated = @IsActivated,
-				ActivationToken = @ActivationToken,
-				ResetPasswordToken = @ResetPasswordToken,
-				ResetTokenExpiry = @ResetTokenExpiry
-			WHERE UserID = @UserID";
+        public bool Update(User user)
+        {
+            string query = @"
+		UPDATE Users
+		SET FirstName = @FirstName,
+			LastName = @LastName,
+			Email = @Email,
+			Phone = @Phone,
+			PasswordHash = @PasswordHash,
+			IsActivated = @IsActivated,
+			ActivationToken = @ActivationToken,
+			ResetPasswordToken = @ResetPasswordToken,
+			ResetTokenExpiry = @ResetTokenExpiry,
+			DistrictID = @DistrictID,
+			WardCode = @WardCode,
+			AddressDetail = @AddressDetail
+		WHERE UserID = @UserID";
 
-			using (SqlConnection myCon = new SqlConnection(_connectionString))
-			{
-				myCon.Open();
-				using (SqlCommand myCommand = new SqlCommand(query, myCon))
-				{
-					myCommand.Parameters.AddWithValue("@UserID", user.UserID);
-					myCommand.Parameters.AddWithValue("@FirstName", user.FirstName);
-					myCommand.Parameters.AddWithValue("@LastName", user.LastName);
-					myCommand.Parameters.AddWithValue("@Email", user.Email);
-					myCommand.Parameters.AddWithValue("@Phone", user.Phone);
-					myCommand.Parameters.AddWithValue("@PasswordHash", user.Password);
-					myCommand.Parameters.AddWithValue("@Address", (object)user.Address ?? DBNull.Value);
-					myCommand.Parameters.AddWithValue("@City", (object)user.City ?? DBNull.Value);
-					myCommand.Parameters.AddWithValue("@PostalCode", (object)user.PostalCode ?? DBNull.Value);
-					myCommand.Parameters.AddWithValue("@ActivationToken", (object)user.ActivationToken ?? DBNull.Value);
-					myCommand.Parameters.AddWithValue("@IsActivated", user.IsActivated.HasValue ? (object)user.IsActivated.Value : DBNull.Value);
-					myCommand.Parameters.AddWithValue("@ResetPasswordToken", (object)user.ResetPasswordToken ?? DBNull.Value);
-					myCommand.Parameters.AddWithValue("@ResetTokenExpiry", user.ResetTokenExpiry.HasValue ? (object)user.ResetTokenExpiry.Value : DBNull.Value);
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@UserID", user.UserID);
+                    myCommand.Parameters.AddWithValue("@FirstName", user.FirstName);
+                    myCommand.Parameters.AddWithValue("@LastName", user.LastName);
+                    myCommand.Parameters.AddWithValue("@Email", user.Email);
+                    myCommand.Parameters.AddWithValue("@Phone", user.Phone);
+                    myCommand.Parameters.AddWithValue("@PasswordHash", user.Password);
+                    myCommand.Parameters.AddWithValue("@ActivationToken", (object?)user.ActivationToken ?? DBNull.Value);
+                    myCommand.Parameters.AddWithValue("@IsActivated", user.IsActivated.HasValue ? (object)user.IsActivated.Value : DBNull.Value);
+                    myCommand.Parameters.AddWithValue("@ResetPasswordToken", (object?)user.ResetPasswordToken ?? DBNull.Value);
+                    myCommand.Parameters.AddWithValue("@ResetTokenExpiry", user.ResetTokenExpiry.HasValue ? (object)user.ResetTokenExpiry.Value : DBNull.Value);
+                    myCommand.Parameters.AddWithValue("@DistrictID", user.DistrictID.HasValue ? (object)user.DistrictID.Value : DBNull.Value);
+                    myCommand.Parameters.AddWithValue("@WardCode", user.WardCode);
+                    myCommand.Parameters.AddWithValue("@AddressDetail", (object?)user.AddressDetail ?? DBNull.Value);
 
-					int rowsAffected = myCommand.ExecuteNonQuery();
-					myCon.Close();
+                    int rowsAffected = myCommand.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+        }
 
-					return rowsAffected > 0;
-				}
-			}
-		}
-
-		public bool Delete(int userId)
+        public bool Delete(int userId)
 		{
 			string query = @"DELETE FROM dbo.[USER] 
 							 WHERE UserID = @UserID";

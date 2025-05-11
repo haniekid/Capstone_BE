@@ -86,20 +86,6 @@ namespace backend.Controllers
 			_emailService.Send(newUser.Email, "Activate your account", GenerateActivationEmail(activationLink));
 			return Ok();
 		}
-		[HttpPut("{userId}")]
-		public IActionResult Put(User updatedUser)
-		{
-			updatedUser.Password = _passwordHelper.HashPassword(updatedUser.Password);
-			bool updated = _userRepository.Update(updatedUser);
-			if (updated)
-			{
-				return Ok();
-			}
-			else
-			{
-				return NotFound();
-			}
-		}
 
 		[HttpDelete("{userId}")]
 		public IActionResult Delete(int userId)
@@ -257,14 +243,26 @@ namespace backend.Controllers
 				return BadRequest("Token không hợp lệ hoặc đã hết hạn.");
 
 			user.Password = _passwordHelper.HashPassword(request.NewPassword);
-			user.ResetPasswordToken = null;
+			user.ResetPasswordToken = string.Empty;
+			user.ActivationToken = string.Empty;
 			user.ResetTokenExpiry = null;
 			_userRepository.Update(user);
 
 			return Ok("Mật khẩu đã được thay đổi thành công.");
 		}
 
-		private string GenerateResetPasswordEmail(string resetLink)
+        [HttpPut("update-user")]
+        public IActionResult UpdateUser([FromBody] User user)
+        {
+            var result = _userRepository.Update(user);
+			if (result)
+			{
+				return Ok();
+			}
+			return BadRequest();
+        }
+
+        private string GenerateResetPasswordEmail(string resetLink)
 		{
 			return $@"
 					<!DOCTYPE html>

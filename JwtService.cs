@@ -33,9 +33,6 @@ namespace backend
                     new Claim(ClaimTypes.Surname, user.LastName),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.MobilePhone, user.Phone),
-                    new Claim(ClaimTypes.StreetAddress, user.Address ?? ""),    
-                    new Claim(ClaimTypes.Locality, user.City ?? ""),
-                    new Claim(ClaimTypes.PostalCode, user.PostalCode ?? ""),
                     new Claim(ClaimTypes.Role, user.RoleName)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
