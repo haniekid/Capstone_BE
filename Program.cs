@@ -1,16 +1,12 @@
-using backend.Controllers;
 using backend.DTOs;
 using backend.Helper;
 using backend.Models;
 using backend.Repositories;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using VNPAY.NET;
 
 namespace backend
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -31,7 +27,16 @@ namespace backend
 											.AllowAnyMethod();
 								  });
 			});
-			builder.Services.AddScoped<IVnpay, Vnpay>();
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IVnpay, Vnpay>();
 			builder.Services.AddScoped<IRepository<User>, UserRepository>();
 			builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 			builder.Services.AddScoped<IRepository<ProductDTO>, ProductDTORepository>();
@@ -60,11 +65,11 @@ namespace backend
 				app.UseSwaggerUI();
 			}
 
-			app.UseCors("_myAllowSpecificOrig   ins");
+			app.UseCors("_myAllowSpecificOrigins");
 
 			app.UseHttpsRedirection();
-
-			app.UseAuthorization();
+            app.UseSession();
+            app.UseAuthorization();
 
 
 			app.MapControllers();
