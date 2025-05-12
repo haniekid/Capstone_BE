@@ -8,6 +8,7 @@
         Preparing, // dang chuan bi
         Shipping, // shipping
         Shipped, // da ship
+        Paid
     }
 
     public class Order

@@ -2,6 +2,7 @@
 {
     public class OrderItem
     {
+        public int OrderItemId { get; set; }
         public int ProductId { get; set; }
         public int OrderId { get; set; }
 
@@ -10,8 +11,9 @@
         public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
 
-        public OrderItem(int productId, int orderId, string productName, int quantity, decimal price, decimal totalPrice)
+        public OrderItem(int orderItemId, int productId, int orderId, string productName, int quantity, decimal price, decimal totalPrice)
         {
+            OrderItemId = orderItemId;
             ProductId = productId;
             OrderId = orderId;
             ProductName = productName;

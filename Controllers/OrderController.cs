@@ -39,17 +39,27 @@ namespace backend.Controllers
             var order = _orderRepository.GetAll().FirstOrDefault(x => x.OrderID == orderId);
             return Ok(order);
         }
-        [HttpGet("{userId}")]
-        public IActionResult Get(int userId)
+        [HttpGet("user/{userId}")]
+        public IActionResult GetOrderByUserId(int userId)
         {
-            var orders = _orderRepository.GetById(userId);
-            if (orders == null)
+            var orders = _orderDTORepository.GetById(userId);
+            if (orders == null || !orders.Any())
             {
                 return NotFound();
             }
             return Ok(orders);
         }
 
+        [HttpGet("order/{orderId}")]
+        public IActionResult GetOrderByOrderId(int orderId)
+        {
+            var order = _orderDTORepository.GetObjById(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return Ok(order);
+        }
         [HttpPut("{orderId}")]
         public IActionResult Put(Order updatedOrder)
         {
