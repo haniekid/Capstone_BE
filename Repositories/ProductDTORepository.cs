@@ -25,9 +25,9 @@ namespace backend.Repositories
 				{
 					// 1. Insert into Products
 					string insertProductQuery = @"
-				INSERT INTO Products (Name, Type, Description, ImageURL, IsDelete)
+				INSERT INTO Products (Name, Type, Description, ImageURL, IsDelete, CategoryId)
 				OUTPUT INSERTED.ProductID
-				VALUES (@Name, @Type, @Description, @ImageURL, 0)";
+				VALUES (@Name, @Type, @Description, @ImageURL, 0 , @CategoryId)";
 
 					int productId;
 					using (SqlCommand cmd = new SqlCommand(insertProductQuery, myCon, transaction))
@@ -36,6 +36,7 @@ namespace backend.Repositories
 						cmd.Parameters.AddWithValue("@Type", productDto.Type);
 						cmd.Parameters.AddWithValue("@Description", productDto.Description);
 						cmd.Parameters.AddWithValue("@ImageURL", productDto.ImageURL);
+						cmd.Parameters.AddWithValue("@CategoryId", productDto.CatergoryId);
 						productId = (int)cmd.ExecuteScalar();
 					}
 
@@ -108,7 +109,7 @@ namespace backend.Repositories
 					// 1. Update Products
 					string updateProductQuery = @"
 				UPDATE Products 
-				SET Name = @Name, Type = @Type, Description = @Description, ImageURL = @ImageURL
+				SET Name = @Name, Type = @Type, Description = @Description, ImageURL = @ImageURL, CategoryId = @CategoryId
 				WHERE ProductID = @ProductID";
 					using (SqlCommand cmd = new SqlCommand(updateProductQuery, myCon, transaction))
 					{
@@ -117,6 +118,7 @@ namespace backend.Repositories
 						cmd.Parameters.AddWithValue("@Type", productDto.Type);
 						cmd.Parameters.AddWithValue("@Description", productDto.Description);
 						cmd.Parameters.AddWithValue("@ImageURL", productDto.ImageURL);
+						cmd.Parameters.AddWithValue("@CategoryId", productDto.CatergoryId);
 						cmd.ExecuteNonQuery();
 					}
 
@@ -214,230 +216,242 @@ namespace backend.Repositories
 
 		}
 
-		IEnumerable<ProductDTO> IRepository<ProductDTO>.GetAll()
-		{
-			string query = @"
-							SELECT 
-						p.ProductID,
-						p.Name,
-						p.Type,
-						p.Description,
-						p.ImageURL,
-						p.IsDelete,
-						pp.Price,
-						pp.Quantity,
-						ps.SalePrice,
-						ps.SaleStartDate,
-						ps.SaleEndDate,
-						pi.ImageURL AS AdditionalImage
-					FROM Products p
-					JOIN ProductPrices pp ON p.ProductID = pp.ProductID
-					LEFT JOIN ProductSales ps ON 
-						ps.ProductPriceID = pp.ProductPriceID 
-						AND GETDATE() BETWEEN ps.SaleStartDate AND ps.SaleEndDate
-					LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
-					ORDER BY p.ProductID";
+        IEnumerable<ProductDTO> IRepository<ProductDTO>.GetAll()
+        {
+            string query = @"
+        SELECT 
+            p.ProductID,
+            p.Name,
+            c.CategoryName AS Type,
+            p.Description,
+            p.ImageURL,
+            p.IsDelete,
+            pp.Price,
+            pp.Quantity,
+            ps.SalePrice,
+            ps.SaleStartDate,
+            ps.SaleEndDate,
+            pi.ImageURL AS AdditionalImage,
+            c.CategoryId AS CatergoryId
+        FROM Products p
+        JOIN ProductPrices pp ON p.ProductID = pp.ProductID
+        LEFT JOIN ProductSales ps ON 
+            ps.ProductPriceID = pp.ProductPriceID 
+            AND GETDATE() BETWEEN ps.SaleStartDate AND ps.SaleEndDate
+        LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
+        LEFT JOIN ProductCategories c ON p.CategoryId = c.CategoryId
+        ORDER BY p.ProductID";
 
-			var productDict = new Dictionary<int, ProductDTO>();
+            var productDict = new Dictionary<int, ProductDTO>();
 
-			using (SqlConnection myCon = new SqlConnection(_connectionString))
-			{
-				myCon.Open();
-				using (SqlCommand myCommand = new SqlCommand(query, myCon))
-				using (SqlDataReader reader = myCommand.ExecuteReader())
-				{
-					while (reader.Read())
-					{
-						int productId = reader.GetInt32(reader.GetOrdinal("ProductID"));
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                using (SqlDataReader reader = myCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int productId = reader.GetInt32(reader.GetOrdinal("ProductID"));
 
-						if (!productDict.ContainsKey(productId))
-						{
-							var dto = new ProductDTO(
-								productId,
-								reader["Name"].ToString(),
-								reader["Type"].ToString(),
-								reader["Description"].ToString(),
-								reader["ImageURL"].ToString(),
-								reader.GetDecimal(reader.GetOrdinal("Price")),
-								reader.GetInt32(reader.GetOrdinal("Quantity")),
-								new List<string>(),
-								reader.IsDBNull(reader.GetOrdinal("SalePrice")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("SalePrice")),
-								reader.IsDBNull(reader.GetOrdinal("SaleStartDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleStartDate")),
-								reader.IsDBNull(reader.GetOrdinal("SaleEndDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleEndDate")),
-								reader.IsDBNull(reader.GetOrdinal("IsDelete")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("IsDelete"))
-							);
+                        if (!productDict.ContainsKey(productId))
+                        {
+                            var dto = new ProductDTO(
+                                productId,
+                                reader["Name"].ToString(),
+                                reader["Type"].ToString(), // now from ProductCategories.CategoryName
+                                reader["Description"].ToString(),
+                                reader["ImageURL"].ToString(),
+                                reader.GetDecimal(reader.GetOrdinal("Price")),
+                                reader.GetInt32(reader.GetOrdinal("Quantity")),
+                                new List<string>(),
+                                reader.IsDBNull(reader.GetOrdinal("SalePrice")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("SalePrice")),
+                                reader.IsDBNull(reader.GetOrdinal("SaleStartDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleStartDate")),
+                                reader.IsDBNull(reader.GetOrdinal("SaleEndDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleEndDate")),
+                                reader.IsDBNull(reader.GetOrdinal("IsDelete")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("IsDelete")),
+                                reader.IsDBNull(reader.GetOrdinal("CatergoryId")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("CatergoryId"))
+                            );
 
-							productDict[productId] = dto;
-						}
+                            productDict[productId] = dto;
+                        }
 
-						// Add additional images
-						if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
-						{
-							string additionalImage = reader["AdditionalImage"].ToString();
-							if (!productDict[productId].ListImageURL.Contains(additionalImage))
-							{
-								productDict[productId].ListImageURL.Add(additionalImage);
-							}
-						}
-					}
-				}
-				myCon.Close();
-			}
+                        // Add additional images
+                        if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
+                        {
+                            string additionalImage = reader["AdditionalImage"].ToString();
+                            if (!productDict[productId].ListImageURL.Contains(additionalImage))
+                            {
+                                productDict[productId].ListImageURL.Add(additionalImage);
+                            }
+                        }
+                    }
+                }
+                myCon.Close();
+            }
 
-			return productDict.Values;
-		}
+            return productDict.Values;
+        }
 
-		ProductDTO IRepository<ProductDTO>.GetById(int id)
-		{
-			string query = @"
-							SELECT 
-						p.ProductID,
-						p.Name,
-						p.Type,
-						p.Description,
-						p.ImageURL,
-						p.IsDelete,
-						pp.Price,
-						pp.Quantity,
-						ps.SalePrice,
-						ps.SaleStartDate,
-						ps.SaleEndDate,
-						pi.ImageURL AS AdditionalImage
-					FROM Products p
-					JOIN ProductPrices pp ON p.ProductID = pp.ProductID
-					LEFT JOIN ProductSales ps ON 
-						ps.ProductPriceID = pp.ProductPriceID 
-						AND GETDATE() BETWEEN ps.SaleStartDate AND ps.SaleEndDate
-					LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
+
+        ProductDTO IRepository<ProductDTO>.GetById(int id)
+        {
+            string query = @"
+		SELECT 
+			p.ProductID,
+			p.Name,
+			c.CategoryName AS Type,
+			p.Description,
+			p.ImageURL,
+			p.IsDelete,
+			pp.Price,
+			pp.Quantity,
+			ps.SalePrice,
+			ps.SaleStartDate,
+			ps.SaleEndDate,
+			pi.ImageURL AS AdditionalImage,
+			c.CategoryId AS CatergoryId
+		FROM Products p
+		JOIN ProductPrices pp ON p.ProductID = pp.ProductID
+		LEFT JOIN ProductSales ps ON 
+			ps.ProductPriceID = pp.ProductPriceID 
+			AND GETDATE() BETWEEN ps.SaleStartDate AND ps.SaleEndDate
+		LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
+		LEFT JOIN ProductCategories c ON p.CategoryId = c.CategoryId
 		WHERE ISNULL(p.IsDelete, 0) != 1 AND p.ProductID = @ProductID";
 
-			ProductDTO product = null;
+            ProductDTO product = null;
 
-			using (SqlConnection myCon = new SqlConnection(_connectionString))
-			{
-				myCon.Open();
-				using (SqlCommand myCommand = new SqlCommand(query, myCon))
-				{
-					myCommand.Parameters.AddWithValue("@ProductID", id);
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProductID", id);
 
-					using (SqlDataReader reader = myCommand.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							if (product == null)
-							{
-								product = new ProductDTO(
-									reader.GetInt32(reader.GetOrdinal("ProductID")),
-									reader["Name"].ToString(),
-									reader["Type"].ToString(),
-									reader["Description"].ToString(),
-									reader["ImageURL"].ToString(),
-									reader.GetDecimal(reader.GetOrdinal("Price")),
-									reader.GetInt32(reader.GetOrdinal("Quantity")),
-									new List<string>(),
-									reader.IsDBNull(reader.GetOrdinal("SalePrice")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("SalePrice")),
-									reader.IsDBNull(reader.GetOrdinal("SaleStartDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleStartDate")),
-									reader.IsDBNull(reader.GetOrdinal("SaleEndDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleEndDate")),
-									reader.IsDBNull(reader.GetOrdinal("IsDelete")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("IsDelete"))
-								);
-							}
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (product == null)
+                            {
+                                product = new ProductDTO(
+                                    reader.GetInt32(reader.GetOrdinal("ProductID")),
+                                    reader["Name"].ToString(),
+                                    reader["Type"].ToString(), // Lấy từ CategoryName
+                                    reader["Description"].ToString(),
+                                    reader["ImageURL"].ToString(),
+                                    reader.GetDecimal(reader.GetOrdinal("Price")),
+                                    reader.GetInt32(reader.GetOrdinal("Quantity")),
+                                    new List<string>(),
+                                    reader.IsDBNull(reader.GetOrdinal("SalePrice")) ? (decimal?)null : reader.GetDecimal(reader.GetOrdinal("SalePrice")),
+                                    reader.IsDBNull(reader.GetOrdinal("SaleStartDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleStartDate")),
+                                    reader.IsDBNull(reader.GetOrdinal("SaleEndDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("SaleEndDate")),
+                                    reader.IsDBNull(reader.GetOrdinal("IsDelete")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("IsDelete")),
+                                    reader.IsDBNull(reader.GetOrdinal("CatergoryId")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("CatergoryId"))
+                                );
+                            }
 
-							if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
-							{
-								string image = reader["AdditionalImage"].ToString();
-								if (!product.ListImageURL.Contains(image))
-								{
-									product.ListImageURL.Add(image);
-								}
-							}
-						}
-					}
-				}
-				myCon.Close();
-			}
+                            if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
+                            {
+                                string image = reader["AdditionalImage"].ToString();
+                                if (!product.ListImageURL.Contains(image))
+                                {
+                                    product.ListImageURL.Add(image);
+                                }
+                            }
+                        }
+                    }
+                }
+                myCon.Close();
+            }
 
-			return product;
-		}
+            return product;
+        }
 
-		public IEnumerable<ProductDTO> GetById2(int id)
-		{
-			var result = new List<ProductDTO>();
-						string query = @"SELECT 
-				p.ProductID,
-				p.Name,
-				p.Type,
-				p.Description,
-				p.ImageURL,
-				p.IsDelete,
-				pp.Price,
-				pp.Quantity,
-				NULL AS SalePrice,
-				NULL AS SaleStartDate,
-				NULL AS SaleEndDate,
-				pi.ImageURL AS AdditionalImage
-			FROM ProductAddOns pa
-			JOIN Products p ON pa.AddOnProductID = p.ProductID
-			JOIN ProductPrices pp ON pp.ProductID = p.ProductID
-			LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
-			WHERE pa.ProductID = @ProductId
-					";
 
-			using (SqlConnection myCon = new SqlConnection(_connectionString))
-			{
-				myCon.Open();
-				using (SqlCommand myCommand = new SqlCommand(query, myCon))
-				{
-					myCommand.Parameters.AddWithValue("@ProductId", id);
+        public IEnumerable<ProductDTO> GetById2(int id)
+        {
+            var result = new List<ProductDTO>();
+            string query = @"
+		SELECT 
+			p.ProductID,
+			p.Name,
+			c.CategoryName AS Type,
+			p.Description,
+			p.ImageURL,
+			p.IsDelete,
+			pp.Price,
+			pp.Quantity,
+			NULL AS SalePrice,
+			NULL AS SaleStartDate,
+			NULL AS SaleEndDate,
+			pi.ImageURL AS AdditionalImage,
+			c.CategoryId AS CatergoryId
+		FROM ProductAddOns pa
+		JOIN Products p ON pa.AddOnProductID = p.ProductID
+		JOIN ProductPrices pp ON pp.ProductID = p.ProductID
+		LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID
+		LEFT JOIN ProductCategories c ON p.CategoryId = c.CategoryId
+		WHERE pa.ProductID = @ProductId";
 
-					using (SqlDataReader reader = myCommand.ExecuteReader())
-					{
-						var productDict = new Dictionary<int, ProductDTO>();
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@ProductId", id);
 
-						while (reader.Read())
-						{
-							int productId = reader.GetInt32(reader.GetOrdinal("ProductID"));
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        var productDict = new Dictionary<int, ProductDTO>();
 
-							if (!productDict.ContainsKey(productId))
-							{
-								var dto = new ProductDTO(
-									productId,
-									reader["Name"].ToString(),
-									reader["Type"].ToString(),
-									reader["Description"].ToString(),
-									reader["ImageURL"].ToString(),
-									reader.GetDecimal(reader.GetOrdinal("Price")),
-									reader.GetInt32(reader.GetOrdinal("Quantity")),
-									new List<string>(),
-									null,
-									null,
-									null,
-									reader.IsDBNull(reader.GetOrdinal("IsDelete")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("IsDelete"))
-								);
+                        while (reader.Read())
+                        {
+                            int productId = reader.GetInt32(reader.GetOrdinal("ProductID"));
 
-								productDict[productId] = dto;
-							}
+                            if (!productDict.ContainsKey(productId))
+                            {
+                                var dto = new ProductDTO(
+                                    productId,
+                                    reader["Name"].ToString(),
+                                    reader["Type"].ToString(),
+                                    reader["Description"].ToString(),
+                                    reader["ImageURL"].ToString(),
+                                    reader.GetDecimal(reader.GetOrdinal("Price")),
+                                    reader.GetInt32(reader.GetOrdinal("Quantity")),
+                                    new List<string>(),
+                                    null,
+                                    null,
+                                    null,
+                                    reader.IsDBNull(reader.GetOrdinal("IsDelete")) ? (bool?)null : reader.GetBoolean(reader.GetOrdinal("IsDelete")),
+                                    reader.IsDBNull(reader.GetOrdinal("CatergoryId")) ? (int?)null : reader.GetInt32(reader.GetOrdinal("CatergoryId"))
+                                );
 
-							// Add additional images
-							if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
-							{
-								string additionalImage = reader["AdditionalImage"].ToString();
-								if (!productDict[productId].ListImageURL.Contains(additionalImage))
-								{
-									productDict[productId].ListImageURL.Add(additionalImage);
-								}
-							}
-						}
+                                productDict[productId] = dto;
+                            }
 
-						result.AddRange(productDict.Values);
-					}
-				}
-				myCon.Close();
-			}
+                            // Add additional images
+                            if (!reader.IsDBNull(reader.GetOrdinal("AdditionalImage")))
+                            {
+                                string additionalImage = reader["AdditionalImage"].ToString();
+                                if (!productDict[productId].ListImageURL.Contains(additionalImage))
+                                {
+                                    productDict[productId].ListImageURL.Add(additionalImage);
+                                }
+                            }
+                        }
 
-			return result;
-		}
+                        result.AddRange(productDict.Values);
+                    }
+                }
+                myCon.Close();
+            }
 
-		public bool Add2(ProductDTO item, int id)
+            return result;
+        }
+
+
+        public bool Add2(ProductDTO item, int id)
 		{
 			throw new NotImplementedException();
 		}

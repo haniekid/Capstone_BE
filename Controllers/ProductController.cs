@@ -21,16 +21,18 @@ namespace backend.Controllers
 		private readonly IRepository<ProductDTO> _productDTORepository;
 		private readonly IRepository<ProductType> _productTypeRepository;
 		private readonly IRepository<AddOnProductRequest> _addOnProductRepository;
+		private readonly IRepository<ProductCategory> _productCategory;
 
 
 		public ProductController(IRepository<Product> productRepository, IRepository<ProductDTO> productDTORepository, IRepository<ProductType> productTypeRepository,
-			IRepository<AddOnProductRequest> addOnProductRepository)
+			IRepository<AddOnProductRequest> addOnProductRepository, IRepository<ProductCategory> productCategory)
 		{
 			_productRepository = productRepository;
 			_productDTORepository = productDTORepository;
 			_productTypeRepository = productTypeRepository;
 			_addOnProductRepository = addOnProductRepository;
-		}
+			_productCategory = productCategory;
+        }
 
 		[HttpGet]
 		public IActionResult Get()
@@ -143,7 +145,7 @@ namespace backend.Controllers
 		[HttpGet("GetProductTypesForAdminDashboard")]
 		public IActionResult GetProductTypesForAdminDashboard()
 		{
-			var products = _productTypeRepository.GetAll();
+			var products = _productCategory.GetAll();
 			return Ok(products);
 		}
 

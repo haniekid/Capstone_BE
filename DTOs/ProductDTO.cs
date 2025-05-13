@@ -14,21 +14,22 @@
 		public DateTime? SaleStartDate { get; set; }
 		public DateTime? SaleEndDate { get; set; }
 		public bool? IsDeleted { get; set; }
-		public ProductDTO(int productID, string name, string type, string description, string imageURL, decimal price, int quantity, List<string> listImageURL,
-			decimal? salePrice, DateTime? saleStartDate, DateTime? saleEndDate, bool? isDeleted)
-		{
-			ProductID = productID;
-			Name = name;
-			Type = type;
-			Description = description;
-			ImageURL = imageURL;
-			Price = price;
-			Quantity = quantity;
-			ListImageURL = listImageURL;
-			SalePrice = salePrice;
-			SaleStartDate = saleStartDate;
-			SaleEndDate = saleEndDate;
-			IsDeleted = isDeleted;
-		}
-	}
+		public int? CatergoryId { get; set; }
+        public ProductDTO(int productID, string name, string type, string description, string imageURL, decimal price, int quantity, List<string> listImageURL, decimal? salePrice, DateTime? saleStartDate, DateTime? saleEndDate, bool? isDeleted, int? catergoryId)
+        {
+            ProductID = productID;
+            Name = name;
+            Type = type;
+            Description = description;
+            ImageURL = imageURL;
+            Price = price;
+            Quantity = quantity;
+            ListImageURL = listImageURL;
+            SalePrice = salePrice;
+            SaleStartDate = saleStartDate;
+            SaleEndDate = saleEndDate;
+            IsDeleted = isDeleted;
+            CatergoryId = catergoryId;
+        }
+    }
 }

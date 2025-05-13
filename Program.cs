@@ -42,6 +42,7 @@ namespace backend
 			builder.Services.AddScoped<IRepository<ProductDTO>, ProductDTORepository>();
 			builder.Services.AddScoped<IRepository<AddOnProductRequest>, AddOnProductRepository>();
 			builder.Services.AddScoped<IRepository<ProductType>, ProductTypeRepository>();
+			builder.Services.AddScoped<IRepository<ProductCategory>, ProductCategoryRepository>();
 
 			builder.Services.AddScoped<IListRepository<Order>, OrderRepository>();
 			builder.Services.AddScoped<IListRepository<OrderDTO>, OrderRepository>();
