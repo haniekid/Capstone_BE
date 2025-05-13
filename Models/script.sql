@@ -1,6 +1,6 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Demo_3]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Database [Demo_3]    Script Date: 14/5/2025 1:04:37 AM ******/
 CREATE DATABASE [Demo_3]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -82,7 +82,7 @@ ALTER DATABASE [Demo_3] SET QUERY_STORE = OFF
 GO
 USE [Demo_3]
 GO
-/****** Object:  Table [dbo].[Discount]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[Discount]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +105,7 @@ CREATE TABLE [dbo].[Discount](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -124,7 +124,7 @@ CREATE TABLE [dbo].[OrderItems](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -148,7 +148,7 @@ CREATE TABLE [dbo].[Orders](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -163,7 +163,23 @@ CREATE TABLE [dbo].[ProductAddOns](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductImages]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[ProductCategories]    Script Date: 14/5/2025 1:04:37 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProductCategories](
+	[CategoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CategoryName] [nvarchar](100) NOT NULL,
+	[Description] [nvarchar](255) NULL,
+	[IsActive] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CategoryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ProductImages]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -178,7 +194,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductPrices]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[ProductPrices]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -194,7 +210,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -206,13 +222,14 @@ CREATE TABLE [dbo].[Products](
 	[Description] [nvarchar](1000) NULL,
 	[ImageURL] [nvarchar](500) NULL,
 	[IsDelete] [bit] NULL,
+	[CategoryId] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ProductID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductSales]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[ProductSales]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -230,7 +247,7 @@ CREATE TABLE [dbo].[ProductSales](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -244,7 +261,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -264,7 +281,7 @@ CREATE TABLE [dbo].[ShippingAddress](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 14/5/2025 1:04:37 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -446,15 +463,31 @@ INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) V
 GO
 SET IDENTITY_INSERT [dbo].[ProductAddOns] OFF
 GO
+SET IDENTITY_INSERT [dbo].[ProductCategories] ON 
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (1, N'Phở', N'', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (2, N'Bún', N'', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (3, N'Cơm', NULL, 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (4, N'Lẩu', N'', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (5, N'Cháo', N'', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (6, N'Topping', N'', 1)
+GO
+SET IDENTITY_INSERT [dbo].[ProductCategories] OFF
+GO
 SET IDENTITY_INSERT [dbo].[ProductImages] ON 
 GO
 INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (7, 13, N'https://fullofplants.com/wp-content/uploads/2023/10/how-to-make-vegan-bun-rieu-chay-vietnamese-crab-noodle-soup-thumb.jpg')
 GO
 INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (8, 14, N'https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGhvfGVufDB8fDB8fHww')
 GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (18, 20, N'https://file.hstatic.net/1000394081/article/lau-thai_2aedea543c194e93948def3c260e8eb9.jpg')
+INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (20, 20, N'https://file.hstatic.net/1000394081/article/lau-thai_2aedea543c194e93948def3c260e8eb9.jpg')
 GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (19, 20, N'https://maythucphamgoma.vn/wp-content/uploads/2024/10/thai-tc1-4-6ng.png')
+INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (21, 20, N'https://maythucphamgoma.vn/wp-content/uploads/2024/10/thai-tc1-4-6ng.png')
 GO
 SET IDENTITY_INSERT [dbo].[ProductImages] OFF
 GO
@@ -476,27 +509,41 @@ INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]
 GO
 INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (24, CAST(35000.00 AS Decimal(10, 2)), 100, 26)
 GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (25, CAST(100000.00 AS Decimal(10, 2)), 8, 27)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (26, CAST(120000.00 AS Decimal(10, 2)), 222, 28)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (27, CAST(40000.00 AS Decimal(10, 2)), 10, 29)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (28, CAST(10000.00 AS Decimal(10, 2)), 0, 30)
+GO
 SET IDENTITY_INSERT [dbo].[ProductPrices] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Products] ON 
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (13, N'Bun rieu', N'Bún', N'no', N'https://cdn.tgdd.vn/2020/08/CookProduct/Untitled-1-1200x676-10.jpg', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (13, N'Bun rieu', N'Bún', N'no', N'https://cdn.tgdd.vn/2020/08/CookProduct/Untitled-1-1200x676-10.jpg', 0, 1)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (14, N'Pho bo', N'Bún', N'123', N'https://plus.unsplash.com/premium_photo-1664478276162-46c39b3557c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhvfGVufDB8fDB8fHww', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (14, N'Pho bo', N'Bún', N'123', N'https://plus.unsplash.com/premium_photo-1664478276162-46c39b3557c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhvfGVufDB8fDB8fHww', 0, 2)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (20, N'Lẩu Thái', N'Lẩu', N'Lẩu Thái tôm chua cay', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (20, N'Lẩu Thái', N'Cơm', N'Lẩu Thái tôm chua cay', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 0, 3)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (21, N'Bò viên', N'Topping', N'Bò viên dai tươi ngon', N'https://mastermeats.com.vn/wp-content/uploads/2023/12/bo-vien-nau-gi-ngon-1.jpg', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (21, N'Bò viên', N'Phở', N'Bò viên dai tươi ngon', N'https://mastermeats.com.vn/wp-content/uploads/2023/12/bo-vien-nau-gi-ngon-1.jpg', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (22, N'Nấm kim châm', N'Topping', N'Nấm tươi ngon', N'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTl1i_2x_jwtuzVagdNwj4EwKNJsgyR0kazHbO3I1wmu4g-6Eu976diT_L0_JzIvOjieBGazHRw4Iw4Yt3cFDDWIQ', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (22, N'Nấm kim châm', N'Topping', N'Nấm tươi ngon', N'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTl1i_2x_jwtuzVagdNwj4EwKNJsgyR0kazHbO3I1wmu4g-6Eu976diT_L0_JzIvOjieBGazHRw4Iw4Yt3cFDDWIQ', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (23, N'Trứng gà', N'Topping', N'Trứng gà ta', N'https://bynature.vn/wp-content/uploads/2023/11/bynature-why-free-range-eggs-blog.jpg', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (23, N'Trứng gà', N'Topping', N'Trứng gà ta', N'https://bynature.vn/wp-content/uploads/2023/11/bynature-why-free-range-eggs-blog.jpg', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (24, N'Rau muống ', N'Topping', N'no', N'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRDqYWKDC0cZil0kCu02yPUV03hHYJMvs4fR6zYvcsReC1eZ120KPD_sVbtINvbN900ml9il0VGdhFdifqxqiYy2w', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (24, N'Rau muống ', N'Topping', N'no', N'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRDqYWKDC0cZil0kCu02yPUV03hHYJMvs4fR6zYvcsReC1eZ120KPD_sVbtINvbN900ml9il0VGdhFdifqxqiYy2w', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (25, N'C1', N'Cơm chay', N'no', N'no', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (26, N'Cơm chay 1', N'Cơm chay', N'No', N'https://down-cvs-vn.img.susercontent.com/vn-11134513-7r98o-lsv6w1kz1kex61@resize_ss640x400!@crop_w640_h400_cT', 0, 2)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete]) VALUES (26, N'Cơm chay 1', N'Cơm chay', N'No', N'https://down-cvs-vn.img.susercontent.com/vn-11134513-7r98o-lsv6w1kz1kex61@resize_ss640x400!@crop_w640_h400_cT', 0)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (27, N'Lẩu Gà', N'Lẩu', N'no', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 0, 4)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (28, N'aaaaaaaaaa', N'Bún', N'aaaaaaaaaaaaaaa', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 1, 2)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (29, N'Phở gà', N'Phở', N'a', N'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhd6dgfk6Qn7U25tvgrxJYLUJ94S4V4iip77bN35P17d3JGLT8eoW7_Xjse6OgZV2leEiHaYIz89BC5fsBdrc6X5NVN8caqZMe1Z8fGdUo4r19Uyr62g17tP2ALGnJUf5c0l4F4g85BaIs/s800/94271CB2-5921-4180-B602-AC21E71F4BB7_1_102_o.jpeg', 0, 1)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (30, N'aaaaaaaaaa122', N'Cháo', N'222', N'2', 1, 5)
 GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
 GO
@@ -508,7 +555,13 @@ INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStart
 GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (7, 22, NULL, NULL, NULL, CAST(N'2025-05-06T14:23:35.900' AS DateTime))
 GO
-INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (8, 19, NULL, NULL, NULL, CAST(N'2025-05-06T23:18:21.320' AS DateTime))
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (8, 19, CAST(120000.00 AS Decimal(10, 2)), CAST(N'2025-05-13T16:58:00.000' AS DateTime), CAST(N'2025-05-16T06:58:00.000' AS DateTime), CAST(N'2025-05-06T23:18:21.320' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (9, 26, NULL, NULL, NULL, CAST(N'2025-05-13T23:05:43.247' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (10, 27, NULL, NULL, NULL, CAST(N'2025-05-13T23:44:33.287' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (11, 25, NULL, NULL, NULL, CAST(N'2025-05-13T23:44:52.140' AS DateTime))
 GO
 SET IDENTITY_INSERT [dbo].[ProductSales] OFF
 GO
@@ -596,11 +649,13 @@ INSERT [dbo].[Users] ([UserID], [FirstName], [LastName], [Email], [Phone], [Pass
 GO
 INSERT [dbo].[Users] ([UserID], [FirstName], [LastName], [Email], [Phone], [PasswordHash], [RoleID], [ActivationToken], [IsActivated], [ResetPasswordToken], [ResetTokenExpiry], [DistrictID], [WardCode], [AddressDetail]) VALUES (29, N'Nguyen', N'Anh', N'anhnhhe153131@fpt.edu.vn', N'0944924978', N'ky88G1YlfOhTmsJp16q0JVDaz4gY0HXwvfGZBWKq4+8=', 2, N'', 1, NULL, NULL, NULL, NULL, NULL)
 GO
+INSERT [dbo].[Users] ([UserID], [FirstName], [LastName], [Email], [Phone], [PasswordHash], [RoleID], [ActivationToken], [IsActivated], [ResetPasswordToken], [ResetTokenExpiry], [DistrictID], [WardCode], [AddressDetail]) VALUES (30, N'thu', N'hà', N'thuharosy2003@gmail.com', N'0944924978', N'PQiRq6MxHLsSRszMhbdjgBcNxQU4vYzcsxYlXeTiFu8=', 2, N'', 1, N'', CAST(N'2025-05-13T14:37:10.867' AS DateTime), 3255, N'1B2816', N'ha nội')
+GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 14/5/2025 1:04:37 AM ******/
 ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UNIQUE NONCLUSTERED 
 (
 	[Code] ASC
@@ -608,7 +663,7 @@ ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UN
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B6160DED04910]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Index [UQ__Roles__8A2B6160DED04910]    Script Date: 14/5/2025 1:04:37 AM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -616,7 +671,7 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 12/5/2025 11:33:51 PM ******/
+/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 14/5/2025 1:04:37 AM ******/
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [UQ__Users__A9D105340A96D1D5] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -628,12 +683,19 @@ ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [DF__Discount__IsActi__398D8EEE]  D
 GO
 ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [DF__Discount__Create__3A81B327]  DEFAULT (getdate()) FOR [CreatedAt]
 GO
+ALTER TABLE [dbo].[ProductCategories] ADD  DEFAULT ((1)) FOR [IsActive]
+GO
 ALTER TABLE [dbo].[ProductSales] ADD  CONSTRAINT [DF__ProductSa__Creat__5EBF139D]  DEFAULT (getdate()) FOR [CreatedAt]
 GO
 ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD  CONSTRAINT [FK_OrderItems_Orders] FOREIGN KEY([OrderID])
 REFERENCES [dbo].[Orders] ([OrderID])
 GO
 ALTER TABLE [dbo].[OrderItems] CHECK CONSTRAINT [FK_OrderItems_Orders]
+GO
+ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD  CONSTRAINT [FK_OrderItems_ProductPrices] FOREIGN KEY([ProductId])
+REFERENCES [dbo].[ProductPrices] ([ProductPriceID])
+GO
+ALTER TABLE [dbo].[OrderItems] CHECK CONSTRAINT [FK_OrderItems_ProductPrices]
 GO
 ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Discount] FOREIGN KEY([DiscountCode])
 REFERENCES [dbo].[Discount] ([Code])
@@ -662,6 +724,11 @@ ALTER TABLE [dbo].[ProductPrices]  WITH CHECK ADD  CONSTRAINT [FK__ProductPr__Pr
 REFERENCES [dbo].[Products] ([ProductID])
 GO
 ALTER TABLE [dbo].[ProductPrices] CHECK CONSTRAINT [FK__ProductPr__Produ__2D27B809]
+GO
+ALTER TABLE [dbo].[Products]  WITH CHECK ADD  CONSTRAINT [FK_Products_ProductCategory] FOREIGN KEY([CategoryId])
+REFERENCES [dbo].[ProductCategories] ([CategoryId])
+GO
+ALTER TABLE [dbo].[Products] CHECK CONSTRAINT [FK_Products_ProductCategory]
 GO
 ALTER TABLE [dbo].[ProductSales]  WITH CHECK ADD  CONSTRAINT [FK__ProductSa__Produ__6477ECF3] FOREIGN KEY([ProductPriceID])
 REFERENCES [dbo].[ProductPrices] ([ProductPriceID])
