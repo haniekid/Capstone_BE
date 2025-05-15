@@ -108,11 +108,15 @@ namespace backend.Controllers
 			var isValid = _passwordHelper.HashPassword(loginRequest.Password) == user?.Password;
 			if (user == null || !isValid)
 			{
-				return Unauthorized("Invalid username or password");
+				return Unauthorized("Sai tai khoản hoặc mật khẩu");
+			}
+			if (user.IsActivated == false)
+			{
+				return BadRequest("Tài khoản đã bị khóa");
 			}
 			if (!string.IsNullOrWhiteSpace(user.ActivationToken))
 			{
-				return Unauthorized("Please check your email to active the activation");
+				return Unauthorized("Kiểm tra email để kích hoạt tài khoản");
 			}
 			var jwtService = new JwtService(_configuration);
 			var token = jwtService.GenerateJwtToken(user);
@@ -251,33 +255,54 @@ namespace backend.Controllers
 			return Ok("Mật khẩu đã được thay đổi thành công.");
 		}
 
-        [HttpPut("update-user")]
-        public IActionResult UpdateUser([FromBody] User user)
-        {
-            var result = _userRepository.Update(user);
+		[HttpPut("update-user")]
+		public IActionResult UpdateUser([FromBody] User user)
+		{
+			var result = _userRepository.Update(user);
 			if (result)
 			{
 				return Ok();
 			}
 			return BadRequest();
-        }
-        [HttpPut("change-password")]
-        public IActionResult ChangePassword([FromBody] ChangePasswordRequest req)
-        {
+		}
+		[HttpPut("change-password")]
+		public IActionResult ChangePassword([FromBody] ChangePasswordRequest req)
+		{
 			var currentUser = _userRepository.GetById(req.UserId);
 			if (currentUser.Password != _passwordHelper.HashPassword(req.OldPassword))
 			{
 				return BadRequest("Mật khẩu hiện tại không đúng");
 			}
-            currentUser.Password = _passwordHelper.HashPassword(req.NewPassword);
-            var result = _userRepository.Update(currentUser);
-            if (result)
-            {
-                return Ok();
-            }
-            return BadRequest();
-        }
-        private string GenerateResetPasswordEmail(string resetLink)
+			currentUser.Password = _passwordHelper.HashPassword(req.NewPassword);
+			var result = _userRepository.Update(currentUser);
+			if (result)
+			{
+				return Ok();
+			}
+			return BadRequest();
+		}
+
+		[HttpPut("lock-user")]
+		public IActionResult LockUser([FromBody] LockUserRequest req)
+		{
+			var currentUser = _userRepository.GetAll().FirstOrDefault(x => x.UserID == req.UserId);
+			if (req.IsLocked)
+			{
+				currentUser.IsActivated = true;
+			}
+			else
+			{
+				currentUser.IsActivated = false;
+
+			}
+			var result = _userRepository.Update(currentUser);
+			if (result)
+			{
+				return Ok();
+			}
+			return BadRequest();
+		}
+		private string GenerateResetPasswordEmail(string resetLink)
 		{
 			return $@"
 					<!DOCTYPE html>
