@@ -5,8 +5,6 @@
         Cancelled, 
         Processing, 
         Accepted,
-        Paid,
-        HalfPaid,
         Preparing, 
         Shipping, 
         Shipped, 

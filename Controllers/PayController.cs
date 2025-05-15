@@ -43,7 +43,7 @@ namespace backend.Controllers
                 {
                     newOrder.Order.ShippingFee = 0;
                 }
-
+                newOrder.Order.Status = OrderStatus.Processing;
                 var addedOrderID = _orderDTORepository.Add2(newOrder);
                 if (addedOrderID == 0)
                 {
@@ -127,7 +127,7 @@ namespace backend.Controllers
                             var order = _orderRepository.GetAll().FirstOrDefault(x => x.OrderID == orderId);
                             if (order != null)
                             {
-                                order.Status = OrderStatus.Paid;
+                                order.Status = OrderStatus.Accepted;
                                 _orderRepository.Update(order);
                                 return Redirect(ORDER_SUCCESS);
                             }
