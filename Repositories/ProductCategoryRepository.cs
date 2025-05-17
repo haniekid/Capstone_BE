@@ -53,7 +53,19 @@ namespace backend.Repositories
 
         public bool Delete2(ProductCategory item)
         {
-            throw new NotImplementedException();
+            string query = "UPDATE ProductCategories SET IsActive = 1 WHERE CategoryId = @CategoryId";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@CategoryId", item.CategoryId);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
         }
 
         public IEnumerable<ProductCategory> GetAll()

@@ -33,7 +33,12 @@ namespace backend.Controllers
         [HttpPost("DeleteCategoryById/{categoryId}")]
         public IActionResult DeleteCategoryById(int categoryId)
         {
-             _productCategory.Delete(categoryId);
+            var current = _productCategory.GetAll().FirstOrDefault(x => x.CategoryId == categoryId);
+            if (current.IsActive)
+            {
+                _productCategory.Delete(current.CategoryId);
+            }
+            _productCategory.Delete2(current);
             return Ok();
         }
         [HttpPut("{categoryId}")]

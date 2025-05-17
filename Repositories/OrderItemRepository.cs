@@ -17,36 +17,36 @@ namespace backend.Repositories
 
         public IEnumerable<OrderItem> GetAll()
         {
-            return null;
-            /*string query = @"SELECT OrderItemID, Quantity, OrderID, ProductPriceID FROM dbo.ORDER_ITEM";
+            string query = @"SELECT OrderItemID, ProductId, Quantity, Price, TotalPrice, OrderID, ProductName FROM dbo.OrderItems";
 
             DataTable table = new DataTable();
-            SqlDataReader myReader;
             using (SqlConnection myCon = new SqlConnection(_connectionString))
             {
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                using (SqlDataReader myReader = myCommand.ExecuteReader())
                 {
-                    myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
                 }
             }
 
             var orderItems = new List<OrderItem>();
             foreach (DataRow row in table.Rows)
             {
-                orderItems.Add(new OrderItem(
-                    (int)row["OrderItemID"],
-                    (int)row["Quantity"],
-                    (int)row["OrderID"],
-                        (int)row["ProductPriceID"]
-                ));
+                orderItems.Add(new OrderItem
+                {
+                    OrderItemId = (int)row["OrderItemID"],
+                    ProductId = row["ProductId"] == DBNull.Value ? (int?)null : (int)row["ProductId"],
+                    Quantity = (int)row["Quantity"],
+                    Price = (decimal)row["Price"],
+                    TotalPrice = (decimal)row["TotalPrice"],
+                    OrderId = (int)row["OrderID"],
+                    ProductName = row["ProductName"] == DBNull.Value ? null : row["ProductName"].ToString()
+                });
             }
-            return orderItems;*/
-        }
 
+            return orderItems;
+        }
         public List<OrderItem> GetById(int orderId)
         {
             return null;
