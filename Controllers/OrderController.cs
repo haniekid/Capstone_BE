@@ -45,7 +45,7 @@ namespace backend.Controllers
             var orders = _orderDTORepository.GetById(userId);
             if (orders == null || !orders.Any())
             {
-                return NotFound();
+                return Ok();
             }
             return Ok(orders);
         }
