@@ -15,7 +15,7 @@
         public int OrderID { get; set; }
         public OrderStatus Status { get; set; }
         public int UserID { get; set; }
-        public string DiscountCode { get; set; }
+        public string? DiscountCode { get; set; }
         public string ShippingMethod { get; set; }
         public decimal ShippingFee { get; set; }
         public string PaymentMethod { get; set; }
