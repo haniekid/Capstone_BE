@@ -54,7 +54,8 @@ namespace backend.Controllers
 			}
 			if (oldUser != null)
 			{
-				oldUser.ActivationToken = Guid.NewGuid().ToString();
+				oldUser.Password = _passwordHelper.HashPassword(newUser.Password);
+                oldUser.ActivationToken = Guid.NewGuid().ToString();
 				var activationLinkUpdate = $"{Request.Scheme}://{Request.Host}/api/user/activate?token={oldUser.ActivationToken}";
 				_userRepository.Update(oldUser);
 				_emailService.Send(newUser.Email, "Activate your account", GenerateActivationEmail(activationLinkUpdate));
@@ -72,86 +73,34 @@ namespace backend.Controllers
 			return Ok();
 		}
 
-		[HttpPost("register")]
-		public IActionResult Register(User newUser)
-		{
-			newUser.Password = _passwordHelper.HashPassword(newUser.Password);
-			newUser.ActivationToken = Guid.NewGuid().ToString();
-			bool added = _userRepository.Add(newUser);
-			if (!added)
-			{
-				return BadRequest("Failed to add user");
-			}
-			var activationLink = $"{Request.Scheme}://{Request.Host}/api/user/activate?token={newUser.ActivationToken}";
-			_emailService.Send(newUser.Email, "Activate your account", GenerateActivationEmail(activationLink));
-			return Ok();
-		}
+        [HttpGet("activate")]
+        public ContentResult Activate(string token)
+        {
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.ActivationToken == token);
 
-		[HttpDelete("{userId}")]
-		public IActionResult Delete(int userId)
-		{
-			bool deleted = _userRepository.Delete(userId);
-			if (deleted)
-			{
-				return Ok();
-			}
-			else
-			{
-				return NotFound();
-			}
-		}
+            if (user == null)
+            {
+                return new ContentResult
+                {
+                    Content = "<h2 style='color:red;'>Invalid activation token.</h2>",
+                    ContentType = "text/html"
+                };
+            }
 
-		[HttpPost("login")]
-		public IActionResult Login(UserLoginRequest loginRequest)
-		{
-			var user = _userRepository.GetAll().FirstOrDefault(u => u.Email == loginRequest.Email);
-			var isValid = _passwordHelper.HashPassword(loginRequest.Password) == user?.Password;
-			if (user == null || !isValid)
-			{
-				return Unauthorized("Sai tai khoản hoặc mật khẩu");
-			}
-			if (user.IsActivated == false)
-			{
-				return BadRequest("Tài khoản đã bị khóa");
-			}
-			if (!string.IsNullOrWhiteSpace(user.ActivationToken))
-			{
-				return Unauthorized("Kiểm tra email để kích hoạt tài khoản");
-			}
-			var jwtService = new JwtService(_configuration);
-			var token = jwtService.GenerateJwtToken(user);
+            user.IsActivated = true;
+            user.ActivationToken = string.Empty;
+            bool updated = _userRepository.Update(user);
 
-			return Ok(new { Token = token });
-		}
+            if (!updated)
+            {
+                return new ContentResult
+                {
+                    Content = "<h2 style='color:red;'>Something went wrong. Please try again.</h2>",
+                    ContentType = "text/html"
+                };
+            }
 
-		[HttpGet("activate")]
-		public ContentResult Activate(string token)
-		{
-			var user = _userRepository.GetAll().FirstOrDefault(u => u.ActivationToken == token);
-
-			if (user == null)
-			{
-				return new ContentResult
-				{
-					Content = "<h2 style='color:red;'>Invalid activation token.</h2>",
-					ContentType = "text/html"
-				};
-			}
-
-			user.IsActivated = true;
-			user.ActivationToken = string.Empty;
-			bool updated = _userRepository.Update(user);
-
-			if (!updated)
-			{
-				return new ContentResult
-				{
-					Content = "<h2 style='color:red;'>Something went wrong. Please try again.</h2>",
-					ContentType = "text/html"
-				};
-			}
-
-			var html = $@"
+            var html = $@"
 				<!DOCTYPE html>
 				<html lang='en'>
 				<head>
@@ -212,11 +161,47 @@ namespace backend.Controllers
 				</body>
 				</html>";
 
-			return new ContentResult
+            return new ContentResult
+            {
+                Content = html,
+                ContentType = "text/html"
+            };
+        }
+        [HttpDelete("{userId}")]
+		public IActionResult Delete(int userId)
+		{
+			bool deleted = _userRepository.Delete(userId);
+			if (deleted)
 			{
-				Content = html,
-				ContentType = "text/html"
-			};
+				return Ok();
+			}
+			else
+			{
+				return NotFound();
+			}
+		}
+
+        [HttpPost("login")]
+		public IActionResult Login(UserLoginRequest loginRequest)
+		{
+			var user = _userRepository.GetAll().FirstOrDefault(u => u.Email == loginRequest.Email);
+			var isValid = _passwordHelper.HashPassword(loginRequest.Password) == user?.Password;
+			if (user == null || !isValid)
+			{
+				return Unauthorized("Sai tai khoản hoặc mật khẩu");
+			}
+			if (user.IsActivated == false)
+			{
+				return BadRequest("Tài khoản đã bị khóa");
+			}
+			if (!string.IsNullOrWhiteSpace(user.ActivationToken))
+			{
+				return Unauthorized("Kiểm tra email để kích hoạt tài khoản");
+			}
+			var jwtService = new JwtService(_configuration);
+			var token = jwtService.GenerateJwtToken(user);
+
+			return Ok(new { Token = token });
 		}
 
 		[HttpPost("forgot-password")]
