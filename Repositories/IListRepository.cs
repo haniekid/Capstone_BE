@@ -9,6 +9,8 @@ namespace backend.Repositories
         T GetObjById(int id);
         bool Add(T item);
         bool Update(T item);
+        bool Update2(List<T> item);
+        bool Update3(List<T> item);
         bool Delete(int id);
         int Add2(T item);
 

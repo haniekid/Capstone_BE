@@ -36,6 +36,8 @@ namespace backend
                 options.Cookie.IsEssential = true;
             });
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddHostedService<ExpiredOrderCheckJob>();
+            builder.Services.AddScoped<IOrderProcessingRepository, OrderRepository>();
             builder.Services.AddScoped<IVnpay, Vnpay>();
 			builder.Services.AddScoped<IRepository<User>, UserRepository>();
 			builder.Services.AddScoped<IRepository<Product>, ProductRepository>();

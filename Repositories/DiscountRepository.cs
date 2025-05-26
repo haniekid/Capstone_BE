@@ -209,5 +209,15 @@ namespace backend.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public bool Update2(List<Discount> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update3(List<Discount> item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

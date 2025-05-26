@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Org.BouncyCastle.Utilities;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -49,93 +50,70 @@ namespace backend.Repositories
         }
         public List<OrderItem> GetById(int orderId)
         {
-            return null;
-            /*string query = @"SELECT * FROM ORDERITEMS WHERE OrderID = @OrderID";
+            string query = @"SELECT OrderItemID, ProductId, Quantity, Price, TotalPrice, OrderID, ProductName 
+                     FROM dbo.OrderItems 
+                     WHERE OrderID = @OrderId";
 
-            List<OrderItem> orderItems = new List<OrderItem>();
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            DataTable table = new DataTable();
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
             {
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand(query, connection))
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    command.Parameters.AddWithValue("@OrderID", orderId);
+                    myCommand.Parameters.AddWithValue("@OrderId", orderId);
 
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
+                    using (SqlDataReader myReader = myCommand.ExecuteReader())
                     {
-                        OrderItem orderItem = new OrderItem(
-                            reader.GetInt32(0),
-                            reader.GetInt32(1),
-                            reader.GetInt32(2),
-                            reader.GetInt32(3)
-                        );
-
-                        orderItems.Add(orderItem);
+                        table.Load(myReader);
                     }
-
-                    reader.Close();
                 }
-
-                connection.Close();
             }
 
-            return orderItems;*/
+            var orderItems = new List<OrderItem>();
+            foreach (DataRow row in table.Rows)
+            {
+                orderItems.Add(new OrderItem
+                {
+                    OrderItemId = (int)row["OrderItemID"],
+                    ProductId = row["ProductId"] == DBNull.Value ? (int?)null : (int)row["ProductId"],
+                    Quantity = (int)row["Quantity"],
+                    Price = (decimal)row["Price"],
+                    TotalPrice = (decimal)row["TotalPrice"],
+                    OrderId = (int)row["OrderID"],
+                    ProductName = row["ProductName"] == DBNull.Value ? null : row["ProductName"].ToString()
+                });
+            }
+
+            return orderItems;
         }
 
 
         public bool Add(OrderItem orderItem)
         {
             return true;
-          /*  string query = @"INSERT INTO dbo.ORDER_ITEM 
-                             (Quantity, OrderID, ProductPriceID) 
-                             VALUES (@Quantity, @OrderID, @ProductPriceID)";
-
-            try
-            {
-                using (SqlConnection myCon = new SqlConnection(_connectionString))
-                {
-                    myCon.Open();
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@Quantity", orderItem.Quantity);
-                        myCommand.Parameters.AddWithValue("@OrderID", orderItem.OrderID);
-                        myCommand.Parameters.AddWithValue("@ProductPriceID", orderItem.ProductPriceID);
-                        myCommand.ExecuteNonQuery();
-                        myCon.Close();
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }*/
         }
         public bool Update(OrderItem orderItem)
         {
             return true;
-           /* string query = @"UPDATE dbo.ORDER_ITEM
-                             SET Quantity = @Quantity,
-                             OrderID = @OrderID,
-                             ProductPriceID = @ProductPriceID
-                             WHERE OrderItemID = @OrderItemID";
+            /* string query = @"UPDATE dbo.ORDER_ITEM
+                              SET Quantity = @Quantity,
+                              OrderID = @OrderID,
+                              ProductPriceID = @ProductPriceID
+                              WHERE OrderItemID = @OrderItemID";
 
-            using (SqlConnection myCon = new SqlConnection(_connectionString))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myCommand.Parameters.AddWithValue("@OrderItemID", orderItem.OrderItemID);
-                    myCommand.Parameters.AddWithValue("@Quantity", orderItem.Quantity);
-                    myCommand.Parameters.AddWithValue("@OrderID", orderItem.OrderID);
-                    myCommand.Parameters.AddWithValue("@ProductPriceID", orderItem.ProductPriceID);
-                    int rowsAffected = myCommand.ExecuteNonQuery();
-                    return rowsAffected > 0;
-                }
-            }*/
+             using (SqlConnection myCon = new SqlConnection(_connectionString))
+             {
+                 myCon.Open();
+                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                 {
+                     myCommand.Parameters.AddWithValue("@OrderItemID", orderItem.OrderItemID);
+                     myCommand.Parameters.AddWithValue("@Quantity", orderItem.Quantity);
+                     myCommand.Parameters.AddWithValue("@OrderID", orderItem.OrderID);
+                     myCommand.Parameters.AddWithValue("@ProductPriceID", orderItem.ProductPriceID);
+                     int rowsAffected = myCommand.ExecuteNonQuery();
+                     return rowsAffected > 0;
+                 }
+             }*/
         }
 
         public bool Delete(int orderItemId)
@@ -163,6 +141,73 @@ namespace backend.Repositories
         public int Add2(OrderItem item)
         {
             throw new NotImplementedException();
+        }
+
+        public bool Update2(List<OrderItem> items)
+        {
+            try
+            {
+                string query = @"
+        UPDATE ProductPrices
+        SET Quantity = Quantity - @OrderQuantity
+        WHERE ProductID = @ProductId AND Quantity >= @OrderQuantity";
+
+                using (SqlConnection myCon = new SqlConnection(_connectionString))
+                {
+                    myCon.Open();
+
+                    foreach (var item in items)
+                    {
+                        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                        {
+                            myCommand.Parameters.AddWithValue("@ProductId", item.ProductId);
+                            myCommand.Parameters.AddWithValue("@Price", item.Price);
+                            myCommand.Parameters.AddWithValue("@OrderQuantity", item.Quantity);
+
+                            int rowsAffected = myCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
+        public bool Update3(List<OrderItem> items)
+        {
+            try
+            {
+                string query = @"
+                        UPDATE ProductPrices
+                        SET Quantity = Quantity + @OrderQuantity
+                        WHERE ProductID = @ProductId AND Price = @Price";
+
+                using (SqlConnection myCon = new SqlConnection(_connectionString))
+                {
+                    myCon.Open();
+
+                    foreach (var item in items)
+                    {
+                        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                        {
+                            myCommand.Parameters.AddWithValue("@ProductId", item.ProductId);
+                            myCommand.Parameters.AddWithValue("@Price", item.Price);
+                            myCommand.Parameters.AddWithValue("@OrderQuantity", item.Quantity);
+
+                            myCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

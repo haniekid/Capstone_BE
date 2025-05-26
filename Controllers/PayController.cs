@@ -21,10 +21,12 @@ namespace backend.Controllers
         private readonly IListRepository<OrderDTO> _orderDTORepository;
         private readonly IListRepository<Order> _orderRepository;
         private readonly IRepository<Product> _productRepository;
+        private readonly IListRepository<OrderItem> _orderItemRepository;
 
         private readonly string ORDER_SUCCESS = "http://localhost:3000/order-success";
 
-        public PayController(IVnpay vnpay, IConfiguration configuration, IListRepository<OrderDTO> orderDTORepository, IListRepository<Order> orderRepo, IRepository<Product> productRepository)
+        public PayController(IVnpay vnpay, IConfiguration configuration, IListRepository<OrderDTO> orderDTORepository,
+                             IListRepository<Order> orderRepo, IRepository<Product> productRepository, IListRepository<OrderItem> orderItemRepository)
         {
             _configuration = configuration;
             _vnpay = vnpay;
@@ -32,6 +34,7 @@ namespace backend.Controllers
             _orderDTORepository = orderDTORepository;
             _orderRepository = orderRepo;
             _productRepository = productRepository;
+            _orderItemRepository = orderItemRepository;
         }
 
         [HttpPost("CreatePaymentUrl")]
@@ -45,6 +48,7 @@ namespace backend.Controllers
                 }
                 newOrder.Order.Status = OrderStatus.Processing;
                 var addedOrderID = _orderDTORepository.Add2(newOrder);
+                var isUpdateQuantity = _orderItemRepository.Update2(newOrder.OrderItems);
                 if (addedOrderID == 0)
                 {
                     return BadRequest();

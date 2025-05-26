@@ -6,8 +6,8 @@ using System.Data.SqlClient;
 
 namespace backend.Repositories
 {
-	public class OrderRepository : IListRepository<Order>, IListRepository<OrderDTO>
-	{
+	public class OrderRepository : IListRepository<Order>, IListRepository<OrderDTO>, IOrderProcessingRepository
+    {
 		private readonly IConfiguration _configuration;
 		private readonly string _connectionString;
 
@@ -67,9 +67,9 @@ namespace backend.Repositories
 								 @DiscountCode, @ShippingFee, @Subtotal, @FinalTotal, @Status, @UserID)";
 
 			string orderItemQuery = @"INSERT INTO OrderItems 
-								(OrderID, ProductName, Quantity, Price, TotalPrice) 
+								(OrderID, ProductId, ProductName, Quantity, Price, TotalPrice) 
 								VALUES 
-								(@OrderID, @ProductName, @Quantity, @Price, @TotalPrice)";
+								(@OrderID, @ProductId, @ProductName, @Quantity, @Price, @TotalPrice)";
 
 			string shippingAddressQuery = @"INSERT INTO ShippingAddress
 								(OrderId, Province, DistrictId, DistrictName, WardCode, WardName, AddressDetail)
@@ -114,7 +114,8 @@ namespace backend.Repositories
 								using (SqlCommand itemCommand = new SqlCommand(orderItemQuery, myCon, transaction))
 								{
 									itemCommand.Parameters.AddWithValue("@OrderID", newOrderId);
-									itemCommand.Parameters.AddWithValue("@ProductName", item.ProductName ?? (object)DBNull.Value);
+                                    itemCommand.Parameters.AddWithValue("@ProductId", item.ProductId);
+                                    itemCommand.Parameters.AddWithValue("@ProductName", item.ProductName ?? (object)DBNull.Value);
 									itemCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
 									itemCommand.Parameters.AddWithValue("@Price", item.Price);
 									itemCommand.Parameters.AddWithValue("@TotalPrice", item.TotalPrice);
@@ -181,7 +182,7 @@ namespace backend.Repositories
 				using (SqlCommand myCommand = new SqlCommand(query, myCon))
 				{
 					myCommand.Parameters.AddWithValue("@OrderID", order.OrderID);
-					myCommand.Parameters.AddWithValue("@Status", order.Status.ToString()); // Save enum as string
+					myCommand.Parameters.AddWithValue("@Status", order.Status); 
 					myCommand.Parameters.AddWithValue("@UserID", order.UserID);
 					myCommand.Parameters.AddWithValue("@DiscountCode", (object?)order.DiscountCode ?? DBNull.Value);
 					myCommand.Parameters.AddWithValue("@ShippingMethod", (object?)order.ShippingMethod ?? DBNull.Value);
@@ -474,5 +475,78 @@ namespace backend.Repositories
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public bool Update2(List<Order> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update2(List<OrderDTO> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update3(List<Order> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update3(List<OrderDTO> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Order> GetProcessingOrdersOlderThanMinutes(int minutes)
+        {
+            string query = @"
+        SELECT OrderID, Status, UserID, DiscountCode, ShippingMethod, ShippingFee,
+               PaymentMethod, VnpayOption, Subtotal, FinalTotal, DateTime, Note
+        FROM Orders
+        WHERE Status = @Status
+          AND DATEDIFF(MINUTE, DateTime, GETDATE()) > @Minutes AND PaymentMethod = 'vnpay'";
+
+            var result = new List<Order>();
+
+            using (SqlConnection myCon = new SqlConnection(_connectionString))
+            {
+                myCon.Open();
+
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@Status", (int)OrderStatus.Processing); // status enum
+                    myCommand.Parameters.AddWithValue("@Minutes", minutes);
+
+                    using (SqlDataReader reader = myCommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var order = new Order
+                            {
+                                OrderID = reader.GetInt32(reader.GetOrdinal("OrderID")),
+                                Status = Enum.TryParse<OrderStatus>(reader["Status"].ToString(), out var status)
+                                            ? status
+                                            : OrderStatus.Processing,
+                                UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
+                                DiscountCode = reader["DiscountCode"] as string,
+                                ShippingMethod = reader["ShippingMethod"] as string,
+                                ShippingFee = reader["ShippingFee"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["ShippingFee"]),
+                                PaymentMethod = reader["PaymentMethod"] as string,
+                                VnpayOption = reader["VnpayOption"] as string,
+                                Subtotal = reader["Subtotal"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["Subtotal"]),
+                                FinalTotal = reader["FinalTotal"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["FinalTotal"]),
+                                DateTime = reader.GetDateTime(reader.GetOrdinal("DateTime")),
+                                Note = reader["Note"] as string
+                            };
+
+                            result.Add(order);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+    }
 }

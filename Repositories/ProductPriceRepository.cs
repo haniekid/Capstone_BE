@@ -46,9 +46,9 @@ namespace backend.Repositories
             return ProductPrices;
         }
 
-        public ProductPrice GetObjById(int ProductPriceId)
+        public ProductPrice GetObjById(int productId)
         {
-            string query = @"SELECT * FROM dbo.PRODUCT_SIZE WHERE ProductPriceID = @ProductPriceID";
+            string query = @"SELECT * FROM dbo.ProductPrices WHERE ProductID = @ProductID";
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -56,30 +56,26 @@ namespace backend.Repositories
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@ProductPriceID", ProductPriceId);
+                    command.Parameters.AddWithValue("@ProductID", productId);
 
                     SqlDataReader reader = command.ExecuteReader();
 
                     if (reader.Read())
                     {
-                        ProductPrice ProductPrice = new ProductPrice(
-                            reader.GetInt32(0),
-                            reader.GetDecimal(1),
-                            reader.GetInt32(2),
-                            reader.GetInt32(3)
+                        ProductPrice productPrice = new ProductPrice(
+                            reader.GetInt32(reader.GetOrdinal("ProductPriceID")), // Cột ProductPriceID
+                            reader.GetDecimal(reader.GetOrdinal("Price")),        // Cột Price
+                            reader.GetInt32(reader.GetOrdinal("Quantity")),       // Cột Quantity
+                            reader.GetInt32(reader.GetOrdinal("ProductID"))       // Cột ProductID
                         );
 
                         reader.Close();
-                        connection.Close();
-
-                        return ProductPrice;
+                        return productPrice;
                     }
                     else
                     {
                         reader.Close();
-                        connection.Close();
-
-                        return null; // Or throw an exception if you prefer
+                        return null; // Hoặc ném ra exception nếu cần
                     }
                 }
             }
@@ -87,9 +83,9 @@ namespace backend.Repositories
 
         public List<ProductPrice> GetById(int productId)
         {
-            string query = @"SELECT * FROM dbo.PRODUCT_SIZE WHERE ProductID = @ProductID";
+            string query = @"SELECT * FROM dbo.ProductPrices WHERE ProductID = @ProductID";
 
-            List<ProductPrice> ProductPrices = new List<ProductPrice>();
+            List<ProductPrice> productPrices = new List<ProductPrice>();
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -103,14 +99,14 @@ namespace backend.Repositories
 
                     while (reader.Read())
                     {
-                        ProductPrice ProductPrice = new ProductPrice(
-                            reader.GetInt32(0),
-                            reader.GetDecimal(1),
-                            reader.GetInt32(2),
-                            reader.GetInt32(3)
+                        ProductPrice productPrice = new ProductPrice(
+                            reader.GetInt32(reader.GetOrdinal("ProductPriceID")), // Cột ProductPriceID
+                            reader.GetDecimal(reader.GetOrdinal("Price")),        // Cột Price
+                            reader.GetInt32(reader.GetOrdinal("Quantity")),       // Cột Quantity
+                            reader.GetInt32(reader.GetOrdinal("ProductID"))       // Cột ProductID
                         );
 
-                        ProductPrices.Add(ProductPrice);
+                        productPrices.Add(productPrice);
                     }
 
                     reader.Close();
@@ -119,9 +115,8 @@ namespace backend.Repositories
                 connection.Close();
             }
 
-            return ProductPrices;
+            return productPrices;
         }
-
 
         public bool Add(ProductPrice ProductPrice)
         {
@@ -150,21 +145,20 @@ namespace backend.Repositories
                 return false;
             }
         }
-        public bool Update(ProductPrice ProductPrice)
+        public bool Update(ProductPrice productPrice)
         {
-            string query = @"UPDATE dbo.PRODUCT_SIZE 
-                            SET Price = @Price, Quantity = @Quantity
-                            WHERE ProductPriceID = @ProductPriceID;
-                            ";
+            string query = @"UPDATE dbo.ProductPrices 
+                     SET Price = @Price, Quantity = @Quantity
+                     WHERE ProductPriceID = @ProductPriceID;";
 
             using (SqlConnection myCon = new SqlConnection(_connectionString))
             {
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@ProductPriceID", ProductPrice.ProductPriceID);
-                    myCommand.Parameters.AddWithValue("@Price", ProductPrice.Price);
-                    myCommand.Parameters.AddWithValue("@Quantity", ProductPrice.Quantity);
+                    myCommand.Parameters.AddWithValue("@ProductPriceID", productPrice.ProductPriceID);
+                    myCommand.Parameters.AddWithValue("@Price", productPrice.Price);
+                    myCommand.Parameters.AddWithValue("@Quantity", productPrice.Quantity);
 
                     int rowsAffected = myCommand.ExecuteNonQuery();
                     return rowsAffected > 0;
@@ -190,6 +184,16 @@ namespace backend.Repositories
         }
 
         public int Add2(ProductPrice item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update2(List<ProductPrice> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update3(List<ProductPrice> item)
         {
             throw new NotImplementedException();
         }
