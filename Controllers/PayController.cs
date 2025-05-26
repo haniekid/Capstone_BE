@@ -42,7 +42,7 @@ namespace backend.Controllers
         {
             try
             {
-                if (newOrder.Order.ShippingFee == null)
+                if (newOrder.Order?.ShippingFee == null)
                 {
                     newOrder.Order.ShippingFee = 0;
                 }
