@@ -2,6 +2,7 @@ using backend.DTOs;
 using backend.Helper;
 using backend.Models;
 using backend.Repositories;
+using Microsoft.AspNetCore.Http.Features;
 using VNPAY.NET;
 
 namespace backend
@@ -35,6 +36,11 @@ namespace backend
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 5 * 1024 * 1024; // 5MB
+            });
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddHostedService<ExpiredOrderCheckJob>();
             builder.Services.AddScoped<IOrderProcessingRepository, OrderRepository>();
