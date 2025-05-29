@@ -42,10 +42,6 @@ namespace backend.Controllers
         {
             try
             {
-                if (newOrder.Order?.ShippingFee == null)
-                {
-                    newOrder.Order.ShippingFee = 0;
-                }
                 newOrder.Order.Status = OrderStatus.Processing;
                 var addedOrderID = _orderDTORepository.Add2(newOrder);
                 var isUpdateQuantity = _orderItemRepository.Update2(newOrder.OrderItems);
