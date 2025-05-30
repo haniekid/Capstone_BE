@@ -1,88 +1,88 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Demo_3]    Script Date: 30/5/2025 1:19:54 AM ******/
-CREATE DATABASE [Demo_3]
+/****** Object:  Database [Demo_6]    Script Date: 30-May-25 11:26:01 AM ******/
+CREATE DATABASE [Demo_6]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'Demo_3', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_3.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'Demo_6', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_6.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'Demo_3_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_3_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT
+( NAME = N'Demo_6_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_6_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
-ALTER DATABASE [Demo_3] SET COMPATIBILITY_LEVEL = 150
+ALTER DATABASE [Demo_6] SET COMPATIBILITY_LEVEL = 160
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
-EXEC [Demo_3].[dbo].[sp_fulltext_database] @action = 'enable'
+EXEC [Demo_6].[dbo].[sp_fulltext_database] @action = 'enable'
 end
 GO
-ALTER DATABASE [Demo_3] SET ANSI_NULL_DEFAULT OFF 
+ALTER DATABASE [Demo_6] SET ANSI_NULL_DEFAULT OFF 
 GO
-ALTER DATABASE [Demo_3] SET ANSI_NULLS OFF 
+ALTER DATABASE [Demo_6] SET ANSI_NULLS OFF 
 GO
-ALTER DATABASE [Demo_3] SET ANSI_PADDING OFF 
+ALTER DATABASE [Demo_6] SET ANSI_PADDING OFF 
 GO
-ALTER DATABASE [Demo_3] SET ANSI_WARNINGS OFF 
+ALTER DATABASE [Demo_6] SET ANSI_WARNINGS OFF 
 GO
-ALTER DATABASE [Demo_3] SET ARITHABORT OFF 
+ALTER DATABASE [Demo_6] SET ARITHABORT OFF 
 GO
-ALTER DATABASE [Demo_3] SET AUTO_CLOSE OFF 
+ALTER DATABASE [Demo_6] SET AUTO_CLOSE ON 
 GO
-ALTER DATABASE [Demo_3] SET AUTO_SHRINK OFF 
+ALTER DATABASE [Demo_6] SET AUTO_SHRINK OFF 
 GO
-ALTER DATABASE [Demo_3] SET AUTO_UPDATE_STATISTICS ON 
+ALTER DATABASE [Demo_6] SET AUTO_UPDATE_STATISTICS ON 
 GO
-ALTER DATABASE [Demo_3] SET CURSOR_CLOSE_ON_COMMIT OFF 
+ALTER DATABASE [Demo_6] SET CURSOR_CLOSE_ON_COMMIT OFF 
 GO
-ALTER DATABASE [Demo_3] SET CURSOR_DEFAULT  GLOBAL 
+ALTER DATABASE [Demo_6] SET CURSOR_DEFAULT  GLOBAL 
 GO
-ALTER DATABASE [Demo_3] SET CONCAT_NULL_YIELDS_NULL OFF 
+ALTER DATABASE [Demo_6] SET CONCAT_NULL_YIELDS_NULL OFF 
 GO
-ALTER DATABASE [Demo_3] SET NUMERIC_ROUNDABORT OFF 
+ALTER DATABASE [Demo_6] SET NUMERIC_ROUNDABORT OFF 
 GO
-ALTER DATABASE [Demo_3] SET QUOTED_IDENTIFIER OFF 
+ALTER DATABASE [Demo_6] SET QUOTED_IDENTIFIER OFF 
 GO
-ALTER DATABASE [Demo_3] SET RECURSIVE_TRIGGERS OFF 
+ALTER DATABASE [Demo_6] SET RECURSIVE_TRIGGERS OFF 
 GO
-ALTER DATABASE [Demo_3] SET  ENABLE_BROKER 
+ALTER DATABASE [Demo_6] SET  ENABLE_BROKER 
 GO
-ALTER DATABASE [Demo_3] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+ALTER DATABASE [Demo_6] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
 GO
-ALTER DATABASE [Demo_3] SET DATE_CORRELATION_OPTIMIZATION OFF 
+ALTER DATABASE [Demo_6] SET DATE_CORRELATION_OPTIMIZATION OFF 
 GO
-ALTER DATABASE [Demo_3] SET TRUSTWORTHY OFF 
+ALTER DATABASE [Demo_6] SET TRUSTWORTHY OFF 
 GO
-ALTER DATABASE [Demo_3] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+ALTER DATABASE [Demo_6] SET ALLOW_SNAPSHOT_ISOLATION OFF 
 GO
-ALTER DATABASE [Demo_3] SET PARAMETERIZATION SIMPLE 
+ALTER DATABASE [Demo_6] SET PARAMETERIZATION SIMPLE 
 GO
-ALTER DATABASE [Demo_3] SET READ_COMMITTED_SNAPSHOT OFF 
+ALTER DATABASE [Demo_6] SET READ_COMMITTED_SNAPSHOT OFF 
 GO
-ALTER DATABASE [Demo_3] SET HONOR_BROKER_PRIORITY OFF 
+ALTER DATABASE [Demo_6] SET HONOR_BROKER_PRIORITY OFF 
 GO
-ALTER DATABASE [Demo_3] SET RECOVERY FULL 
+ALTER DATABASE [Demo_6] SET RECOVERY SIMPLE 
 GO
-ALTER DATABASE [Demo_3] SET  MULTI_USER 
+ALTER DATABASE [Demo_6] SET  MULTI_USER 
 GO
-ALTER DATABASE [Demo_3] SET PAGE_VERIFY CHECKSUM  
+ALTER DATABASE [Demo_6] SET PAGE_VERIFY CHECKSUM  
 GO
-ALTER DATABASE [Demo_3] SET DB_CHAINING OFF 
+ALTER DATABASE [Demo_6] SET DB_CHAINING OFF 
 GO
-ALTER DATABASE [Demo_3] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+ALTER DATABASE [Demo_6] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
 GO
-ALTER DATABASE [Demo_3] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+ALTER DATABASE [Demo_6] SET TARGET_RECOVERY_TIME = 60 SECONDS 
 GO
-ALTER DATABASE [Demo_3] SET DELAYED_DURABILITY = DISABLED 
+ALTER DATABASE [Demo_6] SET DELAYED_DURABILITY = DISABLED 
 GO
-ALTER DATABASE [Demo_3] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+ALTER DATABASE [Demo_6] SET ACCELERATED_DATABASE_RECOVERY = OFF  
 GO
-EXEC sys.sp_db_vardecimal_storage_format N'Demo_3', N'ON'
+ALTER DATABASE [Demo_6] SET QUERY_STORE = ON
 GO
-ALTER DATABASE [Demo_3] SET QUERY_STORE = OFF
+ALTER DATABASE [Demo_6] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
 GO
-USE [Demo_3]
+USE [Demo_6]
 GO
-/****** Object:  Table [dbo].[Discount]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[Discount]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +105,7 @@ CREATE TABLE [dbo].[Discount](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -124,7 +124,7 @@ CREATE TABLE [dbo].[OrderItems](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -148,7 +148,7 @@ CREATE TABLE [dbo].[Orders](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -163,7 +163,7 @@ CREATE TABLE [dbo].[ProductAddOns](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductCategories]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[ProductCategories]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -179,7 +179,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductImages]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[ProductImages]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -194,7 +194,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductPrices]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[ProductPrices]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -210,7 +210,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -229,7 +229,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductSales]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[ProductSales]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -247,7 +247,7 @@ CREATE TABLE [dbo].[ProductSales](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -261,7 +261,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -281,7 +281,7 @@ CREATE TABLE [dbo].[ShippingAddress](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 30-May-25 11:26:01 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -669,115 +669,107 @@ INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingM
 GO
 SET IDENTITY_INSERT [dbo].[Orders] OFF
 GO
-SET IDENTITY_INSERT [dbo].[ProductAddOns] ON 
-GO
-INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) VALUES (6, 14, 23)
-GO
-INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) VALUES (8, 20, 24)
-GO
-INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) VALUES (11, 20, 21)
-GO
-INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) VALUES (12, 20, 22)
-GO
-INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) VALUES (13, 20, 23)
-GO
-SET IDENTITY_INSERT [dbo].[ProductAddOns] OFF
-GO
 SET IDENTITY_INSERT [dbo].[ProductCategories] ON 
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (1, N'Phở', N'', 1)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (1, N'Mâm giết sâu bọ 5.5', N'Thực đơn gia đình', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (2, N'Bún', N'', 1)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (2, N'Mâm cơm 3-4 người ăn', N'Thực đơn gia đình', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (3, N'Cơm', NULL, 1)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (3, N'Mâm cơm 5-6 người ăn', N'Thực đơn gia đình', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (4, N'Lẩu', N'', 1)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (4, N'Mâm cỗ chay ngày rằm', N'Thực đơn gia đình', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (5, N'Cháo', N'', 1)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (5, N'Mâm cỗ mặn ngày rằm', N'Thực đơn gia đình', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (6, N'Topping', N'', 1)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (6, N'Lẩu Thái Eat House', N'Lẩu', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (12, N'123', N'123', 0)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (12, N'Lẩu Riêu Cua', N'Lẩu', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (13, N'Cháo1', N'12', 0)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (13, N'Lẩu Kim Chi', N'Lẩu', 1)
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (14, N'2121', N'2121', 0)
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (14, N'Lẩu Nấm', N'Lẩu', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (15, N'Đồ gọi thêm lẩu', N'Lẩu', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (16, N'Món khai vị', N'Lẩu', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (17, N'Nước lẩu và sốt chấm', N'Lẩu', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (18, N'Nước ép', N'Đồ uống', 1)
+GO
+INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (19, N'Nước đóng chai', N'Đồ uống', 1)
 GO
 SET IDENTITY_INSERT [dbo].[ProductCategories] OFF
 GO
-SET IDENTITY_INSERT [dbo].[ProductImages] ON 
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (7, 13, N'https://fullofplants.com/wp-content/uploads/2023/10/how-to-make-vegan-bun-rieu-chay-vietnamese-crab-noodle-soup-thumb.jpg')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (8, 14, N'https://images.unsplash.com/photo-1511910849309-0dffb8785146?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cGhvfGVufDB8fDB8fHww')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (46, 20, N'https://file.hstatic.net/1000394081/article/lau-thai_2aedea543c194e93948def3c260e8eb9.jpg')
-GO
-INSERT [dbo].[ProductImages] ([ImageID], [ProductID], [ImageURL]) VALUES (47, 20, N'https://maythucphamgoma.vn/wp-content/uploads/2024/10/thai-tc1-4-6ng.png')
-GO
-SET IDENTITY_INSERT [dbo].[ProductImages] OFF
-GO
 SET IDENTITY_INSERT [dbo].[ProductPrices] ON 
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (13, CAST(50000.00 AS Decimal(10, 2)), 100, 13)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (13, CAST(80000.00 AS Decimal(10, 2)), 100, 13)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (14, CAST(49000.00 AS Decimal(10, 2)), 0, 14)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (14, CAST(420000.00 AS Decimal(10, 2)), 0, 14)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (19, CAST(160000.00 AS Decimal(10, 2)), 11, 20)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (19, CAST(290000.00 AS Decimal(10, 2)), 11, 20)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (20, CAST(10000.00 AS Decimal(10, 2)), 0, 21)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (20, CAST(290000.00 AS Decimal(10, 2)), 100, 21)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (21, CAST(8000.00 AS Decimal(10, 2)), 0, 22)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (21, CAST(300000.00 AS Decimal(10, 2)), 0, 22)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (22, CAST(5000.00 AS Decimal(10, 2)), 0, 23)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (22, CAST(420000.00 AS Decimal(10, 2)), 10, 23)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (23, CAST(15000.00 AS Decimal(10, 2)), 96, 24)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (23, CAST(290000.00 AS Decimal(10, 2)), 96, 24)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (24, CAST(35000.00 AS Decimal(10, 2)), 99, 26)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (24, CAST(350000.00 AS Decimal(10, 2)), 99, 26)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (25, CAST(100000.00 AS Decimal(10, 2)), 8, 27)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (25, CAST(350000.00 AS Decimal(10, 2)), 8, 27)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (26, CAST(120000.00 AS Decimal(10, 2)), 222, 28)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (26, CAST(1150000.00 AS Decimal(10, 2)), 22, 28)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (27, CAST(40000.00 AS Decimal(10, 2)), 10, 29)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (27, CAST(350000.00 AS Decimal(10, 2)), 10, 29)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (28, CAST(10000.00 AS Decimal(10, 2)), 0, 30)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (28, CAST(290000.00 AS Decimal(10, 2)), 0, 30)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (29, CAST(10000.00 AS Decimal(10, 2)), 10, 31)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (29, CAST(290000.00 AS Decimal(10, 2)), 10, 31)
 GO
-INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (30, CAST(1000.00 AS Decimal(10, 2)), 10, 32)
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (30, CAST(1150000.00 AS Decimal(10, 2)), 10, 32)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (31, CAST(60000.00 AS Decimal(10, 2)), 8, 33)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (32, CAST(50000.00 AS Decimal(10, 2)), 10, 34)
 GO
 SET IDENTITY_INSERT [dbo].[ProductPrices] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Products] ON 
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (13, N'Bun rieu', N'Bún', N'no', N'https://cdn.tgdd.vn/2020/08/CookProduct/Untitled-1-1200x676-10.jpg', 1, 1)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (13, N'Ba chỉ bò', N'Đồ gọi thêm lẩu', N' 200g Ba chỉ bò', N'https://laungontainha.com/wp-content/uploads/2018/10/Ba-chi-bo-L.jpg', 0, 15)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (14, N'Pho bo', N'Bún', N'123', N'https://plus.unsplash.com/premium_photo-1664478276162-46c39b3557c3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGhvfGVufDB8fDB8fHww', 0, 2)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (14, N'Lẩu Riêu Cua Thập Cẩm', N'Lẩu Riêu Cua', N'Set lẩu bao gồm: nước lẩu riêu cua – ba chỉ bò mỹ – bắp bò – gầu hoa bò – gà ta- sụn heo tươi- giò tai – nấm kim – nấm đùi –  bún( hoặc mỳ tôm) – rau hỗn hợp – ngô ngọt – đậu phụ chiên – riêu cua – váng đậu – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-rieu-cua-thap-cam-4-6-1-510x510.jpg', 0, 12)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (20, N'Lẩu Thái', N'Lẩu', N'Lẩu Thái chua cay đậm đà, thơm nức chuẩn vị với tôm, mực, thịt và rau tươi ngon, ăn là ghiền. Nước lẩu được nấu từ công thức đặc biệt, dậy mùi sả, ớt và lá chanh, khiến bạn không thể dừng đũa. Phù hợp cho bữa ăn gia đình, tụ họp bạn bè hay đổi vị ngày cuối tuần, có thể gọi ngay và thưởng thức nóng hổi tại nhà.', N'https://res.cloudinary.com/debzsmbac/image/upload/v1748542689/your-folder/st7l4d1xfuibvob9g1d2.jpg', 1, 4)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (20, N'Lẩu Kim Chi Ba Chỉ Bò Mỹ', N'Lẩu Kim Chi', N'Set lẩu bao gồm: nước lẩu – ba chỉ bò mỹ – đậu hũ pm – viên tôm hùm – nấm kim – nấm đùi gà – mỳ tôm – rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-kim-chi-ba-chi-bo-set-4-6-1.jpg', 0, 13)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (21, N'Bò viên', N'Phở', N'Bò viên dai tươi ngon', N'https://mastermeats.com.vn/wp-content/uploads/2023/12/bo-vien-nau-gi-ngon-1.jpg', 0, 6)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (21, N'Lẩu Thái Bò', N'Lẩu Thái Eat House', N'👉 Set lẩu bao gồm: nước lẩu thái tomyum – bắp bò – ba chỉ bò – gầu hoa bò – đậu hũ phomai – viên tôm hùm – nấm kim – nấm đùi gà – mỳ tôm – rau muống – cải ngọt – rau cần – cải thảo – ngô ngọt – đậu phụ – váng đậu – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-thai-bo-4-6-1-510x510.jpg', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (22, N'Nấm kim châm', N'Topping', N'Nấm tươi ngon', N'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTl1i_2x_jwtuzVagdNwj4EwKNJsgyR0kazHbO3I1wmu4g-6Eu976diT_L0_JzIvOjieBGazHRw4Iw4Yt3cFDDWIQ', 0, 6)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (22, N'Lẩu Riêu Cua Bò', N'Lẩu Riêu Cua', N'👉 Set lẩu bao gồm: nước lẩu riêu cua – ba chỉ bò mỹ – bắp bò – gầu bò – giò tai – riêu cua – nấm kim – nấm đùi –  bún( hoặc mỳ tôm) – rau hỗn hợp – ngô ngọt – đậu phụ chiên – váng đậu – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-rieu-bo-1-510x510.jpg', 0, 12)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (23, N'Trứng gà', N'Topping', N'Trứng gà ta', N'https://bynature.vn/wp-content/uploads/2023/11/bynature-why-free-range-eggs-blog.jpg', 0, 6)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (23, N'Lẩu Nấm Thập Cẩm', N'Lẩu Nấm', N'Set lẩu bao gồm: nước lẩu – ba chỉ bò – bắp bò – gầu hoa bò – sụn – gà ta – đậu hũ phomai – viên tôm hùm – nấm kim – nấm đùi gà – Bún hoặc mỳ tôm – rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-nam-thap-cam-4-6-1.jpg', 0, 14)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (24, N'Rau muống ', N'Topping', N'no', N'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRDqYWKDC0cZil0kCu02yPUV03hHYJMvs4fR6zYvcsReC1eZ120KPD_sVbtINvbN900ml9il0VGdhFdifqxqiYy2w', 0, 6)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (24, N'Lẩu Nấm Bò', N'Lẩu Nấm', N'Set lẩu bao gồm: nước lẩu – ba chỉ bò – bắp bò – gầu hoa bò – đậu hũ phomai – viên tôm hùm – nấm kim – nấm đùi gà – Bún hoặc mỳ tôm – rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-nam-bo-4-6-1.jpg', 0, 14)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (26, N'Cơm chay ', N'Cơm', N'No', N'https://down-cvs-vn.img.susercontent.com/vn-11134513-7r98o-lsv6w1kz1kex61@resize_ss640x400!@crop_w640_h400_cT', 0, 3)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (26, N'Lẩu Thái Ba Chỉ Bò Mỹ', N'Lẩu Thái Eat House', N'👉 Set lẩu bao gồm: nước lẩu – bò mỹ – đậu hũ phomai – viên tôm hùm – nấm kim – nấm đùi gà – mỳ tôm – rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-thai-ba-chi-bo-set-4-6-1-510x510.jpg', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (27, N'Lẩu Gà', N'Lẩu', N'no', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 0, 4)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (27, N'Lẩu Thái Thập Cẩm', N'Lẩu Thái Eat House', N'👉 Set lẩu bao gồm: nước lẩu – bò mỹ – sườn sụn – tôm – mực – ngao – viên tôm hùm – đậu hũ phomai – nấm kim – nấm đùi gà – mỳ tôm – đĩa rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-Thai-Thap-Cam-set-4-6-1-510x510.jpg', 0, 6)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (28, N'aaaaaaaaaa', N'Bún', N'aaaaaaaaaaaaaaa', N'https://sgtt.thesaigontimes.vn/wp-content/uploads/2025/01/2024_1_23_638416491645237808_mach-ban-cach-nau-lau-thai-bang-goi-gia-vi_960.jpg', 1, 2)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (28, N'Combo Lẩu Riêu Cua Đoàn Viên (8 – 10 Người)', N'Lẩu Riêu Cua', N'Set Lẩu Bao Gồm: Nước Lẩu 4-4,5L, Ba chỉ bò 300g, 300g Gầu hoa bò, Sụn Tươi 300g, Ba Chỉ Bò Cuộn Nấm 300g, Má Đào Heo 300g, Bắp bò 300g, Tràng heo tươi 250g, Gà 500g, nước lẩu thái 3-3,5 lit, rau tổng hợp 1,5kg, nấm kim 300g, nấm đùi 150g, ngô ngọt 6-8 miếng, 1 Đĩa giò tai, 3 bìa đậu chiên,1 hộp váng đậu, 1 hộp Riêu cua, 1,3kg Bún hoặc 5 gói mỳ, 3 gói sốt chấm, 2 gói muối chấm, quất ớt (Khách có thể yêu cầu đổi món trong set lẩu sang món khác)', N'https://laungontainha.com/wp-content/uploads/2025/05/Lau-Doan-Vien-set-7-10ng-510x510.jpg', 0, 12)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (29, N'Phở gà', N'Phở', N'a', N'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhd6dgfk6Qn7U25tvgrxJYLUJ94S4V4iip77bN35P17d3JGLT8eoW7_Xjse6OgZV2leEiHaYIz89BC5fsBdrc6X5NVN8caqZMe1Z8fGdUo4r19Uyr62g17tP2ALGnJUf5c0l4F4g85BaIs/s800/94271CB2-5921-4180-B602-AC21E71F4BB7_1_102_o.jpeg', 1, 1)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (29, N'Lẩu Kim Chi Thập Cẩm', N'Lẩu Kim Chi', N'Set lẩu bao gồm: nước lẩu – bò mỹ – sườn sụn – tôm sú – mực ngao – đậu hũ pm – viên tôm hùm – nấm kim – nấm đùi gà – mỳ tôm – rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-kim-chi-thap-cam-set-4-6-1.jpg', 0, 13)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (30, N'aaaaaaaaaa122', N'Cháo', N'222', N'2', 1, 5)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (30, N'Lẩu Kim Chi Bò', N'Lẩu Kim Chi', N'Set lẩu bao gồm: nước lẩu kim chi – bắp bò – ba chỉ bò – gầu bò – đậu hũ pm – viên tôm hùm – nấm kim – nấm đùi gà – mỳ tôm – rau hỗn hợp – ngô ngọt – đậu phụ – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-kim-chi-bo-4-6-1-510x510.jpg', 0, 13)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (31, N'Lẩu Thái222', N'Lẩu', N'1', N'C:\Users\Admin\source\repos\Study_1\img\638841628430366021_Lau-Thai-Thap-Cam-set-4-6-510x510.jpg', 0, 4)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (31, N'Lẩu Riêu Cua Bắp Bò Sườn Sụn', N'Lẩu Riêu Cua', N'👉 Set lẩu bao gồm: nước lẩu riêu cua – bắp bò – sườn sụn – giò tai – nấm kim – nấm đùi –  bún( hoặc mỳ tôm) – rau hỗn hợp – ngô ngọt – đậu phụ chiên – riêu cua – váng đậu – gia vị lẩu', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-rieu-bap-bo-suon-sun-4-6-1-510x510.jpg', 0, 12)
 GO
-INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (32, N'Lẩu Thái212', N'Cơm', N'a', N'https://res.cloudinary.com/debzsmbac/image/upload/v1748542416/your-folder/uiayuub7rndrefspfcg1.jpg', 0, 3)
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (32, N'Combo Lẩu Thái Sum Vầy (8 – 10 Người)', N'Lẩu Thái Eat House', N'Set Lẩu Bao Gồm: Nước Lẩu 4-4,5L, Ba chỉ bò 300g, 300g Gầu hoa bò, Sụn Tươi 300g, Tôm 7-8 con, 300g tuộc, 300g mực, Tràng heo tươi 250g, Gà 500g, nước lẩu thái 3-3,5 lit, rau tổng hợp 1,5kg, nấm kim 300g, nấm đùi 150g, ngô ngọt 6-8 miếng, 6 viên đậu hũ pm, 5 viên tôm hùm, 3 bìa đậu trắng,1 hộp váng đậu, 5 gói mỳ tôm, 3 gói sốt chấm, 2 gói muối chấm, quất ớt (Khách có thể yêu cầu đổi món trong set lẩu sang món khác )', N'https://laungontainha.com/wp-content/uploads/2022/04/Lau-Thai-Thap-Cam-set-7-10ng-510x510.jpg', 0, 6)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (33, N'Sụn heo tươi', N'Đồ gọi thêm lẩu', N'200g Sụn heo tươi', N'https://laungontainha.com/wp-content/uploads/2018/10/Sun-heo-tuoi-L.jpg', 0, 15)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (34, N'Ba chỉ heo', N'Đồ gọi thêm lẩu', N'200g Ba chỉ heo', N'https://laungontainha.com/wp-content/uploads/2018/10/ba-chi-heo-L.jpg', 0, 15)
 GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
 GO
@@ -789,15 +781,29 @@ INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStart
 GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (7, 22, NULL, NULL, NULL, CAST(N'2025-05-06T14:23:35.900' AS DateTime))
 GO
-INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (8, 19, CAST(130000.00 AS Decimal(10, 2)), CAST(N'2025-05-27T16:51:00.000' AS DateTime), CAST(N'2025-06-07T16:51:00.000' AS DateTime), CAST(N'2025-05-06T23:18:21.320' AS DateTime))
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (8, 19, CAST(130000.00 AS Decimal(10, 2)), CAST(N'2025-05-27T09:51:00.000' AS DateTime), CAST(N'2025-06-07T09:51:00.000' AS DateTime), CAST(N'2025-05-06T23:18:21.320' AS DateTime))
 GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (9, 26, NULL, NULL, NULL, CAST(N'2025-05-13T23:05:43.247' AS DateTime))
 GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (10, 27, NULL, NULL, NULL, CAST(N'2025-05-13T23:44:33.287' AS DateTime))
 GO
-INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (11, 25, CAST(90000.00 AS Decimal(10, 2)), NULL, NULL, CAST(N'2025-05-13T23:44:52.140' AS DateTime))
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (11, 25, NULL, NULL, NULL, CAST(N'2025-05-13T23:44:52.140' AS DateTime))
 GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (12, 24, NULL, NULL, NULL, CAST(N'2025-05-15T23:52:53.157' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (13, 30, NULL, NULL, NULL, CAST(N'2025-05-30T11:04:56.277' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (14, 29, NULL, NULL, NULL, CAST(N'2025-05-30T11:08:30.330' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (15, 14, NULL, NULL, NULL, CAST(N'2025-05-30T11:10:27.653' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (16, 28, NULL, NULL, NULL, CAST(N'2025-05-30T11:14:18.423' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (17, 23, NULL, NULL, NULL, CAST(N'2025-05-30T11:17:12.830' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (18, 13, NULL, NULL, NULL, CAST(N'2025-05-30T11:21:01.263' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (19, 32, NULL, NULL, NULL, CAST(N'2025-05-30T11:23:14.580' AS DateTime))
 GO
 SET IDENTITY_INSERT [dbo].[ProductSales] OFF
 GO
@@ -963,7 +969,7 @@ SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 30-May-25 11:26:01 AM ******/
 ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UNIQUE NONCLUSTERED 
 (
 	[Code] ASC
@@ -971,7 +977,7 @@ ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UN
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B6160DED04910]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Index [UQ__Roles__8A2B616097FD18A4]    Script Date: 30-May-25 11:26:01 AM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -979,7 +985,7 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 30/5/2025 1:19:54 AM ******/
+/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 30-May-25 11:26:01 AM ******/
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [UQ__Users__A9D105340A96D1D5] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -1064,5 +1070,5 @@ ALTER TABLE [dbo].[ProductAddOns] CHECK CONSTRAINT [CHK_ProductAddOns_NoSelfRefe
 GO
 USE [master]
 GO
-ALTER DATABASE [Demo_3] SET  READ_WRITE 
+ALTER DATABASE [Demo_6] SET  READ_WRITE 
 GO
