@@ -1,15 +1,15 @@
 ﻿USE [master]
 GO
-/****** Object:  Database [Demo_6]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Database [Demo_6]    Script Date: 30/5/2025 1:05:22 PM ******/
 CREATE DATABASE [Demo_6]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'Demo_6', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_6.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'Demo_6', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_6.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'Demo_6_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Demo_6_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+( NAME = N'Demo_6_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MAYAO\MSSQL\DATA\Demo_6_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
 GO
-ALTER DATABASE [Demo_6] SET COMPATIBILITY_LEVEL = 160
+ALTER DATABASE [Demo_6] SET COMPATIBILITY_LEVEL = 150
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
@@ -76,13 +76,15 @@ ALTER DATABASE [Demo_6] SET DELAYED_DURABILITY = DISABLED
 GO
 ALTER DATABASE [Demo_6] SET ACCELERATED_DATABASE_RECOVERY = OFF  
 GO
+EXEC sys.sp_db_vardecimal_storage_format N'Demo_6', N'ON'
+GO
 ALTER DATABASE [Demo_6] SET QUERY_STORE = ON
 GO
 ALTER DATABASE [Demo_6] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
 GO
 USE [Demo_6]
 GO
-/****** Object:  Table [dbo].[Discount]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[Discount]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -105,7 +107,7 @@ CREATE TABLE [dbo].[Discount](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -124,7 +126,7 @@ CREATE TABLE [dbo].[OrderItems](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -148,7 +150,7 @@ CREATE TABLE [dbo].[Orders](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[ProductAddOns]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -163,7 +165,7 @@ CREATE TABLE [dbo].[ProductAddOns](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductCategories]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[ProductCategories]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -179,7 +181,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductImages]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[ProductImages]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -194,7 +196,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductPrices]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[ProductPrices]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -210,7 +212,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -229,7 +231,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ProductSales]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[ProductSales]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -247,7 +249,7 @@ CREATE TABLE [dbo].[ProductSales](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -261,7 +263,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[ShippingAddress]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -281,7 +283,7 @@ CREATE TABLE [dbo].[ShippingAddress](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 30/5/2025 1:05:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -669,9 +671,13 @@ INSERT [dbo].[Orders] ([OrderID], [Status], [UserID], [DiscountCode], [ShippingM
 GO
 SET IDENTITY_INSERT [dbo].[Orders] OFF
 GO
-SET IDENTITY_INSERT [dbo].[ProductCategories] ON 
+SET IDENTITY_INSERT [dbo].[ProductAddOns] ON 
 GO
-INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (1, N'Mâm giết sâu bọ 5.5', N'Thực đơn gia đình', 1)
+INSERT [dbo].[ProductAddOns] ([ProductAddOnID], [ProductID], [AddOnProductID]) VALUES (1, 28, 56)
+GO
+SET IDENTITY_INSERT [dbo].[ProductAddOns] OFF
+GO
+SET IDENTITY_INSERT [dbo].[ProductCategories] ON 
 GO
 INSERT [dbo].[ProductCategories] ([CategoryId], [CategoryName], [Description], [IsActive]) VALUES (2, N'Mâm cơm 3-4 người ăn', N'Thực đơn gia đình', 1)
 GO
@@ -735,6 +741,64 @@ INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]
 GO
 INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (32, CAST(50000.00 AS Decimal(10, 2)), 10, 34)
 GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (33, CAST(200000.00 AS Decimal(10, 2)), 10, 35)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (34, CAST(200000.00 AS Decimal(10, 2)), 10, 36)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (35, CAST(180000.00 AS Decimal(10, 2)), 2, 37)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (36, CAST(450000.00 AS Decimal(10, 2)), 10, 38)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (37, CAST(450000.00 AS Decimal(10, 2)), 2, 39)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (38, CAST(400000.00 AS Decimal(10, 2)), 10, 40)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (39, CAST(500000.00 AS Decimal(10, 2)), 10, 41)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (40, CAST(200000.00 AS Decimal(10, 2)), 10, 42)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (41, CAST(220000.00 AS Decimal(10, 2)), 0, 43)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (42, CAST(260000.00 AS Decimal(10, 2)), 10, 44)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (43, CAST(250000.00 AS Decimal(10, 2)), 10, 45)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (44, CAST(400000.00 AS Decimal(10, 2)), 10, 46)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (45, CAST(510000.00 AS Decimal(10, 2)), 10, 47)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (46, CAST(500000.00 AS Decimal(10, 2)), 10, 48)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (47, CAST(35000.00 AS Decimal(10, 2)), 999, 49)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (48, CAST(360000.00 AS Decimal(10, 2)), 10, 50)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (49, CAST(39000.00 AS Decimal(10, 2)), 10, 51)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (50, CAST(35000.00 AS Decimal(10, 2)), 10, 52)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (51, CAST(12000.00 AS Decimal(10, 2)), 100, 53)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (52, CAST(10000.00 AS Decimal(10, 2)), 10, 54)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (53, CAST(15000.00 AS Decimal(10, 2)), 100, 55)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (54, CAST(70000.00 AS Decimal(10, 2)), 10, 56)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (55, CAST(60000.00 AS Decimal(10, 2)), 10, 57)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (56, CAST(60000.00 AS Decimal(10, 2)), 10, 58)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (57, CAST(50000.00 AS Decimal(10, 2)), 10, 59)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (58, CAST(40000.00 AS Decimal(10, 2)), 100, 60)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (59, CAST(40000.00 AS Decimal(10, 2)), 10, 61)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (60, CAST(20000.00 AS Decimal(10, 2)), 12, 62)
+GO
+INSERT [dbo].[ProductPrices] ([ProductPriceID], [Price], [Quantity], [ProductID]) VALUES (61, CAST(20000.00 AS Decimal(10, 2)), 12, 63)
+GO
 SET IDENTITY_INSERT [dbo].[ProductPrices] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Products] ON 
@@ -771,6 +835,64 @@ INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL],
 GO
 INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (34, N'Ba chỉ heo', N'Đồ gọi thêm lẩu', N'200g Ba chỉ heo', N'https://laungontainha.com/wp-content/uploads/2018/10/ba-chi-heo-L.jpg', 0, 15)
 GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (35, N'Mâm Cơm Gia Đình Truyền Thống 1', N'Mâm cơm 3-4 người ăn', N'N/A', N'https://scontent.fhan5-8.fna.fbcdn.net/v/t39.30808-6/500606241_2203846223418752_3894235115661435404_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeEaz2O-qLguFEbQpWNcZwUvXHSx63rkI3FcdLHreuQjcVVy5YRho0L-Mwiq7tCYpHnmiT_gP7hPyhrXXyeVLpu2&_nc_ohc=xrXXgA6cFnsQ7kNvwEFs5od&_nc_oc=AdmoGU0P2jffppmNbz4rj3gEka5s1bsDNmAqUv1oiN_ct1yJMskAr9snkZoodq6Jn6s&_nc_zt=23&_nc_ht=scontent.fhan5-8.fna&_nc_gid=gonTAZh0vB7arBB-Odlmpw&oh=00_AfIYPleozx2PF-QEQAX4hXOKebeFgFxV3hJvHdBkRdw_Og&oe=683F12ED', 0, 2)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (36, N'Mâm Cơm Gia Đình Truyền Thống 2', N'Mâm cơm 3-4 người ăn', N'N/A', N'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/500252799_2203846343418740_4713698643407304339_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeGQnIjnXQBgIX_cpWUzJWm76NHDkgEXjdXo0cOSAReN1SacvMo3jJdXRJfPpIWH3K5GSiTs7UgyXUEegYiB3dhG&_nc_ohc=Xbp6yx-8Y_UQ7kNvwHVvGoe&_nc_oc=AdkU8-XsYJjnYpy_yUPwJ7TZtpc3hQ53oZVLocNSDzPReJuRf25Iv1YWIinKvbeFLiU&_nc_zt=23&_nc_ht=scontent.fhan5-6.fna&_nc_gid=ZvatGd_SaNzM0Ys-nRAZkQ&oh=00_AfJrnoNTch6ub2ZJkFkJ_nr6PeP64QdrCsSTn-fh_k4Vgw&oe=683EFC00', 0, 2)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (37, N'Mâm Cơm Gia Đình Truyền Thống 3', N'Mâm cơm 3-4 người ăn', N'N/A', N'https://scontent.fhan5-2.fna.fbcdn.net/v/t39.30808-6/499728891_2203846710085370_123396285715256865_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeFvmjnSIiX0S4nH9vCO1hqq1wbnhxfTVTzXBueHF9NVPKC3CfFrVEx8CIGtVgC9UekZRvRhdzTwRv4UkU97sXje&_nc_ohc=Fpw03Ko6-HwQ7kNvwEcA0X0&_nc_oc=Adkq3uwN9b8b4G85OEF_TTn6MBqONEynW8aSTXZHYSyfMpVspVNwn6xgi4Cyxw6L-n4&_nc_zt=23&_nc_ht=scontent.fhan5-2.fna&_nc_gid=_klUkym1vx_ctn0Wzs32kw&oh=00_AfJ3yFbHIRG8sz3k_aDI6uhacOa3xSDsqlYMI7gIHWVXMA&oe=683EFEA5', 0, 2)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (38, N'Mâm Cơm Gia Đình Sum Vầy 1', N'Mâm cơm 5-6 người ăn', N'N/A', N'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/487386251_2988415231333654_8382896126949283259_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeE_Gk3_2LcsMzg9G0O8VpNY_qJ-jRns9m7-on6NGez2bi1qgoO1NGsdqL6LNNcwJbIuSy-WoO8EJPdLtwwsL9pg&_nc_ohc=H4f4iMUo0XcQ7kNvwEd4s-9&_nc_oc=Adl0gQjIGCAKU8Xz_C6XBOqzUGxaHPFqCVl6Sh1ZOiHG1oXPvRjoU2ztLyzFjZ83xOc&_nc_zt=23&_nc_ht=scontent.fhan5-6.fna&_nc_gid=EbgizqQlw9Y7-8aYN9oQhg&oh=00_AfKLDbLjsFY2npbD98EU1YSLckrv3h7oB1JoEdlE2TEwMQ&oe=683F0FFC', 0, 3)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (39, N'Mâm Cơm Cuối Tuần Sum Vầy 2 ', N'Mâm cơm 5-6 người ăn', N'N/A', N'https://scontent.fhan5-10.fna.fbcdn.net/v/t39.30808-6/487000097_2988415514666959_4892154561868415970_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeGOLUk3tfEzwyFaGHygtkkoxW1UmwRaQMPFbVSbBFpAw89gUWd--f1QnTN3JrdamrWrGPREetGAZhS5kHYVM8_i&_nc_ohc=Qvc_C_rUHZoQ7kNvwFUB3EJ&_nc_oc=Adnb3PUqtI6wED0ZtpanZhRnxgWtDXCW05xI-K3uDRMK3uEhwR8_8V-BKIW6xZPcUfo&_nc_zt=23&_nc_ht=scontent.fhan5-10.fna&_nc_gid=zFVhqXrqRmaqoaJdtU77GA&oh=00_AfKlfwCDKwwJkJt5oWYEPxMoBr67cRHPQRdOcj5LngLA_g&oe=683F041B', 0, 3)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (40, N'Mâm Cơm Cuối Tuần Sum Vầy 3', N'Mâm cơm 5-6 người ăn', N'N/A', N'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-6/487104062_2988415378000306_8674610362720675030_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=aa7b47&_nc_aid=0&_nc_eui2=AeEGb9AoaRYchg3m7NnSl49m_jnkX6Zw627-OeRfpnDrbmAUjn8VNa7wfA6nCn1wYaiXS6Nuooe61BJVuBK89Pn6&_nc_ohc=o3cm2szlYfMQ7kNvwE4-khM&_nc_oc=Adk5vGSn2E6NbIUso_qIQJh62QwZzClGBvHtdaCjhkrN-MPpMDfaW4_Qz_3MC1yENLw&_nc_zt=23&_nc_ht=scontent.fhan5-11.fna&_nc_gid=mbwAyCTlf6JGsqAL8uPNgg&oh=00_AfJP6BeV_PHIYH6u4wpHID8hV-ivvx05uLPTJLhURgmx5Q&oe=683F2180', 0, 3)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (41, N'Mâm Cơm Gia Đình Sum Vầy 4', N'Mâm cơm 5-6 người ăn', N'N/A', N'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-6/487048671_2988415308000313_691154140723339343_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=aa7b47&_nc_aid=0&_nc_eui2=AeHKv_HH8fwG7bbJOKYILb5ko8Ioyz6fSymjwijLPp9LKexMGfmxP3m2EvcFI2BrMAH0JnVpjW1-fC2ZMYA5KcIH&_nc_ohc=ChvNG2WI3aQQ7kNvwEpnA39&_nc_oc=AdlTk9S8Hm96ILfWWnimu700ufF14qcDR8uIV5yy5z_LmN4L_d_K-aNIFArZoTPjXsU&_nc_zt=23&_nc_ht=scontent.fhan5-11.fna&_nc_gid=i-QG6nZ_uEpPlLEh0gAxHw&oh=00_AfJEjhlPZK0eyeEzwfPjRQLnqKASZ6DcvDGK3P5su52Mrg&oe=683F2589', 0, 3)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (42, N'Mâm cúng tone màu đỏ', N'Mâm cỗ chay ngày rằm', N'N/A', N'https://scontent.fhan5-10.fna.fbcdn.net/v/t39.30808-6/500738883_9387069944731176_5491530165046729963_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeELZePYraiqlhKP9e2ucHsE_s688T9_8Qj-zrzxP3_xCBUFF8E9PahNmxcmfCoe80HXleAdkyKsSe_LoEYhCPX_&_nc_ohc=42tDVX5ekD8Q7kNvwFiE-MO&_nc_oc=Adn0WCffS4zl1Hkfg6WzHBGVEJFjlMuNUUionmp1Kph0b44C3onoFOPZHYHkobMKsq0&_nc_zt=23&_nc_ht=scontent.fhan5-10.fna&_nc_gid=KWml_SOrFz1wlaXRQgHmNg&oh=00_AfK0m-FLw8_fBu2DlOA_-X2KJQsZwHwCh32QCz1O7kFjVw&oe=683F095A', 0, 4)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (43, N'Mâm cúng tone xanh lá', N'Mâm cỗ chay ngày rằm', N'N/A', N'https://scontent.fhan5-8.fna.fbcdn.net/v/t39.30808-6/500231489_9387070401397797_6231741007369697320_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeFeqNgImqlEspAHwLRhU76Huo2eFw2uAtG6jZ4XDa4C0W__VRciIUUNVszg3GYB8X9KaaAt4xqKM9-XdfTBMhZ9&_nc_ohc=cC67cXFGEHgQ7kNvwF_Qvoh&_nc_oc=AdmHxxPuv1fcrV-S_9w7DjrS054PV1NulLr89cMFRONBkbQ_7PxDyPZ5SK9CK-8ejdE&_nc_zt=23&_nc_ht=scontent.fhan5-8.fna&_nc_gid=OE1JNFuY2NWjuGVo1iiL3A&oh=00_AfL6KjgC7Ousy-ituqkGykdb315DdClbqGbgfrwSR9JUOg&oe=683F26DB', 0, 4)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (44, N'Mâm cúng tone màu tím', N'Mâm cỗ chay ngày rằm', N'N/A', N'https://scontent.fhan5-10.fna.fbcdn.net/v/t39.30808-6/500247752_9387080034730167_5763669810210652538_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeFPgecZ_qaQAs5hb-YUP0i77oA8joG_BgbugDyOgb8GBm9ehqYnkgACblZQvmzV-OjWRpFfEhHKur9-XMiJz2Qz&_nc_ohc=26SWxpWT1MMQ7kNvwEHIrXR&_nc_oc=Adm5JdvC16wka2O-kBaTQAsDmdSO8CcO2GxPrt35_fBzZM2KIJdBMkDw8Dgpj7cL8P4&_nc_zt=23&_nc_ht=scontent.fhan5-10.fna&_nc_gid=GotCwCJ960sXNDSMqC-iuQ&oh=00_AfJyUCcwsDAaSIrU35mv_XHZydX27-BKzeivEgxCs8hBoQ&oe=683F0E87', 0, 4)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (45, N'Mâm cúng tone màu cam', N'Mâm cỗ chay ngày rằm', N'N/A', N'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/500733206_9387079414730229_8192771098167672212_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeGXI2hQ1gf7yrISE0leeyHuDYD0J3bEbPwNgPQndsRs_MqpxKP7DQR2mGLB35RygiY5QkPuKp3tDlGIMWp9v_TT&_nc_ohc=cgnYIDlN1wIQ7kNvwHdFD8p&_nc_oc=AdmPBX5syLVwMiZRkyeOzZ8UaMnaLw99m0uZCScI5o3mX19pZU3DcXBD7WldvNkUWa8&_nc_zt=23&_nc_ht=scontent.fhan5-6.fna&_nc_gid=s-DMybsJU-5uhLi413O99Q&oh=00_AfJid3vr6qQmXCsmQwbpzx7psdK7dsJRHu6nUDteUAoYNg&oe=683F1AB4', 0, 4)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (46, N'Mâm Cỗ Ngày Rằm 1', N'Mâm cỗ mặn ngày rằm', N'N/A', N'https://scontent.fhan5-8.fna.fbcdn.net/v/t39.30808-6/481708395_2117054808715056_1815013168712653665_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeFZeAA1O8PztyB2aHfCDpTj04uhlJ9VmZHTi6GUn1WZkTRFbhni3Gyg7R7iPrrgOv4vT3S34YQgmSBIjX5N3UpR&_nc_ohc=EJ8By1q9rrwQ7kNvwF_M6Ln&_nc_oc=Adn6hGF1vpYxtUSb-PaDK67aIqmL5kYB-ZTsSpF7bdIIvjD-al3SjmQEpABF7unhr_k&_nc_zt=23&_nc_ht=scontent.fhan5-8.fna&_nc_gid=AxqVqBANo9kk5mjb5YylBA&oh=00_AfKEABinLGGnmDO_ZBkVgsfEOqS1wG0mun6LezlenfDMEg&oe=683F1054', 0, 5)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (47, N'Mâm Cỗ Ngày Rằm 2', N'Mâm cỗ mặn ngày rằm', N'N/A', N'https://scontent.fhan5-10.fna.fbcdn.net/v/t39.30808-6/481160038_2117054785381725_6770775677135418044_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeHGouI248cyM1yFbHVcbXSEs2LNmIRhniqzYs2YhGGeKjNTkdUkjoDDzEES55SCWvZTFymnVp25idXDurecrrRt&_nc_ohc=Yk2vjcSnGa8Q7kNvwH-Z4Cj&_nc_oc=AdmSWoRz_HngUna6pyhzf3MBAa9MkIjzzoLcY-dAG_tdZwUx_W1VLxcUYzwieCws-fg&_nc_zt=23&_nc_ht=scontent.fhan5-10.fna&_nc_gid=_meknyJYCyGqqfJ-6QjljA&oh=00_AfL17uqQCVVFiZRzH1oEWYPeneY0FNjzBbMbMOx_DbzJEw&oe=683F2B49', 0, 5)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (48, N'Mâm Cỗ Ngày Rằm 3', N'Mâm cỗ mặn ngày rằm', N'N/A', N'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-6/481998284_2117054925381711_6677090550336160025_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeHe5gQuZ7ZPBbpjA7k7LMLwBwikljYIKhQHCKSWNggqFCTnIWES9JCMwXKo3qAQ73iF5msKkHR99qgFIX9-jR1x&_nc_ohc=InC_XvdaoEQQ7kNvwHH6cRG&_nc_oc=AdlSO5dX5Vk7BgFrXwDZozsQxpAqwIJDVrmzA9HZRforyJXtJXZFMRY4AOsO7e0ZbZI&_nc_zt=23&_nc_ht=scontent.fhan5-6.fna&_nc_gid=nDwqON6ow2ne47ekLiWUtA&oh=00_AfJodbiZ7sSeTx3_ZjLOAOcwkQTk-TtLSBazGQdyT0ToaA&oe=683F04F5', 0, 5)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (49, N'Nước ép cam dứa nguyên chất', N'Nước ép', N'N/A', N'https://food-cms.grab.com/compressed_webp/items/VNITE2022091914395560830/detail/menueditor_item_7b9d90fd0a5b4664b73fd7594e71cecb_1663598361542355862.webp', 0, 18)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (50, N'Sinh tố bơ mãng cầu', N'Nước ép', N'N/A', N'https://food-cms.grab.com/compressed_webp/items/VNITE20220527064020023457/detail/menueditor_item_7ac535fadd0742ba8770fce951898a9e_1653882460855259444.webp', 0, 18)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (51, N'Kem Bơ Dừa Đà Lạt', N'Nước ép', N'N/A', N'https://food-cms.grab.com/compressed_webp/items/VNITE2023071104443692454/detail/menueditor_item_aac3daf5fc704fbcb6d652ec68e0f814_1689050608664378666.webp', 0, 18)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (52, N'Nước ép dưa hấu nha đam', N'Nước ép', N'N/A', N'https://food-cms.grab.com/compressed_webp/items/VNITE20220527064021169034/detail/menueditor_item_53830679099f4661b2aa5b76766fd07a_1653881636032611132.webp', 0, 18)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (53, N'Cocacola', N'Nước đóng chai', N'N/A', N'https://bizweb.dktcdn.net/100/436/111/products/coca-2.png?v=1703986211787', 0, 19)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (54, N'Nước khoáng', N'Nước đóng chai', N'N/A', N'https://www.laviewater.com/media/catalog/product/cache/26875f483b01c23ee90703c4af2b98ce/1/_/1.5l.png', 0, 19)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (55, N'Mirinda', N'Nước đóng chai', N'N/A', N'https://bizweb.dktcdn.net/thumb/grande/100/511/037/products/image-1714701921132.png?v=1718166319133', 0, 19)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (56, N'Nước Lẩu Thái Tomyum', N'Nước lẩu và sốt chấm', N'N/A', N'https://laungontainha.com/wp-content/uploads/2019/07/set30-v.jpg', 0, 17)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (57, N'Nước Lẩu Riêu Cua', N'Nước lẩu và sốt chấm', N'N/A', N'https://laungontainha.com/wp-content/uploads/2019/07/set31-v.jpg', 0, 17)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (58, N'Nước Lẩu Kim Chi', N'Nước lẩu và sốt chấm', N'N/A', N'https://laungontainha.com/wp-content/uploads/2019/07/set33-v.jpg', 0, 17)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (59, N'Sốt Chấm Lẩu Eat House (Chai 300ml)', N'Nước lẩu và sốt chấm', N'N/A', N'https://laungontainha.com/wp-content/uploads/2025/04/Sot-cham-lau.jpg', 0, 17)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (60, N'Ngô Chiên', N'Món khai vị', N'Ngô Chiên', N'https://laungontainha.com/wp-content/uploads/2019/01/Ngo-Chien.jpg', 0, 16)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (61, N'Khoai Tây Chiên', N'Món khai vị', N'Khoai Tây Chiên', N'https://laungontainha.com/wp-content/uploads/2019/01/Khoai-tay-chien.jpg', 0, 16)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (62, N'Phồng Tôm Chiên', N'Món khai vị', N'Phồng Tôm Chiên', N'https://laungontainha.com/wp-content/uploads/2019/04/Phong-tom-chien.jpg', 0, 16)
+GO
+INSERT [dbo].[Products] ([ProductID], [Name], [Type], [Description], [ImageURL], [IsDelete], [CategoryId]) VALUES (63, N'Dưa Chuột', N'Món khai vị', N'Dưa Chuột', N'https://laungontainha.com/wp-content/uploads/2018/12/Dua-chuot-che.jpg', 0, 16)
+GO
 SET IDENTITY_INSERT [dbo].[Products] OFF
 GO
 SET IDENTITY_INSERT [dbo].[ProductSales] ON 
@@ -804,6 +926,8 @@ GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (18, 13, NULL, NULL, NULL, CAST(N'2025-05-30T11:21:01.263' AS DateTime))
 GO
 INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (19, 32, NULL, NULL, NULL, CAST(N'2025-05-30T11:23:14.580' AS DateTime))
+GO
+INSERT [dbo].[ProductSales] ([SaleID], [ProductPriceID], [SalePrice], [SaleStartDate], [SaleEndDate], [CreatedAt]) VALUES (20, 33, NULL, NULL, NULL, CAST(N'2025-05-30T12:17:22.287' AS DateTime))
 GO
 SET IDENTITY_INSERT [dbo].[ProductSales] OFF
 GO
@@ -969,7 +1093,7 @@ SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Index [UQ__Discount__A25C5AA7F18C4242]    Script Date: 30/5/2025 1:05:22 PM ******/
 ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UNIQUE NONCLUSTERED 
 (
 	[Code] ASC
@@ -977,7 +1101,7 @@ ALTER TABLE [dbo].[Discount] ADD  CONSTRAINT [UQ__Discount__A25C5AA7F18C4242] UN
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B616097FD18A4]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Index [UQ__Roles__8A2B616038C71C49]    Script Date: 30/5/2025 1:05:22 PM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -985,7 +1109,7 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 30-May-25 11:26:01 AM ******/
+/****** Object:  Index [UQ__Users__A9D105340A96D1D5]    Script Date: 30/5/2025 1:05:22 PM ******/
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [UQ__Users__A9D105340A96D1D5] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
